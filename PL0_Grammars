@@ -1,0 +1,80 @@
+Digit -> "0"|"1"|...|"9"
+
+Letter -> "a"|"b"|...|"z"|"A"|"B"|...|"Z"
+
+Basic_Type -> "integer" | "char"
+
+String -> """ ([ ] | [!] | [# - ~])* """
+
+Character -> "'" ( Letter |  Digit ) "'"
+----------------------------------------------------------------------
+Program -> Block "."
+
+Block -> [Constants] [Variables] (Procedures | Functions)* CompoundStatement
+
+Constants -> "const" ConstantDeclaration ("," ConstantDeclaration)* ";"
+
+ConstantDeclaration -> Ident "=" Constant
+
+Constant -> ["+" | "-"]  Unsigned_Number | Character
+
+Unsigned_Number -> Digit (Digit)*
+
+Ident -> Letter (Letter | Digit)*
+
+Variables -> "var" VariableDeclaration ";" (VariableDeclaration ";")* 
+
+Variables -> "var" VariableDeclaration ";" (VariableDeclaration ";")* 
+
+VariableDeclaration -> Ident ("," Ident)* : Type
+
+Type -> Basic_Type | "array" "[" Unsigned_Number "]" "of" Basic_Type
+
+Procedures -> (ProcedureDeclaration)+
+
+ProcedureDeclaration -> "procedure" Ident  ["("FormalParameters")"]  Block ";"
+
+Functions -> (FunctionDeclaration)+
+
+FunctionDeclaration  -> "function" Ident ["("FormalParameters")"] ":" Basic_Type ";"  Block ";"
+
+FormalParameters -> FormalParameters_Seg (";" FormalParameters_Seg)*
+
+FormalParameters_Seg -> ["var"] Ident ("," Ident)* ":" Basic_Type
+
+Statement -> [AssignmentStatement| IfStatement  | DoWhileStatement  | CallProcStatement |CompoundStatement| InputStatement | OutputStatement | ForStatement ]
+
+AssignmentStatement -> (Ident | FuncIdent | Ident "[" Expression "]") ":=" Expression  
+
+FuncIdent -> Ident
+
+Expression -> ["+" | "-"]  Term ( ( "+" | "-" ) Term )*
+
+Term -> Factor ( ("*" | "/") Factor )*
+
+Factor -> Ident | Unsigned_Number | ParenthesisFactor | CallFuncStatement | Ident "[" Expression "]"
+
+ParenthesisFactor -> "(" Expression ")"
+
+CallProcStatement ->  Ident  ["(" ActualParameters")"] 
+
+CallFuncStatement ->  Ident  ["(" ActualParameters ")"] 
+
+ActualParameters -> Expression ("," Expression)*
+
+Condition ->  CompareCondition
+
+CompareCondition -> Expression ("=" | "<>" | "<" | "<=" | ">" | ">=") Expression
+
+IfStatement -> "if" Condition "then" Statement ["else" Statement]
+
+DoWhileStatement -> "do" Statement "while" Condition
+
+ForStatement -> "for" Ident ":=" Expression ("downto" | "to") Expression "do" Statement
+
+CompoundStatement -> "begin" Statement ( ";" Statement )* "end"
+
+InputStatement -> "read" "(" Ident("," Ident)* ")"
+
+OutputStatement -> "write" "(String "," Expression | String | Expression) ")"
+
