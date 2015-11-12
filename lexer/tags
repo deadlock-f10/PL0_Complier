@@ -1,0 +1,105 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+Character	Token.h	/^		Character(char c) : Token(T_CHARACTER){character = c;}$/;"	f	class:Character
+Character	Token.h	/^class Character : public Token{$/;"	c
+Lexer	Lexer.cpp	/^Lexer::Lexer(std::fstream F) {$/;"	f	class:Lexer
+Lexer	Lexer.h	/^class Lexer {$/;"	c
+MAX_STR_LEN	Lexer.h	7;"	d
+MAX_WORD_LEN	Lexer.h	8;"	d
+Num	Token.h	/^		Num(int v) : Token(T_NUMBER) {value = v;}$/;"	f	class:Num
+Num	Token.h	/^class Num : public Token{$/;"	c
+STring	Token.h	/^		STring(std::string s) : Token(T_STRING){line = s;}$/;"	f	class:STring
+STring	Token.h	/^class STring : public Token{$/;"	c
+TOKEN_H	Token.h	4;"	d
+T_ARRAY	Tag.h	/^	T_ARRAY , \/\/ array$/;"	e	enum:Tag
+T_ASSIGN	Tag.h	/^	T_ASSIGN, \/\/ :=$/;"	e	enum:Tag
+T_BEGIN	Tag.h	/^    T_BEGIN, \/\/ begin$/;"	e	enum:Tag
+T_CHAR	Tag.h	/^	T_CHAR, \/\/ char$/;"	e	enum:Tag
+T_CHARACTER	Tag.h	/^	T_CHARACTER, $/;"	e	enum:Tag
+T_CLOSEBRACKET	Tag.h	/^	T_CLOSEBRACKET, \/\/ ]$/;"	e	enum:Tag
+T_CLOSEPARENTHESIS	Tag.h	/^	T_CLOSEPARENTHESIS,  \/\/ )$/;"	e	enum:Tag
+T_COMMA	Tag.h	/^	T_COMMA, \/\/ :$/;"	e	enum:Tag
+T_CONST	Tag.h	/^	T_CONST, \/\/ const$/;"	e	enum:Tag
+T_DIV	Tag.h	/^	T_DIV, \/\/ \/ $/;"	e	enum:Tag
+T_DO	Tag.h	/^    T_DO,  \/\/ do$/;"	e	enum:Tag
+T_DOT	Tag.h	/^	T_DOT, \/\/ .$/;"	e	enum:Tag
+T_DOWNTO	Tag.h	/^	T_DOWNTO, \/\/ downto$/;"	e	enum:Tag
+T_ELSE	Tag.h	/^	T_ELSE, \/\/ else$/;"	e	enum:Tag
+T_END	Tag.h	/^    T_END, \/\/ end$/;"	e	enum:Tag
+T_EQ	Tag.h	/^	T_EQ, \/\/ =$/;"	e	enum:Tag
+T_FOR	Tag.h	/^	T_FOR, \/\/ for$/;"	e	enum:Tag
+T_FUNCTION	Tag.h	/^	T_FUNCTION, \/\/ function$/;"	e	enum:Tag
+T_GE	Tag.h	/^	T_GE, \/\/ >=$/;"	e	enum:Tag
+T_GT	Tag.h	/^	T_GT, \/\/ >$/;"	e	enum:Tag
+T_IDENT	Tag.h	/^	T_IDENT,$/;"	e	enum:Tag
+T_IF	Tag.h	/^    T_IF, \/\/ if$/;"	e	enum:Tag
+T_INT	Tag.h	/^	T_INT, \/\/ integer$/;"	e	enum:Tag
+T_LE	Tag.h	/^	T_LE, \/\/ <=$/;"	e	enum:Tag
+T_LT	Tag.h	/^	T_LT, \/\/ <$/;"	e	enum:Tag
+T_MINUS	Tag.h	/^	T_MINUS, \/\/ -$/;"	e	enum:Tag
+T_MULT	Tag.h	/^	T_MULT, \/\/ *$/;"	e	enum:Tag
+T_NE	Tag.h	/^	T_NE, \/\/ <>$/;"	e	enum:Tag
+T_NULL	Tag.h	/^	T_NULL = 256,$/;"	e	enum:Tag
+T_NUMBER	Tag.h	/^	T_NUMBER,$/;"	e	enum:Tag
+T_OF	Tag.h	/^	T_OF, \/\/ of$/;"	e	enum:Tag
+T_OPENBRACKET	Tag.h	/^	T_OPENBRACKET, \/\/ [$/;"	e	enum:Tag
+T_OPENPARENTHESIS	Tag.h	/^	T_OPENPARENTHESIS, \/\/ ($/;"	e	enum:Tag
+T_PLUS	Tag.h	/^	T_PLUS, \/\/ + $/;"	e	enum:Tag
+T_PROCEDURE	Tag.h	/^    T_PROCEDURE, \/\/ procedure$/;"	e	enum:Tag
+T_READ	Tag.h	/^	T_READ, \/\/ read$/;"	e	enum:Tag
+T_SEMICOLON	Tag.h	/^	T_SEMICOLON, \/\/ ;$/;"	e	enum:Tag
+T_STRING	Tag.h	/^	T_STRING,$/;"	e	enum:Tag
+T_THEN	Tag.h	/^    T_THEN, \/\/ then$/;"	e	enum:Tag
+T_TO	Tag.h	/^	T_TO, \/\/ to$/;"	e	enum:Tag
+T_VAR	Tag.h	/^	T_VAR, \/\/ var$/;"	e	enum:Tag
+T_WHILE	Tag.h	/^    T_WHILE, \/\/ while$/;"	e	enum:Tag
+T_WRITE	Tag.h	/^	T_WRITE, \/\/ write$/;"	e	enum:Tag
+Tag	Tag.h	/^enum Tag{$/;"	g
+Tags_H	Tag.h	2;"	d
+Token	Token.h	/^		Token (Tag i){$/;"	f	class:Token
+Token	Token.h	/^class Token{$/;"	c
+Word	Token.h	/^		Word(char *s, Tag tag) : Token(tag) {lexeme = s;}$/;"	f	class:Word
+Word	Token.h	/^		Word(std::string s, Tag tag) : Token(tag) {lexeme = s;}$/;"	f	class:Word
+Word	Token.h	/^class Word : public Token{$/;"	c
+assign	Token.h	/^		static Word assign,plus,minus,mult,div,eq,gt,lt,le,ge,ne,openparenthesis,closeparenthesis,openbracket,closebracket,comma,semicolon,dot;$/;"	m	class:Word
+character	Token.h	/^		int character;$/;"	m	class:Character
+closebracket	Token.h	/^		static Word assign,plus,minus,mult,div,eq,gt,lt,le,ge,ne,openparenthesis,closeparenthesis,openbracket,closebracket,comma,semicolon,dot;$/;"	m	class:Word
+closeparenthesis	Token.h	/^		static Word assign,plus,minus,mult,div,eq,gt,lt,le,ge,ne,openparenthesis,closeparenthesis,openbracket,closebracket,comma,semicolon,dot;$/;"	m	class:Word
+column	Lexer.h	/^		static int line = 1, column = 0;$/;"	m	class:Lexer
+comma	Token.h	/^		static Word assign,plus,minus,mult,div,eq,gt,lt,le,ge,ne,openparenthesis,closeparenthesis,openbracket,closebracket,comma,semicolon,dot;$/;"	m	class:Word
+div	Token.h	/^		static Word assign,plus,minus,mult,div,eq,gt,lt,le,ge,ne,openparenthesis,closeparenthesis,openbracket,closebracket,comma,semicolon,dot;$/;"	m	class:Word
+dot	Token.h	/^		static Word assign,plus,minus,mult,div,eq,gt,lt,le,ge,ne,openparenthesis,closeparenthesis,openbracket,closebracket,comma,semicolon,dot;$/;"	m	class:Word
+eq	Token.h	/^		static Word assign,plus,minus,mult,div,eq,gt,lt,le,ge,ne,openparenthesis,closeparenthesis,openbracket,closebracket,comma,semicolon,dot;$/;"	m	class:Word
+fs	Lexer.h	/^		std::fstream fs;$/;"	m	class:Lexer
+ge	Token.h	/^		static Word assign,plus,minus,mult,div,eq,gt,lt,le,ge,ne,openparenthesis,closeparenthesis,openbracket,closebracket,comma,semicolon,dot;$/;"	m	class:Word
+gt	Token.h	/^		static Word assign,plus,minus,mult,div,eq,gt,lt,le,ge,ne,openparenthesis,closeparenthesis,openbracket,closebracket,comma,semicolon,dot;$/;"	m	class:Word
+hashtable	Lexer.h	/^typedef std::unordered_map<std::string , Token> hashtable;$/;"	t
+le	Token.h	/^		static Word assign,plus,minus,mult,div,eq,gt,lt,le,ge,ne,openparenthesis,closeparenthesis,openbracket,closebracket,comma,semicolon,dot;$/;"	m	class:Word
+lexeme	Token.h	/^		std::string lexeme;$/;"	m	class:Word
+line	Lexer.h	/^		static int line = 1, column = 0;$/;"	m	class:Lexer
+line	Token.h	/^		std::string line;$/;"	m	class:STring
+lt	Token.h	/^		static Word assign,plus,minus,mult,div,eq,gt,lt,le,ge,ne,openparenthesis,closeparenthesis,openbracket,closebracket,comma,semicolon,dot;$/;"	m	class:Word
+minus	Token.h	/^		static Word assign,plus,minus,mult,div,eq,gt,lt,le,ge,ne,openparenthesis,closeparenthesis,openbracket,closebracket,comma,semicolon,dot;$/;"	m	class:Word
+mult	Token.h	/^		static Word assign,plus,minus,mult,div,eq,gt,lt,le,ge,ne,openparenthesis,closeparenthesis,openbracket,closebracket,comma,semicolon,dot;$/;"	m	class:Word
+ne	Token.h	/^		static Word assign,plus,minus,mult,div,eq,gt,lt,le,ge,ne,openparenthesis,closeparenthesis,openbracket,closebracket,comma,semicolon,dot;$/;"	m	class:Word
+openbracket	Token.h	/^		static Word assign,plus,minus,mult,div,eq,gt,lt,le,ge,ne,openparenthesis,closeparenthesis,openbracket,closebracket,comma,semicolon,dot;$/;"	m	class:Word
+openparenthesis	Token.h	/^		static Word assign,plus,minus,mult,div,eq,gt,lt,le,ge,ne,openparenthesis,closeparenthesis,openbracket,closebracket,comma,semicolon,dot;$/;"	m	class:Word
+peek	Lexer.h	/^		char peek = ' ';$/;"	m	class:Lexer
+plus	Token.h	/^		static Word assign,plus,minus,mult,div,eq,gt,lt,le,ge,ne,openparenthesis,closeparenthesis,openbracket,closebracket,comma,semicolon,dot;$/;"	m	class:Word
+readch	Lexer.cpp	/^bool Lexer::readch(char c){$/;"	f	class:Lexer
+readch	Lexer.cpp	/^inline void Lexer::readch(){$/;"	f	class:Lexer
+reserve	Lexer.h	/^		void reserve(Word w) {words.insert(std::make_pair<std::string , Token>(w.lexeme,w));}$/;"	f	class:Lexer
+scan	Lexer.cpp	/^Token Lexer::scan(){$/;"	f	class:Lexer
+semicolon	Token.h	/^		static Word assign,plus,minus,mult,div,eq,gt,lt,le,ge,ne,openparenthesis,closeparenthesis,openbracket,closebracket,comma,semicolon,dot;$/;"	m	class:Word
+tag	Token.h	/^		Tag tag;$/;"	m	class:Token
+toString	Token.h	/^		std::string toString() {return std::to_string(value);}$/;"	f	class:Num
+toString	Token.h	/^		std::string toString() {return to_string(character);}$/;"	f	class:Character
+toString	Token.h	/^		std::string toString(){$/;"	f	class:Token
+toString	Token.h	/^		std::string toString(){return line;}$/;"	f	class:STring
+toString	Token.h	/^		string toString() {return lexeme;}$/;"	f	class:Word
+value	Token.h	/^		int value;$/;"	m	class:Num
+words	Lexer.h	/^		hashtable words;$/;"	m	class:Lexer

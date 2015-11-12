@@ -24,8 +24,6 @@ Ident -> Letter (Letter | Digit)*
 
 Variables -> "var" VariableDeclaration ";" (VariableDeclaration ";")* 
 
-Variables -> "var" VariableDeclaration ";" (VariableDeclaration ";")* 
-
 VariableDeclaration -> Ident ("," Ident)* : Type
 
 Type -> Basic_Type | "array" "[" Unsigned_Number "]" "of" Basic_Type

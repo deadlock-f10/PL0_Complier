@@ -11,6 +11,7 @@ enum Tag{
 	T_CHARACTER, 
 	T_STRING,
 	T_OF, // of
+	T_ARRAY , // array
 
 	T_CONST, // const
 	T_VAR, // var
@@ -36,7 +37,7 @@ enum Tag{
 	T_PLUS, // + 
 	T_MINUS, // -
 	T_MULT, // *
-	T_DIV, // \
+	T_DIV, // / 
 
 	T_EQ, // =
 	T_GT, // >
@@ -55,6 +56,6 @@ enum Tag{
 	T_DOT, // .
 //	T_DQUOTE, // "
 //	T_SQUOTE // '
-}
+};
 
 #endif
