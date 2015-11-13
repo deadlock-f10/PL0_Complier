@@ -66,7 +66,7 @@ bool Lexer::readch(char c){
 }
 
 Token* Lexer::scan(){
-	peek = ' ';
+L:  peek = ' ';
 	for( ; ; readch()){
 		if(peek == ' ' || peek == '\t')
 			continue;
@@ -74,6 +74,11 @@ Token* Lexer::scan(){
 			line++;
 		else
 			break;
+	}
+	if(peek == '{'){
+		for( ;peek != '}' ; readch())
+			;
+		goto L;
 	}
 	switch (peek){
 		case ':':
@@ -149,6 +154,7 @@ Token* Lexer::scan(){
             v = 10*v + peek-'0'; 
 			readch();
          } while(isdigit(peek));
+		 fs->unget();
 		 return  new Num(v);
 	}
 	else if(isalpha(peek)){
@@ -158,6 +164,7 @@ Token* Lexer::scan(){
 			str[i++] = peek;
 			readch();
 		}while(isalnum(peek));
+		fs->unget();
 		std::string s =  std::string(str,i);
 		hashtable::const_iterator it = words.find(s);
 		if(it != words.end())
@@ -168,5 +175,5 @@ Token* Lexer::scan(){
 	}
 	else 
 //		throw  WrongSymbolException();
-		std::cout << "WrongSymbol"<<endl;
+		std::cout << "WrongSymbol :"<< peek << endl;
 }

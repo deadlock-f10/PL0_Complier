@@ -3,7 +3,7 @@
 #include "Lexer.h"
 int main()
 {
-	Lexer l("local.pl0");
+	Lexer l("stack.pl0");
 	int i = 0;
 	Token*  t;
 	do{
