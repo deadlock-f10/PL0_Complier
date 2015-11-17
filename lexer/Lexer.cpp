@@ -1,4 +1,5 @@
 #include "Lexer.h"
+#include "../symboltable/Type.h"
 #include <iostream>
 
 Word *  assign = new Word(":=",T_ASSIGN);
@@ -43,10 +44,10 @@ Lexer::Lexer(std::string str) {
 			reserve(new Word("to" , T_TO));
 			reserve(new Word("read" , T_READ));
 			reserve(new Word("write" , T_WRITE));
+			reserve(new Word("array" , T_ARRAY));
 			
-			//reserve( Type(T_CHAR));
-			//reserve( Type(T_INT));
-			//reserve( Array(T_ARRAY));
+			reserve(Type::Char);
+			reserve(Type::Int);
 }
 inline void Lexer::readch(){
 	peek = fs->get();

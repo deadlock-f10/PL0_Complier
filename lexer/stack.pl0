@@ -46,6 +46,15 @@ begin
 			base := base + 1
 	end
 end;
+procedure PopN(popNum : integer)
+begin
+	write (Top);
+	if popNum >= 1 then
+		begin
+		Pop;
+		PopN(popNum - 1);
+	end;
+end;
 begin
 	read (MaxLen);
 	MakeEmpty;
@@ -61,6 +70,5 @@ begin
 		else if temp = 0 then       {*break*}
 			i := 0
 	end;
-	for base := base downto 1 do
-		write (Top) 
+	PopN(base);
 end.
