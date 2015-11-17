@@ -1,5 +1,5 @@
-#include "Lexer.h"
-#include "../symboltable/Type.h"
+#include "../include/Lexer.h"
+#include "../include/Type.h"
 #include <iostream>
 
 Word *  assign = new Word(":=",T_ASSIGN);
@@ -177,4 +177,5 @@ L:  peek = ' ';
 	else 
 //		throw  WrongSymbolException();
 		std::cout << "WrongSymbol :"<< peek << endl;
+	return nullptr;
 }
