@@ -1,0 +1,111 @@
+Digit -> "0"|"1"|...|"9"
+
+Letter -> "a"|"b"|...|"z"|"A"|"B"|...|"Z"
+
+Basic_Type -> "integer" | "char"
+
+String -> """ ([ ] | [!] | [# - ~])* """
+
+Character -> "'" ( Letter |  Digit ) "'"
+
+Constant -> ["+" | "-"]  Unsigned_Number | Character
+
+Unsigned_Number -> Digit (Digit)*
+
+Ident -> Letter (Letter | Digit)*
+----------------------------------------------------------------------
+Program -> Block "."
+
+
+
+Block -> Decl_Constants  Decl_Variables	 Decl_ProcAndFunc  CompoundStatement
+
+
+
+Decl_Constants -> Constants | \epsilon
+
+Constants -> "const" ConstantDeclaration  Seq_ConstantDeclaration  ";"
+
+Seq_ConstantDeclaration -> ("," ConstantDeclaration	Seq_ConstantDeclaration) |  \epsilon
+
+ConstantDeclaration -> Ident "=" Constant
+
+
+
+Decl_Variables -> Variables | \epsilon
+
+Variables -> "var" VariableDeclaration ";"	Seq_VariableDeclaration 
+
+Seq_VariableDeclaration -> (VariableDeclaration ";" Seq_VariableDeclaration) | \epsilon
+
+VariableDeclaration -> Ident Seq_IdentDeclaration ":" Type
+
+Seq_IdentDeclaration -> ("," Ident Seq_IdentDeclaration) | \epsilon
+
+Type -> Basic_Type | "array" "[" Unsigned_Number "]" "of" Basic_Type
+
+
+
+Decl_ProcAndFunc -> ( (ProcedureDeclaration | FunctionDeclaration) Decl_ProcAndFunc ) | \epsilon
+
+ProcedureDeclaration -> "procedure" Ident  OptionalFormPara  Block ";"
+
+FunctionDeclaration  -> "function" Ident OptionalFormPara ":" Basic_Type ";"  Block ";"
+
+OptionalFormPara -> ( "("	FormalParameters   ")" ) | \epsilon
+
+FormalParameters -> FormalParameters_Seg  Seq_FormalParameters_Seg
+
+Seq_FormalParameters_Seg -> (";"	FormalParameters_Seg	Seq_FormalParameters_Seg)  |  \epsilon
+
+FormalParameters_Seg -> OptionalVar Ident Seq_IdentDeclaration ":" Basic_Type
+
+OptionalVar -> "var" | \epsilon
+
+
+
+Statement -> AssignmentStatement| IfStatement  | DoWhileStatement  | CallProcStatement |CompoundStatement| InputStatement | OutputStatement | ForStatement | \epsilon
+
+AssignmentStatement -> (Ident | FuncIdent | Ident "[" Expression "]") ":=" Expression  
+
+FuncIdent -> Ident
+
+Expression -> OptionalUnary  Term SubExpression
+
+OptionalUnary -> "+" | "-" | \epsilon
+
+SubExpression -> (("+" | "-") Term	SubExpression) | \epsilon
+
+Term -> Factor	Factors 
+
+Factors -> (("*" | "/") Factor Factors) | \epsilon
+
+Factor -> Ident | Unsigned_Number | ParenthesisFactor | CallFuncStatement | Ident "[" Expression "]"
+
+ParenthesisFactor -> "(" Expression ")"
+
+CallProcStatement ->  Ident  ["(" ActualParameters")"] 
+
+CallFuncStatement ->  Ident  ["(" ActualParameters ")"] 
+
+ActualParameters -> Expression Expressions
+Expressions -> (","  Expression	 Expressions) | \epsilon
+
+Condition ->  CompareCondition
+
+CompareCondition -> Expression ("=" | "<>" | "<" | "<=" | ">" | ">=") Expression
+
+IfStatement -> "if" Condition "then" Statement ["else" Statement]
+
+DoWhileStatement -> "do" Statement "while" Condition
+
+ForStatement -> "for" Ident ":=" Expression ("downto" | "to") Expression "do" Statement
+
+CompoundStatement -> "begin" Statement Statements "end"
+
+Statements ->  (";"	Statement	 Statements) | \epsilon
+
+InputStatement -> "read" "(" Ident("," Ident)* ")"
+
+OutputStatement -> "write" "(String "," Expression | String | Expression) ")"
+
