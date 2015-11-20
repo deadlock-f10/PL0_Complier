@@ -1,0 +1,165 @@
+Digit -> "0"|"1"|...|"9"
+
+Letter -> "a"|"b"|...|"z"|"A"|"B"|...|"Z"
+
+String -> """ ([ ] | [!] | [# - ~])* """
+
+Character -> "'" ( Letter |  Digit ) "'"
+
+Unsigned_Number -> Digit (Digit)*
+
+Ident -> Letter (Letter | Digit)*
+
+
+
+Constant -> ["+" | "-"]  Unsigned_Number | Character
+FIRST{"+","-",Character}		FOLLOW{}
+
+Basic_Type -> "integer" | "char"
+FIRST{"integer","char"}		FOLLOW{}
+
+----------------------------------------------------------------------
+Program -> Block "."
+FIRST{"const","var","procedure","function","begin"}		FOLLOW{EOF}
+
+
+Block -> Decl_Constants  Decl_Variables	 Decl_ProcAndFunc  CompoundStatement
+FIRST{"const","var","procedure","function","begin"}		FOLLOW{"."}
+
+
+
+Decl_Constants -> Constants | \epsilon
+FIRST{"const",\epsilon}		FOLLOW{"var","procedure","function","begin"}
+
+Constants -> "const" ConstantDeclaration  Seq_ConstantDeclaration  ";"
+FIRST{"const"}		FOLLOW{"var","procedure","function","begin"}
+
+Seq_ConstantDeclaration -> ("," ConstantDeclaration	Seq_ConstantDeclaration) |  \epsilon
+FIRST{",",\epsilon}		FOLLOW{";"}
+
+ConstantDeclaration -> Ident "=" Constant
+FIRST{Ident}		FOLLOW{"," , ";"}
+
+
+
+Decl_Variables -> Variables | \epsilon
+FIRST{"var",\epsilon}		FOLLOW{"procedure","function","begin"}
+
+Variables -> "var" VariableDeclaration ";"	Seq_VariableDeclaration 
+FIRST{"var"}		FOLLOW{"procedure","function","begin"}
+
+Seq_VariableDeclaration -> (VariableDeclaration ";" Seq_VariableDeclaration) | \epsilon
+FIRST{"Ident",\epsilon}		FOLLOW{"procedure","function","begin"}
+
+VariableDeclaration -> Ident Seq_IdentDecl ":" Type
+FIRST{Ident}		FOLLOW{";"}
+
+Seq_IdentDecl -> ("," Ident Seq_IdentDecl) | \epsilon
+FIRST{",",\epsilon}		FOLLOW{":"}
+
+Type -> Basic_Type | "array" "[" Unsigned_Number "]" "of" Basic_Type
+FIRST{"integer","char","array"}		FOLLOW{";"}
+
+
+
+Decl_ProcAndFunc -> ( (ProcedureDeclaration | FunctionDeclaration) Decl_ProcAndFunc ) | \epsilon
+FIRST{"procedure","function",\epsilon}		FOLLOW{"begin"}
+
+ProcedureDeclaration -> "procedure" Ident  OptionalFormPara  Block ";"
+FIRST{"procedure"}		FOLLOW{"procedure","function","begin"}
+
+FunctionDeclaration  -> "function" Ident OptionalFormPara ":" Basic_Type ";"  Block ";"
+FIRST{"function"}		FOLLOW{"procedure","function","begin"}
+
+OptionalFormPara -> ( "("	FormalParameters   ")" ) | \epsilon
+FIRST{"(",\epsilon}		FOLLOW{":" , "const" , "var" , "procedure" , "function" , "begin"}
+
+FormalParameters -> FormalParameters_Seg  Seq_FormalParameters_Seg
+FIRST{"var",Ident}		FOLLOW{")"}
+
+Seq_FormalParameters_Seg -> (";"	FormalParameters_Seg	Seq_FormalParameters_Seg)  |  \epsilon
+FIRST{";",\epsilon}		FOLLOW{")"}
+
+FormalParameters_Seg -> OptionalVar Ident Seq_IdentDecl ":" Basic_Type
+FIRST{"var",Ident}		FOLLOW{";" , ")"}
+
+OptionalVar -> "var" | \epsilon
+FIRST{"var"}		FOLLOW{Ident}
+
+
+
+Statement -> AssignmentStatement| IfStatement  | DoWhileStatement  | CallProcStatement |CompoundStatement| InputStatement | OutputStatement | ForStatement | \epsilon
+FIRST{Ident,"if","do",Ident,"begin", "write", "read","for" ,\epsilon}		FOLLOW{"else" , "while" , ";" , "end"}
+
+AssignmentStatement -> (Ident | FuncIdent | Ident "[" Expression "]") ":=" Expression  
+FIRST{Ident}		FOLLOW{Statement_FOLLOW}
+
+FuncIdent -> Ident
+FIRST{Ident}		FOLLOW{":="}
+
+Expression -> OptionalUnary  Term SubExpression
+FIRST{"+","-",Ident,Unsigned_Number,"("}		FOLLOW{Statement_FOLLOW , "]" , ")" , "," ,"=" , "<>" , "<" , "<=" , ">" , ">=" , "downto", "to" ,"do"}
+
+OptionalUnary -> "+" | "-" | \epsilon
+FIRST{"+","-",\epsilon}		FOLLOW{Ident,Unsigned_Number,"("}
+
+SubExpression -> (("+" | "-") Term	SubExpression) | \epsilon
+FIRST{"+","-",\epsilon}		FOLLOW{ Expression_FOLLOW }
+
+Term -> Factor	Factors 
+FIRST{Ident,Unsigned_Number,"("}		FOLLOW{"+","-" , Expression_FOLLOW}
+
+Factors -> (("*" | "/") Factor Factors) | \epsilon
+FIRST{"*","/",\epsilon}		FOLLOW{ "+","-",Expression_FOLLOW } 
+
+Factor -> Ident | Unsigned_Number | ParenthesisFactor | CallFunc | Ident "[" Expression "]"
+FIRST{Ident,Unsigned_Number,"("}		FOLLOW{ "*" , "/" , "+","-",Expression_FOLLOW }
+
+CallFunc ->  Ident  ["(" ActualParameters ")"] 
+FIRST{Ident}		FOLLOW{"*" , "/" , "+","-",Expression_FOLLOW}
+
+ParenthesisFactor -> "(" Expression ")"
+FIRST{"("}		FOLLOW{"*" , "/" , "+","-",Expression_FOLLOW}
+
+CallProcStatement ->  Ident  ["(" ActualParameters")"] 
+FIRST{Ident}		FOLLOW{Statement_FOLLOW}
+
+ActualParameters -> Expression Expressions
+FIRST{"+","-",Ident,Unsigned_Number,"("}		FOLLOW{")"}
+
+Expressions -> (","  Expression	 Expressions) | \epsilon
+FIRST{",",\epsilon}		FOLLOW{")"}
+
+Condition ->  CompareCondition
+FIRST{"+","-",Ident,Unsigned_Number,"("}		FOLLOW{Statement_FOLLOW , "then"}
+
+CompareCondition -> Expression ("=" | "<>" | "<" | "<=" | ">" | ">=") Expression
+FIRST{"+","-",Ident,Unsigned_Number,"("}		FOLLOW{Statement_FOLLOW , "then"}
+
+IfStatement -> "if" Condition "then" Statement OptionalElse
+FIRST{"if"}		FOLLOW{Statement_FOLLOW}
+
+OptionalElse -> "else" Statement | \epsilon
+FIRST{"else" , \epsilon}	FOLLOW{ Statement_FOLLOW }
+
+DoWhileStatement -> "do" Statement "while" Condition
+FIRST{"do"}		FOLLOW{Statement_FOLLOW}
+
+ForStatement -> "for" Ident ":=" Expression ("downto" | "to") Expression "do" Statement
+FIRST{"for"}		FOLLOW{ Statement_FOLLOW }
+
+CompoundStatement -> "begin" Statement Seq_Statements "end"
+FIRST{"begin"}		FOLLOW{Statement_FOLLOW , "."}
+
+Seq_Statements ->  (";"	Statement	 Seq_Statements) | \epsilon
+FIRST{";", \epsilon}		FOLLOW{"end"}
+
+InputStatement -> "read" "(" Ident Seq_Ident ")"
+FIRST{"read"}		FOLLOW{Statement_FOLLOW}
+
+Seq_Ident -> ("," Ident Seq_Ident) | \epsilon
+FIRST{",",\epsilon}		FOLLOW{")"}
+
+OutputStatement -> "write" "(" ( (String "," Expression) | String | Expression) ")"
+FIRST{"write"}		FOLLOW{Statement_FOLLOW}
+
