@@ -1,0 +1,232 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+Access	include/Expr.h	/^		Access (Id *id ,Type * t, Expr * e) : Op(new Word("[]" ,T_INDEX),t) {array = id ; index = e }$/;"	f	class:Access
+Access	include/Expr.h	/^class Access : public Op{$/;"	c
+Arith	include/Expr.h	/^class Arith : public Op {$/;"	c
+Arith	inter/Expr.cpp	/^Arith::Arith(Token* tok , Expr *x1 , Expr* x2) : Op(tok, nullptr){$/;"	f	class:Arith
+Array	include/Type.h	/^	Array(int sz , Type* t) : Type(T_ARRAY , sz*(t->width), "array")$/;"	f	class:Array
+Array	include/Type.h	/^class Array : public Type{$/;"	c
+BUILDDIR	lexer/Makefile	/^BUILDDIR = ..\/obj\/lexer\/$/;"	m
+CC	lexer/Makefile	/^CC = g++$/;"	m
+CFLAGS	lexer/Makefile	/^CFLAGS = -Wall -Werror --std=c++11$/;"	m
+Char	include/Type.h	/^		static Type *Int,*Char;$/;"	m	class:Type
+Char	lexer/Type.cpp	/^Type* Type::Char = new Type(T_CHAR , Char_Width , "char");  $/;"	m	class:Type	file:
+Char_Width	lexer/Type.cpp	3;"	d	file:
+Character	include/Token.h	/^		Character(char c) : Token(T_CHARACTER){character = c; value = character;}$/;"	f	class:Character
+Character	include/Token.h	/^class Character : public Token{$/;"	c
+Constant	include/Expr.h	/^		Constant (Token *t): Expr(t , Type::int){}$/;"	f	class:Constant
+Constant	include/Expr.h	/^class Constant : public Expr {$/;"	c
+Div	include/Token.h	/^		static Word *Div ; $/;"	m	class:Word
+Div	lexer/Lexer.cpp	/^Word	*Word::Div = new Word("\/",T_DIV);	$/;"	m	class:Word	file:
+ENV_H	include/Env.h	5;"	d
+EXPR_H	include/Expr.h	3;"	d
+Env	include/Env.h	/^		Env(Env *prev){this.prev = prev;}$/;"	f	class:Env
+Env	include/Env.h	/^class Env{$/;"	c
+Expr	include/Expr.h	/^		Expr(Token* tok , Type *t) {op = tok ; type = t;}$/;"	f	class:Expr
+Expr	include/Expr.h	/^class Expr : public Node{$/;"	c
+HEADER_PATH	lexer/Makefile	/^HEADER_PATH = ..\/include$/;"	m
+Hashtable	include/Env.h	/^typedef std::unordered_map<Token , Id> Hashtable;$/;"	t
+Id	include/Expr.h	/^		Id(Word* w , Type* t , int o): Expr(w,t) {offset = o;}$/;"	f	class:Id
+Id	include/Expr.h	/^class Id : public Expr {$/;"	c
+If	include/Stmt.h	/^		If(Expr *expr , Stmt *stmt){e = expr;s =stmt;}$/;"	f	class:If
+If	include/Stmt.h	/^class If : public Stmt{$/;"	c
+Int	include/Type.h	/^		static Type *Int,*Char;$/;"	m	class:Type
+Int	lexer/Type.cpp	/^Type* Type::Int = new Type(T_INT , Int_Width , "integer") ;$/;"	m	class:Type	file:
+Int_Width	lexer/Type.cpp	2;"	d	file:
+LEXER_C	lexer/Makefile	/^LEXER_C = Lexer.cpp Type.cpp $/;"	m
+LEXER_H	include/Lexer.h	11;"	d
+LEXER_H	lexer/Makefile	/^LEXER_H = $(HEADER_PATH)\/Lexer.h  $(HEADER_PATH)\/Tag.h $(HEADER_PATH)\/Token.h $(HEADER_PATH)\/Type.h$/;"	m
+LEXER_TEST	lexer/Makefile	/^LEXER_TEST = ..\/test\/test_lexer.cpp$/;"	m
+Lexer	include/Lexer.h	/^class Lexer {$/;"	c
+Lexer	lexer/Lexer.cpp	/^Lexer::Lexer(std::string str) {$/;"	f	class:Lexer
+MAX_STR_LEN	include/Lexer.h	7;"	d
+MAX_WORD_LEN	include/Lexer.h	8;"	d
+Minus	include/Token.h	/^		static Word *Minus ; $/;"	m	class:Word
+Minus	lexer/Lexer.cpp	/^Word	*Word::Minus = new Word("-",T_MINUS);$/;"	m	class:Word	file:
+Mult	include/Token.h	/^		static Word *Mult ; $/;"	m	class:Word
+Mult	lexer/Lexer.cpp	/^Word	*Word::Mult = new Word("*",T_MULT);	$/;"	m	class:Word	file:
+NODE_H	include/Node.h	7;"	d
+Node	include/Node.h	/^	Node () {lexline = Lexer::line;}$/;"	f	class:Node
+Node	include/Node.h	/^class Node{$/;"	c
+Null	include/Stmt.h	/^		static Stmt* Null;$/;"	m	class:Stmt
+Num	include/Token.h	/^		Num(int v) : Token(T_NUMBER) {value = v;}$/;"	f	class:Num
+Num	include/Token.h	/^class Num : public Token{$/;"	c
+OBJS	lexer/Makefile	/^OBJS = $(patsubst %.cpp,$(BUILDDIR)%.o,$(LEXER_C))$/;"	m
+Op	include/Expr.h	/^		Op(Token* tok , Type* t) : Expr(tok , t){}$/;"	f	class:Op
+Op	include/Expr.h	/^class Op : public Expr {$/;"	c
+Plus	include/Token.h	/^		static Word *Plus ; $/;"	m	class:Word
+Plus	lexer/Lexer.cpp	/^Word	*Word::Plus = new Word("+",T_PLUS);$/;"	m	class:Word	file:
+Rel	include/Expr.h	/^class Rel : public Expr {$/;"	c
+Rel	inter/Expr.cpp	/^Rel::Rel (Token *t ,Expr *x1 , Expr *x2) : Expr(t,nullptr){$/;"	f	class:Rel
+STMT_H	include/Stmt.h	5;"	d
+STring	include/Token.h	/^		STring(std::string s) : Token(T_STRING){line = s;}$/;"	f	class:STring
+STring	include/Token.h	/^class STring : public Token{$/;"	c
+Stmt	include/Stmt.h	/^		Stmt(){}$/;"	f	class:Stmt
+Stmt	include/Stmt.h	/^class Stmt : public Node{$/;"	c
+TOKEN_H	include/Token.h	4;"	d
+T_ARRAY	include/Tag.h	/^	T_ARRAY , \/\/ array$/;"	e	enum:Tag
+T_ASSIGN	include/Tag.h	/^	T_ASSIGN, \/\/ :=$/;"	e	enum:Tag
+T_BEGIN	include/Tag.h	/^    T_BEGIN, \/\/ begin$/;"	e	enum:Tag
+T_CHAR	include/Tag.h	/^	T_CHAR, \/\/ char$/;"	e	enum:Tag
+T_CHARACTER	include/Tag.h	/^	T_CHARACTER, $/;"	e	enum:Tag
+T_CLOSEBRACKET	include/Tag.h	/^	T_CLOSEBRACKET, \/\/ ]$/;"	e	enum:Tag
+T_CLOSEPARENTHESIS	include/Tag.h	/^	T_CLOSEPARENTHESIS,  \/\/ )$/;"	e	enum:Tag
+T_COLON	include/Tag.h	/^	T_COLON, \/\/ :$/;"	e	enum:Tag
+T_COMMA	include/Tag.h	/^	T_COMMA, \/\/ ,$/;"	e	enum:Tag
+T_CONST	include/Tag.h	/^	T_CONST, \/\/ const$/;"	e	enum:Tag
+T_DIV	include/Tag.h	/^	T_DIV, \/\/ \/ $/;"	e	enum:Tag
+T_DO	include/Tag.h	/^    T_DO,  \/\/ do$/;"	e	enum:Tag
+T_DOT	include/Tag.h	/^	T_DOT, \/\/ .$/;"	e	enum:Tag
+T_DOWNTO	include/Tag.h	/^	T_DOWNTO, \/\/ downto$/;"	e	enum:Tag
+T_ELSE	include/Tag.h	/^	T_ELSE, \/\/ else$/;"	e	enum:Tag
+T_END	include/Tag.h	/^    T_END, \/\/ end$/;"	e	enum:Tag
+T_EQ	include/Tag.h	/^	T_EQ, \/\/ =$/;"	e	enum:Tag
+T_FOR	include/Tag.h	/^	T_FOR, \/\/ for$/;"	e	enum:Tag
+T_FUNCTION	include/Tag.h	/^	T_FUNCTION, \/\/ function$/;"	e	enum:Tag
+T_GE	include/Tag.h	/^	T_GE, \/\/ >=$/;"	e	enum:Tag
+T_GT	include/Tag.h	/^	T_GT, \/\/ >$/;"	e	enum:Tag
+T_IDENT	include/Tag.h	/^	T_IDENT,$/;"	e	enum:Tag
+T_IF	include/Tag.h	/^    T_IF, \/\/ if$/;"	e	enum:Tag
+T_INDEX	include/Tag.h	/^	T_INDEX , $/;"	e	enum:Tag
+T_INT	include/Tag.h	/^	T_INT, \/\/ integer$/;"	e	enum:Tag
+T_LE	include/Tag.h	/^	T_LE, \/\/ <=$/;"	e	enum:Tag
+T_LT	include/Tag.h	/^	T_LT, \/\/ <$/;"	e	enum:Tag
+T_MINUS	include/Tag.h	/^	T_MINUS, \/\/ -$/;"	e	enum:Tag
+T_MULT	include/Tag.h	/^	T_MULT, \/\/ *$/;"	e	enum:Tag
+T_NE	include/Tag.h	/^	T_NE, \/\/ <>$/;"	e	enum:Tag
+T_NULL	include/Tag.h	/^	T_NULL = 256,$/;"	e	enum:Tag
+T_NUMBER	include/Tag.h	/^	T_NUMBER,$/;"	e	enum:Tag
+T_OF	include/Tag.h	/^	T_OF, \/\/ of$/;"	e	enum:Tag
+T_OPENBRACKET	include/Tag.h	/^	T_OPENBRACKET, \/\/ [$/;"	e	enum:Tag
+T_OPENPARENTHESIS	include/Tag.h	/^	T_OPENPARENTHESIS, \/\/ ($/;"	e	enum:Tag
+T_PLUS	include/Tag.h	/^	T_PLUS, \/\/ + $/;"	e	enum:Tag
+T_PROCEDURE	include/Tag.h	/^    T_PROCEDURE, \/\/ procedure$/;"	e	enum:Tag
+T_READ	include/Tag.h	/^	T_READ, \/\/ read$/;"	e	enum:Tag
+T_SEMICOLON	include/Tag.h	/^	T_SEMICOLON, \/\/ ;$/;"	e	enum:Tag
+T_STRING	include/Tag.h	/^	T_STRING,$/;"	e	enum:Tag
+T_TEMP	include/Tag.h	/^	T_TEMP ,$/;"	e	enum:Tag
+T_THEN	include/Tag.h	/^    T_THEN, \/\/ then$/;"	e	enum:Tag
+T_TO	include/Tag.h	/^	T_TO, \/\/ to$/;"	e	enum:Tag
+T_VAR	include/Tag.h	/^	T_VAR, \/\/ var$/;"	e	enum:Tag
+T_WHILE	include/Tag.h	/^    T_WHILE, \/\/ while$/;"	e	enum:Tag
+T_WRITE	include/Tag.h	/^	T_WRITE, \/\/ write$/;"	e	enum:Tag
+Tag	include/Tag.h	/^enum Tag{$/;"	g
+Tags_H	include/Tag.h	2;"	d
+Temp	include/Expr.h	/^	Temp(Type *t) : Expr(Word::temp , t) {number += count;}$/;"	f	class:Temp
+Temp	include/Expr.h	/^class Temp : public  Expr {$/;"	c
+Token	include/Token.h	/^		Token (Tag i){$/;"	f	class:Token
+Token	include/Token.h	/^class Token{$/;"	c
+Type	include/Type.h	/^		Type(Tag t , int w, std::string s) : Word(s,t) {width = w;}$/;"	f	class:Type
+Type	include/Type.h	/^class Type : public Word{$/;"	c
+Unary	include/Expr.h	/^class Unary : public Op {$/;"	c
+Unary	inter/Expr.cpp	/^Unary::Unary(Token *tok, Expr *x) : Op(tok,null) {$/;"	f	class:Unary
+Word	include/Token.h	/^		Word(char const *s, Tag tag) : Token(tag) {lexeme = s;}$/;"	f	class:Word
+Word	include/Token.h	/^		Word(std::string s, Tag tag) : Token(tag) {lexeme = s;}$/;"	f	class:Word
+Word	include/Token.h	/^class Word : public Token{$/;"	c
+array	include/Expr.h	/^		Id * array ;$/;"	m	class:Access
+assign	include/Token.h	/^		static Word  *assign;$/;"	m	class:Word
+assign	lexer/Lexer.cpp	/^Word *  Word::assign = new Word(":=",T_ASSIGN);$/;"	m	class:Word	file:
+c	include/Expr.h	/^		int c ;$/;"	m	class:Constant
+character	include/Token.h	/^		char character;$/;"	m	class:Character
+check	inter/Expr.cpp	/^bool Rel::check(Type *p1 , Type *p2){$/;"	f	class:Rel
+closebracket	include/Token.h	/^		static Word *closebracket ; $/;"	m	class:Word
+closebracket	lexer/Lexer.cpp	/^Word	*Word::closebracket = new Word("]",T_CLOSEBRACKET);	$/;"	m	class:Word	file:
+closeparenthesis	include/Token.h	/^		static Word *closeparenthesis ; $/;"	m	class:Word
+closeparenthesis	lexer/Lexer.cpp	/^Word	*Word::closeparenthesis = new Word(")",T_CLOSEPARENTHESIS);$/;"	m	class:Word	file:
+colon	include/Token.h	/^		static Word *colon ; $/;"	m	class:Word
+colon	lexer/Lexer.cpp	/^Word	*Word::colon = new Word(":",T_COLON);	$/;"	m	class:Word	file:
+column	include/Lexer.h	/^		static int column;$/;"	m	class:Lexer
+column	lexer/Lexer.cpp	/^int Lexer::column = 0;$/;"	m	class:Lexer	file:
+comma	include/Token.h	/^		static Word *comma ; $/;"	m	class:Word
+comma	lexer/Lexer.cpp	/^Word	*Word::comma = new Word(",",T_COMMA);	$/;"	m	class:Word	file:
+count	include/Expr.h	/^	static int count;$/;"	m	class:Temp
+dot	include/Token.h	/^		static Word *dot ; $/;"	m	class:Word
+dot	lexer/Lexer.cpp	/^Word	*Word::dot = new Word(".",T_DOT);	$/;"	m	class:Word	file:
+e	include/Expr.h	/^		Expr* e;$/;"	m	class:Unary
+e	include/Stmt.h	/^		Expr* e;$/;"	m	class:If
+e1	include/Expr.h	/^		Expr * e1;$/;"	m	class:Arith
+e1	include/Expr.h	/^		Expr *e1;$/;"	m	class:Rel
+e2	include/Expr.h	/^		Expr * e2;$/;"	m	class:Arith
+e2	include/Expr.h	/^		Expr *e2;$/;"	m	class:Rel
+emit	include/Node.h	/^	void emit(std::string s) {std::cout <<"\\t"<< s << endl;}$/;"	f	class:Node
+emitjumps	inter/Expr.cpp	/^virtual void Expr::emitjumps(std::string test , label iftrue , label iffalse){$/;"	f	class:Expr
+emitlabel	include/Node.h	/^	void emitlabel(label l) {std::cout << "L" + i + ":";}$/;"	f	class:Node
+eq	include/Token.h	/^		static Word *eq ; $/;"	m	class:Word
+eq	lexer/Lexer.cpp	/^Word	*Word::eq = new Word("=",T_EQ);	$/;"	m	class:Word	file:
+fs	include/Lexer.h	/^		std::fstream *fs;$/;"	m	class:Lexer
+ge	include/Token.h	/^		static Word *ge ; $/;"	m	class:Word
+ge	lexer/Lexer.cpp	/^Word	*Word::ge = new Word(">=",T_GE);	$/;"	m	class:Word	file:
+gen	include/Expr.h	/^		Arith(Token* tok , Expr *x1 , Expr* x2); Expr* gen(){ return new Arith(op, e1.reduce() , e2.reduce()); }$/;"	f	class:Arith
+gen	include/Expr.h	/^		Expr * gen() {return new Access*(id,t,e->reduce());}$/;"	f	class:Access
+gen	include/Expr.h	/^		Expr* gen(){return new Unary(Op, e.reduce()) ;}$/;"	f	class:Unary
+gen	include/Expr.h	/^		virtual Expr* gen() {return this;}$/;"	f	class:Expr
+gen	include/Stmt.h	/^		gen(label begin , label after){}$/;"	f	class:Stmt
+gen	include/Stmt.h	/^		void gen(label before, label after){$/;"	f	class:If
+gt	include/Token.h	/^		static Word *gt ; $/;"	m	class:Word
+gt	lexer/Lexer.cpp	/^Word	*Word::gt = new Word(">",T_GT);	$/;"	m	class:Word	file:
+hashtable	include/Lexer.h	/^typedef std::unordered_map<std::string , Word*> hashtable;$/;"	t
+index	include/Expr.h	/^		Expr * index ; $/;"	m	class:Access
+jumping	include/Expr.h	/^		void jumping(label iftrue, label iffalse) {emitjumps(reduce()->toString(),t,f);}$/;"	f	class:Access
+jumping	inter/Expr.cpp	/^virtual void Expr::jumping(label iftrue , label iffalse){$/;"	f	class:Expr
+label	include/Node.h	/^typedef int label;$/;"	t
+labels	include/Node.h	/^	static label labels;$/;"	m	class:Node
+labels	inter/Expr.cpp	/^label Node::labels = 0;$/;"	m	class:Node	file:
+le	include/Token.h	/^		static Word *le ; $/;"	m	class:Word
+le	lexer/Lexer.cpp	/^Word	*Word::le = new Word("<=",T_LE);	$/;"	m	class:Word	file:
+lexeme	include/Token.h	/^		std::string lexeme;$/;"	m	class:Word
+lexline	include/Node.h	/^	int lexline = 0;$/;"	m	class:Node
+line	include/Lexer.h	/^		static int line;         \/\/ not even a declaration!$/;"	m	class:Lexer
+line	include/Token.h	/^		std::string line;$/;"	m	class:STring
+line	lexer/Lexer.cpp	/^int Lexer::line = 1;$/;"	m	class:Lexer	file:
+lt	include/Token.h	/^		static Word *lt ; $/;"	m	class:Word
+lt	lexer/Lexer.cpp	/^Word	*Word::lt = new Word("<",T_LT);	$/;"	m	class:Word	file:
+main	test/test_lexer.cpp	/^int main()$/;"	f
+max	lexer/Type.cpp	/^Type* Type::max(Type *p1, Type *p2)$/;"	f	class:Type
+ne	include/Token.h	/^		static Word *ne ; $/;"	m	class:Word
+ne	lexer/Lexer.cpp	/^Word	*Word::ne = new Word("<>",T_NE);	$/;"	m	class:Word	file:
+newlabel	include/Node.h	/^	label newlabel() {return ++labels;}$/;"	f	class:Node
+number	include/Expr.h	/^	int number = 0;$/;"	m	class:Temp
+numeric	lexer/Type.cpp	/^Type* Type::numeric(Type *t){$/;"	f	class:Type
+of	include/Type.h	/^	Type *of ;$/;"	m	class:Array
+offset	include/Expr.h	/^		int offset ;        \/\/ relative address ( of what ?)$/;"	m	class:Id
+op	include/Expr.h	/^		Token *op;$/;"	m	class:Expr
+openbracket	include/Token.h	/^		static Word *openbracket ; $/;"	m	class:Word
+openbracket	lexer/Lexer.cpp	/^Word	*Word::openbracket = new Word("[",T_OPENBRACKET);	$/;"	m	class:Word	file:
+openparenthesis	include/Token.h	/^		static Word *openparenthesis ; $/;"	m	class:Word
+openparenthesis	lexer/Lexer.cpp	/^Word	*Word::openparenthesis = new Word("(",T_OPENPARENTHESIS);	$/;"	m	class:Word	file:
+peek	include/Lexer.h	/^		char peek = ' ';$/;"	m	class:Lexer
+prev	include/Env.h	/^		Env *prev;$/;"	m	class:Env
+put	include/Env.h	/^		void put(Token t , Id i){table.insert(std::make_pair(t,i))}$/;"	f	class:Env
+readch	lexer/Lexer.cpp	/^bool Lexer::readch(char c){$/;"	f	class:Lexer
+readch	lexer/Lexer.cpp	/^inline void Lexer::readch(){$/;"	f	class:Lexer
+reduce	inter/Expr.cpp	/^Expr* Op::reduce(){$/;"	f	class:Op
+reserve	include/Lexer.h	/^		void reserve(Word* w) {words.insert(std::make_pair(w->lexeme,w));}$/;"	f	class:Lexer
+s	include/Stmt.h	/^		Stmt* s;$/;"	m	class:If
+scan	lexer/Lexer.cpp	/^Token* Lexer::scan(){$/;"	f	class:Lexer
+semicolon	include/Token.h	/^		static Word *semicolon ; $/;"	m	class:Word
+semicolon	lexer/Lexer.cpp	/^Word	*Word::semicolon = new Word(";",T_SEMICOLON);	$/;"	m	class:Word	file:
+size	include/Type.h	/^	int size = 1;$/;"	m	class:Array
+table	include/Env.h	/^		Hashtable table;$/;"	m	class:Env
+tag	include/Token.h	/^		Tag tag;$/;"	m	class:Token
+temp	include/Token.h	/^		static Word *temp;$/;"	m	class:Word
+temp	lexer/Lexer.cpp	/^Word    *Word::temp = new Word("temp",T_TEMP);$/;"	m	class:Word	file:
+toString	include/Expr.h	/^		std::string  toString(){return op.toString() + " " + expr.toString();}$/;"	f	class:Unary
+toString	include/Expr.h	/^		std::string toString() {return e1.toString() + " " + op.toString + " " + e2.toString();}$/;"	f	class:Arith
+toString	include/Expr.h	/^		std::string toString(){return array->toString()+"[" + index.toString + "]";}$/;"	f	class:Access
+toString	include/Expr.h	/^		virtual std::string toString(){return op.toString();}$/;"	f	class:Expr
+toString	include/Expr.h	/^	std::string toString(){return "t"+number;}$/;"	f	class:Temp
+toString	include/Token.h	/^		std::string toString() {return std::to_string(character);}$/;"	f	class:Character
+toString	include/Token.h	/^		std::string toString() {return std::to_string(value);}$/;"	f	class:Num
+toString	include/Token.h	/^		std::string toString(){return line;}$/;"	f	class:STring
+toString	include/Token.h	/^		string toString() {return lexeme;}$/;"	f	class:Word
+toString	include/Token.h	/^		virtual std::string toString(){$/;"	f	class:Token
+toString	include/Type.h	/^	std::string toString(){$/;"	f	class:Array
+type	include/Expr.h	/^		Type *type;$/;"	m	class:Expr
+value	include/Token.h	/^		int value;$/;"	m	class:Character
+value	include/Token.h	/^		int value;$/;"	m	class:Num
+width	include/Type.h	/^		int width;$/;"	m	class:Type
+words	include/Lexer.h	/^		hashtable words;$/;"	m	class:Lexer

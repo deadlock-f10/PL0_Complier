@@ -1,0 +1,10 @@
+1.　为什么有很多个Env对象都有一个hashtable ,　却只用一个Lexer呢？
+
+因为Env 里symboltable用来把 Token 映射到 存放这个变量的地址. 为了使Block里面的变量与外面的变量独立,每一个Block都应该独立对应一个新的Env.事实上每个独立的函数或者过程里也应该对应一个Env
+
+而Lexer主要是返回给语法分析一个Token.
+注意，在接下来的语法分析中唯一重要的是Token的类型以及lexeme，至于与Token相关联的地址则不是语法分析要关心的事情(应该是生成中间代码阶段需要关心的)．
+
+2.	我们把形如'a' 以及"string"的语法成分看成是一体的，也就是说，在词法分析阶段不把 ' , " 单独看做是一个token.这样做的原因是我们的文法规定字符串里的字符类型有非常多种，如果我们把字符串的内容单独作为一个token的话，词法分析器在判断这个token的类型(String,Word)时会需要联系上下文，这样就使设计复杂了．
+
+3. FIRST 与 FOLLOW　集的作用主要是用于选择对应的Production. 如果一个非终结符能够推出\epsilon，那么当我们读到的第一个元素属于FOLLOW集时，说明此时的Production应为\epsilon.　反之如果读到的Token属于FIRST集，则从中选择对应的Production.
