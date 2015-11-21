@@ -9,7 +9,6 @@ void Parser::match(Tag t){
 	if(look->tag = t)
 		move();
 	else
-		;              // throw exception
 }
 
 void Parser::program(){
