@@ -2,12 +2,15 @@
 #define Tags_H
 enum Tag{
 	T_NULL = 256,
+	
+	T_TEMP ,
 
 	T_INT, // integer
 	T_CHAR, // char
+	T_INDEX , 
 
 	T_IDENT,
-	T_NUMBER,
+	T_NUMBER,      //unsigned number
 	T_CHARACTER, 
 	T_STRING,
 	T_OF, // of
@@ -51,7 +54,8 @@ enum Tag{
 	T_OPENBRACKET, // [
 	T_CLOSEBRACKET, // ]
 
-	T_COMMA, // :
+	T_COMMA, // ,
+	T_COLON, // :
 	T_SEMICOLON, // ;
 	T_DOT, // .
 //	T_DQUOTE, // "

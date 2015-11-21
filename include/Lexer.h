@@ -7,6 +7,8 @@
 #define MAX_STR_LEN (2048)
 #define MAX_WORD_LEN (2048)
 
+#ifndef LEXER_H
+#define LEXER_H
 typedef std::unordered_map<std::string , Word*> hashtable;
 
 class Lexer {
@@ -23,3 +25,4 @@ class Lexer {
 		void readch(); 
 		bool readch(char c);
 };
+#endif

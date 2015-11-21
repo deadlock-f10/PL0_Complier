@@ -2,24 +2,26 @@
 #include "../include/Type.h"
 #include <iostream>
 
-Word *  assign = new Word(":=",T_ASSIGN);
-Word	*Plus = new Word("+",T_PLUS);
-Word	*Minus = new Word("-",T_MINUS);
-Word	*Mult = new Word("*",T_MULT);	
-Word	*Div = new Word("/",T_DIV);	
-Word	*eq = new Word("=",T_EQ);	
-Word	*gt = new Word(">",T_GT);	
-Word	*lt = new Word("<",T_LT);	
-Word	*le = new Word("<=",T_LE);	
-Word	*ge = new Word(">=",T_GE);	
-Word	*ne = new Word("<>",T_NE);	
-Word	*openparenthesis = new Word("(",T_OPENPARENTHESIS);	
-Word	*closeparenthesis = new Word(")",T_CLOSEPARENTHESIS);
-Word	*openbracket = new Word("[",T_OPENBRACKET);	
-Word	*closebracket = new Word("]",T_CLOSEBRACKET);	
-Word	*comma = new Word(":",T_COMMA);	
-Word	*semicolon = new Word(";",T_SEMICOLON);	
-Word	*dot = new Word(".",T_DOT);	
+Word *  Word::assign = new Word(":=",T_ASSIGN);
+Word	*Word::Plus = new Word("+",T_PLUS);
+Word	*Word::Minus = new Word("-",T_MINUS);
+Word	*Word::Mult = new Word("*",T_MULT);	
+Word	*Word::Div = new Word("/",T_DIV);	
+Word	*Word::eq = new Word("=",T_EQ);	
+Word	*Word::gt = new Word(">",T_GT);	
+Word	*Word::lt = new Word("<",T_LT);	
+Word	*Word::le = new Word("<=",T_LE);	
+Word	*Word::ge = new Word(">=",T_GE);	
+Word	*Word::ne = new Word("<>",T_NE);	
+Word	*Word::openparenthesis = new Word("(",T_OPENPARENTHESIS);	
+Word	*Word::closeparenthesis = new Word(")",T_CLOSEPARENTHESIS);
+Word	*Word::openbracket = new Word("[",T_OPENBRACKET);	
+Word	*Word::closebracket = new Word("]",T_CLOSEBRACKET);	
+Word	*Word::comma = new Word(",",T_COMMA);	
+Word	*Word::colon = new Word(":",T_COLON);	
+Word	*Word::semicolon = new Word(";",T_SEMICOLON);	
+Word	*Word::dot = new Word(".",T_DOT);	
+Word    *Word::temp = new Word("temp",T_TEMP);
 int Lexer::line = 1;
 int Lexer::column = 0;
 Lexer::Lexer(std::string str) {
@@ -84,44 +86,46 @@ L:  peek = ' ';
 	switch (peek){
 		case ':':
 			if(readch('='))
-				return assign;
+				return Word::assign;
 			else
-				return comma;
+				return Word::colon;
 		case '<':
 			readch();
 			if(peek == '>')
-				return ne;
+				return Word::ne;
 			else if(peek == '=')
-				return le;
+				return Word::le;
 			else 
-				return lt;
+				return Word::lt;
 		case '>':
 			if(readch('='))
-				return ge;
+				return Word::ge;
 			else
-				return gt;
+				return Word::gt;
 		case '=':
-			return eq;
+			return Word::eq;
 		case '+':
-			return Plus;
+			return Word::Plus;
 		case '-':
-			return Minus;
+			return Word::Minus;
 		case '*':
-			return Mult;
+			return Word::Mult;
 		case '/':
-			return Div;
+			return Word::Div;
 		case ';':
-			return semicolon;
+			return Word::semicolon;
 		case '.':
-			return dot;
+			return Word::dot;
 		case '(':
-			return openparenthesis;
+			return Word::openparenthesis;
 		case ')':
-			return closeparenthesis;
+			return Word::closeparenthesis;
 		case '[':
-			return openbracket;
+			return Word::openbracket;
 		case ']':
-			return closebracket;
+			return Word::closebracket;
+		case ',':
+			return Word::comma;
 		case '\'':
 			readch();		
 			char c = peek;

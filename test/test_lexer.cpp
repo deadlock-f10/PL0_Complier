@@ -36,6 +36,8 @@ int main()
 			s = "T_PROCEDURE";
 		else if(t->tag == T_FUNCTION)
 			s = "T_FUNCTION";
+		else if(t->tag == T_COLON)
+			s = "T_COLON";
 		else if(t->tag == T_BEGIN)
 			s = "T_BEGIN";
 		else if(t->tag == T_END)

@@ -38,9 +38,9 @@ Variables -> "var" VariableDeclaration ";"	Seq_VariableDeclaration
 
 Seq_VariableDeclaration -> (VariableDeclaration ";" Seq_VariableDeclaration) | \epsilon
 
-VariableDeclaration -> Ident Seq_IdentDeclaration ":" Type
+VariableDeclaration -> Ident Seq_Ident ":" Type
 
-Seq_IdentDeclaration -> ("," Ident Seq_IdentDeclaration) | \epsilon
+Seq_Ident -> ("," Ident Seq_Ident) | \epsilon
 
 Type -> Basic_Type | "array" "[" Unsigned_Number "]" "of" Basic_Type
 
@@ -58,7 +58,7 @@ FormalParameters -> FormalParameters_Seg  Seq_FormalParameters_Seg
 
 Seq_FormalParameters_Seg -> (";"	FormalParameters_Seg	Seq_FormalParameters_Seg)  |  \epsilon
 
-FormalParameters_Seg -> OptionalVar Ident Seq_IdentDeclaration ":" Basic_Type
+FormalParameters_Seg -> OptionalVar Ident Seq_Ident ":" Basic_Type
 
 OptionalVar -> "var" | \epsilon
 
@@ -80,13 +80,13 @@ Term -> Factor	Factors
 
 Factors -> (("*" | "/") Factor Factors) | \epsilon
 
-Factor -> Ident | Unsigned_Number | ParenthesisFactor | CallFuncStatement | Ident "[" Expression "]"
+Factor -> Ident | Unsigned_Number | ParenthesisFactor | CallFunc | Ident "[" Expression "]"
+
+CallFunc ->  Ident  ["(" ActualParameters ")"] 
 
 ParenthesisFactor -> "(" Expression ")"
 
 CallProcStatement ->  Ident  ["(" ActualParameters")"] 
-
-CallFuncStatement ->  Ident  ["(" ActualParameters ")"] 
 
 ActualParameters -> Expression Expressions
 Expressions -> (","  Expression	 Expressions) | \epsilon
@@ -95,7 +95,9 @@ Condition ->  CompareCondition
 
 CompareCondition -> Expression ("=" | "<>" | "<" | "<=" | ">" | ">=") Expression
 
-IfStatement -> "if" Condition "then" Statement ["else" Statement]
+IfStatement -> "if" Condition "then" Statement OptionalElse
+
+OptionalElse -> "else" Statement | \epsilon
 
 DoWhileStatement -> "do" Statement "while" Condition
 
@@ -105,7 +107,7 @@ CompoundStatement -> "begin" Statement Statements "end"
 
 Statements ->  (";"	Statement	 Statements) | \epsilon
 
-InputStatement -> "read" "(" Ident("," Ident)* ")"
+InputStatement -> "read" "(" Ident Seq_Ident ")"
 
-OutputStatement -> "write" "(String "," Expression | String | Expression) ")"
+OutputStatement -> "write" "(" ( String "," Expression | String | Expression) ")"
 

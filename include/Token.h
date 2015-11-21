@@ -22,7 +22,8 @@ class Num : public Token{
 class Character : public Token{
 	public:
 		char character;
-		Character(char c) : Token(T_CHARACTER){character = c;}
+		int value;
+		Character(char c) : Token(T_CHARACTER){character = c; value = character;}
 		std::string toString() {return std::to_string(character);}
 };
 class STring : public Token{
@@ -38,6 +39,26 @@ class Word : public Token{
 		Word(std::string s, Tag tag) : Token(tag) {lexeme = s;}
 		Word(char const *s, Tag tag) : Token(tag) {lexeme = s;}
 		string toString() {return lexeme;}
+		static Word  *assign;
+		static Word *Plus ; 
+		static Word *Minus ; 
+		static Word *Mult ; 
+		static Word *Div ; 
+		static Word *eq ; 
+		static Word *gt ; 
+		static Word *lt ; 
+		static Word *le ; 
+		static Word *ge ; 
+		static Word *ne ; 
+		static Word *openbracket ; 
+		static Word *closebracket ; 
+		static Word *openparenthesis ; 
+		static Word *closeparenthesis ; 
+		static Word *comma ; 
+		static Word *colon ; 
+		static Word *semicolon ; 
+		static Word *dot ; 
+		static Word *temp;
 		
 };
 #endif

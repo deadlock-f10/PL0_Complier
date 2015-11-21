@@ -7,6 +7,7 @@ class Type : public Word{
 		Type(Tag t , int w, std::string s) : Word(s,t) {width = w;}
 		static Type *Int,*Char;
 		static Type* max(Type *p1,Type *p2); 
+		static bool numeric(Type *a);
 };
 
 class Array : public Type{

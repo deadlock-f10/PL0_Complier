@@ -13,7 +13,6 @@ Program -> Block "."
 Block -> [Constants] [Variables] (Procedures | Functions)* CompoundStatement
 
 Constants -> "const" ConstantDeclaration ("," ConstantDeclaration)* ";"
-
 ConstantDeclaration -> Ident "=" Constant
 
 Constant -> ["+" | "-"]  Unsigned_Number | Character
@@ -23,17 +22,14 @@ Unsigned_Number -> Digit (Digit)*
 Ident -> Letter (Letter | Digit)*
 
 Variables -> "var" VariableDeclaration ";" (VariableDeclaration ";")* 
-
-VariableDeclaration -> Ident ("," Ident)* : Type
+VariableDeclaration -> Ident ("," Ident)* ":" Type
 
 Type -> Basic_Type | "array" "[" Unsigned_Number "]" "of" Basic_Type
 
 Procedures -> (ProcedureDeclaration)+
-
 ProcedureDeclaration -> "procedure" Ident  ["("FormalParameters")"]  Block ";"
 
 Functions -> (FunctionDeclaration)+
-
 FunctionDeclaration  -> "function" Ident ["("FormalParameters")"] ":" Basic_Type ";"  Block ";"
 
 FormalParameters -> FormalParameters_Seg (";" FormalParameters_Seg)*
@@ -43,7 +39,6 @@ FormalParameters_Seg -> ["var"] Ident ("," Ident)* ":" Basic_Type
 Statement -> [AssignmentStatement| IfStatement  | DoWhileStatement  | CallProcStatement |CompoundStatement| InputStatement | OutputStatement | ForStatement ]
 
 AssignmentStatement -> (Ident | FuncIdent | Ident "[" Expression "]") ":=" Expression  
-
 FuncIdent -> Ident
 
 Expression -> ["+" | "-"]  Term ( ( "+" | "-" ) Term )*
@@ -75,4 +70,3 @@ CompoundStatement -> "begin" Statement ( ";" Statement )* "end"
 InputStatement -> "read" "(" Ident("," Ident)* ")"
 
 OutputStatement -> "write" "(String "," Expression | String | Expression) ")"
-
