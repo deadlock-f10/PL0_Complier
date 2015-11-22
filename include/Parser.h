@@ -4,20 +4,21 @@
 #include "../include/Lexer.h"
 #include <iostream>
 #include <string>
+#include <PAF.h>
 #ifndef PARSER_H
 #define PARSER_H
 class Parser{
 	private :
 		Lexer *lex;
 		Token *look;
-		Env * top = nullptr;
-		int used = 0;
+		Program * top = nullptr;
+//		int used = 0;
 		Parser(Lexer* l) {lex = l; move();}
 		void move(){look = lex->scan();}
 		void error(std::string s){;}     //unimplemented
 		void match(Tag t);
-		void program();
-		Stmt* block();
+		Program* program();
+		Block* block(Program *p);
 
 		void decl_constants();
 		Token* constant();
@@ -35,6 +36,14 @@ class Parser{
 
 
 		void decl_procandfunc();
+		Proc* proc_decl();
+		Func* func_decl();
+		void optional_para();
+		void form_para();
+		void seq_formpara_seg();
+		void formpara_seg();
+		
+
 		Stmt* compoundstmt();
 		Stmt* statement();
 		

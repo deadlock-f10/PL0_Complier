@@ -16,7 +16,12 @@ class Expr : public Node{
 class Id : public Expr {          // need add field which specify whether this identifier is const or not
 	public :
 		int offset ;        // relative address ( of what ?)
-		Id(Word* w , Type* t , int o): Expr(w,t) {offset = o;}
+		int level ;
+		bool isConst;
+		bool isRef = false;
+		Id(Word* w , Type* t , int o): Expr(w,t) {offset = o; isConst = false;}
+		Id(Word* w , Type* t , int o , bool b): Expr(w,t) {offset = o; isConst = bool;}
+		Id(Word* w , Type* t , int o , bool b1 , bool b2): Expr(w,t) {offset = o; isConst = b1; isRef = b2;}
 };
 
 class Op : public Expr {

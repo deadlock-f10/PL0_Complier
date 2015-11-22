@@ -9,7 +9,7 @@ class Stmt : public Node{
 	public :
 		Stmt(){}
 		static Stmt* Null;
-		gen(label begin , label after){}
+		virtual gen(label begin , label after){}
 //		label after = 0;         used for break
 };
 
