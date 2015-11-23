@@ -1,48 +1,77 @@
 #include "../include/Expr.h"
 #include "../include/Parser.h"
 
-Expr* Parser::expr(){
-	if(look->tag == T_MINUS){
-		return new Unary(T_MINUS,unary());
-	}
-}
-
 Expr* Parser::factor(){
 	Token* tok;
 	switch(look->tag){
 		case T_NUMBER:
 			tok = (Num *) look;
 			move();
-			return new Constant(tok);
+			return new Constant((Num *)tok);
 		/*case T_CHARACTER:
 			tok = (Character *) look;
 			move();
 			return new Character(tok);*/        //not allowed
 		case T_OPENPARENTHESIS:
 			return parentheisfactor();
-		case T_IDENT:             //incomplete . to much things to consider
-			tok = (Word *) tok;
-			Node * nod = top.get(tok);
-			if(nod == nullptr)
-				;             // throw exception
-			if(Id * id = dynamic_cast<Id *>nod){
-				move();
-				if(look->tag != T_OPENBRACKET)
-					return id;
-				else
-					return offset(id);
-			}
-			else if(Func * func = dynamic_cast<Func*>nod){
-				move();
-				match(T_OPENPARENTHESIS);
-				Callfunc * cf = callfunc(func);
-				match(T_CLOSEPARENTHESIS);
-				return cf;
-			}
-			else {
-				;              // throw exception
-			}
+		case T_IDENT:{
+				tok = (Word *)look;
+				Node * nod = top->get(tok);
+				if(nod == nullptr)
+					;             // throw exception
+				if(Id * id = dynamic_cast<Id *>(nod)){
+					move();
+					if(look->tag != T_OPENBRACKET)
+						return id;
+					else
+						return offset(id);
+				}
+				else if( dynamic_cast<Func*>(nod)){
+					return callfunc();
+				}
+				else {
+					;              // throw exception
+				}
+		}//incomplete . to much things to consider
+		default:
+			;
 	}
+	return nullptr ; // will not excuted
+}
+
+Callfunc* Parser::callfunc(){
+	match(T_IDENT);
+	Word * w = (Word*)look;
+	Node * nod = top->get(w);
+	Expr * e;
+	if(Func * func = dynamic_cast<Func*>(nod)){
+		if(func->paralist.size() == 0)				
+			return new Callfunc(func,nullptr);
+		else{
+			std::vector<Expr*> *list ;
+			match(T_OPENPARENTHESIS);
+			e = expr();
+			list->push_back(e);
+			if(func->paralist.size() == 1){
+				match(T_CLOSEPARENTHESIS);
+				return new Callfunc(func,list);
+			}
+			else{
+				for(unsigned int i = 1; i < func->paralist.size() ; i++){
+					match(T_COMMA);	
+					e = expr();
+					list->push_back(e);
+				}
+				match(T_CLOSEPARENTHESIS);
+				return new Callfunc(func,list);
+			}
+		}
+	}
+	else {
+		; // throw exception
+	}
+	return nullptr ; // will not excuted
+
 }
 
 Expr* Parser::term(){
@@ -55,7 +84,7 @@ Expr* Parser::term(){
 	return x;
 }
 
-Expr* expr(){
+Expr* Parser::expr(){
 	if(look->tag == T_MINUS)
 		return unary();
 	else if(look->tag == T_PLUS)
@@ -65,7 +94,7 @@ Expr* expr(){
 
 Expr* Parser::unary(){
 	match(T_MINUS);
-	return new Unary(T_MINUS,unsignedexpr());
+	return new Unary(Word::Minus,unsignedexpr());
 }
 
 Expr* Parser::unsignedexpr(){
@@ -93,4 +122,14 @@ Rel * Parser::condition(){
 		return new Rel(tok,x1,expr());
 	}
 	;           // throw exception
+	return nullptr ; // will not excuted
+}
+
+Access * Parser::offset(Id *id){
+	match(T_OPENBRACKET);
+	Expr * e  = expr();
+	Type * t = id->type;
+	t = ((Array*)t)->of;
+	match(T_CLOSEBRACKET);
+	return new Access(id,t,e);
 }

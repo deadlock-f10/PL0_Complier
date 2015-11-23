@@ -13,7 +13,9 @@ class Node{
 	void error(std::string s);      // unimplemented;
 	static label labels;
 	label newlabel() {return ++labels;}
-	void emitlabel(label l) {std::cout << "L" + i + ":";}
-	void emit(std::string s) {std::cout <<"\t"<< s << endl;}
+	//void emitlabel(label l) {std::cout << "L" + l + ":";}
+	virtual void emitlabel(label l) {;}
+	//void emit(std::string s) {std::cout <<"\t"<< s << endl;}
+	void emit(std::string s) {;}
 };
 #endif

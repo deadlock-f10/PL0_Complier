@@ -2,9 +2,9 @@
 #include "../include/Expr.h"
 #include "../include/Stmt.h"
 #include "../include/Lexer.h"
+#include "../include/PAF.h"
 #include <iostream>
 #include <string>
-#include <PAF.h>
 #ifndef PARSER_H
 #define PARSER_H
 class Parser{
@@ -18,7 +18,8 @@ class Parser{
 		void error(std::string s){;}     //unimplemented
 		void match(Tag t);
 		Program* program();
-		Block* block(Program *p);
+		Program* seq_paf();
+		Block* block();
 
 		void decl_constants();
 		Token* constant();
@@ -29,7 +30,7 @@ class Parser{
 		void decl_variables();
 		void variables();
 		void variableDeclaration();
-		void seq_constDeclaration();
+		void seq_variableDeclaration();
 		Type* type();
 
 		void seq_identDecl();
@@ -40,6 +41,7 @@ class Parser{
 		Func* func_decl();
 		void optional_para();
 		void form_para();
+		void form_para_seg();
 		void seq_formpara_seg();
 		void formpara_seg();
 		
@@ -49,11 +51,11 @@ class Parser{
 		Stmt* seq_statement();
 		Stmt* inputstatement();
 		Stmt* outputstatement();
-		Stmt* assignstatement(Word * dest);        //incomplete .no type checking
+		Stmt* assignstatement();        //incomplete .no type checking
 		Stmt* ifstatement();
 		Stmt* forstatement();
 		Stmt* dowhilestatement();
-		Stmt* callprocstatement(Word * procname);
+		Stmt* callprocstatement();
 
 		Expr* expr();
 		Expr* unary();
@@ -62,7 +64,7 @@ class Parser{
 		Expr* term();
 		Expr* parentheisfactor();
 		Access* offset(Id *id);
-		Callfunc* callfunc(Func* fc);
+		Callfunc* callfunc();
 
 		Rel * condition();
 };

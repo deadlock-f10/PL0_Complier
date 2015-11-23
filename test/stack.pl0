@@ -19,11 +19,11 @@ begin
 	else
 		IsFull := 0
 end;
-procedure MakeEmpty
+procedure MakeEmpty;
 begin
 	base := 0
 end;
-procedure Pop
+procedure Pop;
 begin
 	if IsEmpty = 1 then
 		write ("Stack is Empty")
@@ -37,7 +37,7 @@ begin
 	else
 		Top := stack[base-1]
 end;
-procedure Push (X : integer)
+procedure Push (X : integer);
 begin
 	if IsFull = 1 then
 		write ("Stack is Full")

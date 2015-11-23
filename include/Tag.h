@@ -1,6 +1,6 @@
 #ifndef Tags_H
 #define Tags_H
-enum Tag{
+enum Tag :int{
 	T_NULL = 256,
 	
 	T_TEMP ,

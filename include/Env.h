@@ -2,6 +2,7 @@
 #include "Node.h"
 #include <utility>
 #include <unordered_map>
+/*
 #ifndef ENV_H
 #define ENV_H
 typedef std::unordered_map<Token , Node> Hashtable;
@@ -24,3 +25,4 @@ class Env{
 		}
 }
 #endif
+*/

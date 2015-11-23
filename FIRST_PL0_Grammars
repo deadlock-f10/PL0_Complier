@@ -65,7 +65,7 @@ FIRST{"integer","char","array"}		FOLLOW{";"}
 Decl_ProcAndFunc -> ( (ProcedureDeclaration | FunctionDeclaration) Decl_ProcAndFunc ) | \epsilon
 FIRST{"procedure","function",\epsilon}		FOLLOW{"begin"}
 
-ProcedureDeclaration -> "procedure" Ident  OptionalFormPara  Block ";"
+ProcedureDeclaration -> "procedure" Ident  OptionalFormPara ";"  Block ";"
 FIRST{"procedure"}		FOLLOW{"procedure","function","begin"}
 
 FunctionDeclaration  -> "function" Ident OptionalFormPara ":" Basic_Type ";"  Block ";"

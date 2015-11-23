@@ -1,26 +1,31 @@
 #include "Node.h"
-#include "Expr.h"
-#include "Stmt.h"
+//#include "Expr.h"
+//#include "Stmt.h"
 #include <utility>
 #include <unordered_map>
+#include <vector>
 #ifndef PAF_H
 #define PAF_H
-typedef std::unordered_map<Token , Node> Hashtable;
+typedef std::unordered_map<Token* , Node*> Hashtable;
+class Block;
+class Seq;
+class Id;
+class Program;
 class Program :public Node{
 	public :
+	Program *prev = nullptr;
 	int level;
 	Hashtable symboltable;
 	Block *block;
 	int used = 0;
 	static Program* Null;
 	Program(){level = 1;}
-	virtual gen(label begin , label after){};
-	void put(Token* t , Node* i){table.insert(std::make_pair(t,i))}
-	Id* get(Token* w);
-}
+	virtual void gen(label begin , label after){};
+	void put(Token* t , Node* i){symboltable.insert(std::make_pair(t,i));}
+	Node* get(Token* w);
+};
 class Proc : public Program{
 	public :
-		Program *prev;
 		std::vector<Id*> paralist;
 		Word* name; 
 		label l;
@@ -30,13 +35,12 @@ class Proc : public Program{
 
 class Func : public Program{
 	public :
-		Program *prev;
 		std::vector<Id*> paralist;
 		label l;                     // L label:
 		Word* name; 
 		Type* type;
 //		std::string symtype = "function";
-		Proc(Program *p,Word *w, int l) {prev = p;name = w;level = l+1;}
+		Func(Program *p,Word *w, int l) {prev = p;name = w;level = l+1;}
 };
 
 class Seq_PAF : public Program{
@@ -52,5 +56,5 @@ class Block {
 	Seq * seq_stmt;
 	Program * belongto;
 	Block(Program *p){belongto = p;}
-}
+};
 #endif

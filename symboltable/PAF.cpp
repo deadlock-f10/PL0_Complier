@@ -2,12 +2,11 @@
 
 Program * Program::Null = nullptr;
 
-Id* Program::get(Token *w) {
-	for(Env *e = this ; e != nullptr ; e = e->prev){
-		Hashtable::const_iterator found = e->table.find(w).second; 
-		if ( found != e->table.end()) 
+Node* Program::get(Token *w) {
+	for(Program *e = this ; e != nullptr ; e = e->prev){
+		Hashtable::const_iterator found = e->symboltable.find(w); 
+		if ( found != e->symboltable.end()) 
 			return found->second;
 	}
 	return nullptr;
 }
-

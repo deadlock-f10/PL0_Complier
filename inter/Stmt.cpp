@@ -9,10 +9,10 @@ void IfElse::gen(label before, label after)
 
 	e->jumping(0,iffalse);
 	emitlabel(iftrue);
-	stmt1->gen(iftrue,after);
+	s1->gen(iftrue,after);
 	emit("goto L"+after);
 	emitlabel(iffalse);
-	stmt2->gen(iffalse,after);
+	s2->gen(iffalse,after);
 }
 void If::gen(label before, label after)
 {
@@ -29,14 +29,14 @@ void DoWhile::gen(label before, label after)
 	e->jumping(before,0);
 }
 
-void Assign::Assign(Id *id,Expr *e) {
-	this.id = id;
-	this.e = e;
+Assign::Assign(Id *id,Expr *e) {
+	this->id = id;
+	this->e = e;
 	if( !check(id->type,e->type))
 		; //throw exception
 }
 bool Assign::check(Type *a,Type *b){
-	if(!numeric(a) || !numeric(b))
+	if(!Type::numeric(a) || !Type::numeric(b))
 		return false;
 	else if(a == Type::Char && b == Type::Int)
 		return false;
@@ -47,15 +47,16 @@ AssignElem::AssignElem(Access *x , Expr *y){
 	array = x->array ;
 	index = x->index ; 
 	e = y; 
-	if(!check(array->type,array))
+	if(!check(array->type,y->type))
+		;            //throw exception
 }
 bool AssignElem::check(Type *a ,Type *b){
-	;	        // unimplemented
+	return true;	        // unimplemented
 }
 void AssignElem::gen(label begin,label after){
 	std::string s1 = index->reduce()->toString();
 	std::string s2 = e->reduce()->toString();
-	emit(array.toString() + "["+ s1 +"]" +" = " + s2);
+	emit(array->toString() + "["+ s1 +"]" +" = " + s2);
 }
 
 void Seq::gen(label begin , label after){

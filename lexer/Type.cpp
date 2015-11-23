@@ -12,9 +12,9 @@ Type* Type::max(Type *p1, Type *p2)
 	else
 		return Type::Char;
 }
-Type* Type::numeric(Type *t){
+bool Type::numeric(Type *t){
 	if(t == Type::Int || t == Type::Char) 
 		return true;
 	else 
-		false;
+		return false;
 }

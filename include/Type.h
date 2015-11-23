@@ -1,5 +1,6 @@
 #include "Token.h"
-
+#ifndef TYPE_H
+#define TYPE_H
 class Type ;
 class Type : public Word{
 	public:
@@ -7,7 +8,7 @@ class Type : public Word{
 		Type(Tag t , int w, std::string s) : Word(s,t) {width = w;}
 		static Type *Int,*Char;
 		static Type* max(Type *p1,Type *p2); 
-		static bool numeric(Type *a);
+		static bool numeric(Type *t);
 };
 
 class Array : public Type{
@@ -20,3 +21,4 @@ class Array : public Type{
 		return (lexeme + "[" + std::to_string(size) + "]" + "of" + of->toString());
 	}
 };
+#endif
