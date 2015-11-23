@@ -8,7 +8,7 @@
 #ifndef PARSER_H
 #define PARSER_H
 class Parser{
-	private :
+	public:
 		Lexer *lex;
 		Token *look;
 		Program * top = nullptr;
