@@ -21,21 +21,21 @@ class Program :public Node{
 class Proc : public Program{
 	public :
 		Program *prev;
-		std::list<Id> para;
-		std::list<Id> varpara;
+		std::vector<Id*> paralist;
 		Word* name; 
 		label l;
+//		std::string symtype = "procedure";
 		Proc(Program  *p,Word *w , int l) { prev = p;name = w;level = l+1;}
 };
 
 class Func : public Program{
 	public :
 		Program *prev;
-		std::list<Id> para;
-		std::list<Id> varpara;        // write back
+		std::vector<Id*> paralist;
 		label l;                     // L label:
 		Word* name; 
 		Type* type;
+//		std::string symtype = "function";
 		Proc(Program *p,Word *w, int l) {prev = p;name = w;level = l+1;}
 };
 

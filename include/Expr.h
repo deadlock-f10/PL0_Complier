@@ -24,6 +24,9 @@ class Id : public Expr {          // need add field which specify whether this i
 		Id(Word* w , Type* t , int o , bool b1 , bool b2): Expr(w,t) {offset = o; isConst = b1; isRef = b2;}
 };
 
+class Callfunc : public Expr{
+
+}
 class Op : public Expr {
 	public :
 		Op(Token* tok , Type* t) : Expr(tok , t){}
@@ -57,7 +60,8 @@ class Unary : public Op {
 class Constant : public Expr {
 	public :
 		int c ;
-		Constant (Token *t): Expr(t , Type::int){}
+		Constant (Num *t): Expr(t , Type::int){c = t->value;}
+		Constant (Character *t): Expr(t , Type::int){c = t->value;}
 };
 
 class Rel : public Expr {

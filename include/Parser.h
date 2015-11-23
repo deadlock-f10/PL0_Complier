@@ -46,7 +46,25 @@ class Parser{
 
 		Stmt* compoundstmt();
 		Stmt* statement();
-		
+		Stmt* seq_statement();
+		Stmt* inputstatement();
+		Stmt* outputstatement();
+		Stmt* assignstatement(Word * dest);        //incomplete .no type checking
+		Stmt* ifstatement();
+		Stmt* forstatement();
+		Stmt* dowhilestatement();
+		Stmt* callprocstatement(Word * procname);
+
+		Expr* expr();
+		Expr* unary();
+		Expr* unsignedexpr();
+		Expr* factor();
+		Expr* term();
+		Expr* parentheisfactor();
+		Access* offset(Id *id);
+		Callfunc* callfunc(Func* fc);
+
+		Rel * condition();
 };
 //#define Max_Variables_In_OneDecl  (100)
 #endif
