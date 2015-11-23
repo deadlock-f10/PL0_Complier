@@ -13,8 +13,8 @@ $(BUILDDIR)%.o: %.cpp
 	g++ $(CFLAGS) -c $< -o $@
 
 test: $(OBJS)
-	$(CC) $(CFLAGS) $(LEXER_TEST) $(OBJS) -o lexer_test
+	$(CC) $(CFLAGS) $(LEXER_TEST) $(OBJS) -o ../lexer_test
 clean:
-	rm -f $(OBJS) *~ *.o lexer_test
+	rm -f $(OBJS) *~ *.o ../lexer_test
 depend: $(LEXER_C)
 	makedepend $(LEXER_H) $^

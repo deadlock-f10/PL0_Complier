@@ -2,16 +2,16 @@
 #define Tags_H
 enum Tag :int{
 	T_NULL = 256,
-	
+
 	T_TEMP ,
 
 	T_INT, // integer
 	T_CHAR, // char
-	T_INDEX , 
+	T_INDEX ,
 
 	T_IDENT,
 	T_NUMBER,      //unsigned number
-	T_CHARACTER, 
+	T_CHARACTER,
 	T_STRING,
 	T_OF, // of
 	T_ARRAY , // array
@@ -31,16 +31,16 @@ enum Tag :int{
 	T_FOR, // for
 	T_DOWNTO, // downto
 	T_TO, // to
-	
+
 	T_READ, // read
 	T_WRITE, // write
 
 	T_ASSIGN, // :=
 
-	T_PLUS, // + 
+	T_PLUS, // +
 	T_MINUS, // -
 	T_MULT, // *
-	T_DIV, // / 
+	T_DIV, // /
 
 	T_EQ, // =
 	T_GT, // >
@@ -57,7 +57,7 @@ enum Tag :int{
 	T_COMMA, // ,
 	T_COLON, // :
 	T_SEMICOLON, // ;
-	T_DOT, // .
+	T_DOT // .
 //	T_DQUOTE, // "
 //	T_SQUOTE // '
 };

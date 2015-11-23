@@ -40,15 +40,17 @@ Expr* Parser::factor(){
 }
 
 Callfunc* Parser::callfunc(){
-	match(T_IDENT);
+	if(look->tag != T_IDENT)
+		;            // throw exception
 	Word * w = (Word*)look;
+	move();
 	Node * nod = top->get(w);
 	Expr * e;
 	if(Func * func = dynamic_cast<Func*>(nod)){
-		if(func->paralist.size() == 0)				
+		if(func->paralist.size() == 0)
 			return new Callfunc(func,nullptr);
 		else{
-			std::vector<Expr*> *list ;
+			std::vector<Expr*> *list = new std::vector<Expr*>();
 			match(T_OPENPARENTHESIS);
 			e = expr();
 			list->push_back(e);
@@ -58,7 +60,7 @@ Callfunc* Parser::callfunc(){
 			}
 			else{
 				for(unsigned int i = 1; i < func->paralist.size() ; i++){
-					match(T_COMMA);	
+					match(T_COMMA);
 					e = expr();
 					list->push_back(e);
 				}

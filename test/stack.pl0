@@ -46,7 +46,7 @@ begin
 			base := base + 1
 	end
 end;
-procedure PopN(popNum : integer)
+procedure PopN(popNum : integer);
 begin
 	write (Top);
 	if popNum >= 1 then

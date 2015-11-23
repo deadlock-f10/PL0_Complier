@@ -47,8 +47,10 @@ Token* Parser::constant(){
 	return nullptr;       //never excuted
 }
 void Parser::constDeclaration(){        //  imcomplete due to lack of protaction for const. deal with it
-	match(T_IDENT);
+	if(look->tag != T_IDENT)
+		;                // throw exception
 	Word * tok = (Word*)look;
+	move();
 	match(T_EQ);
 	Token * CONST = constant();
 	Type * t;
@@ -124,21 +126,25 @@ void Parser::seq_variableDeclaration(){
 
 void Parser::variableDeclaration(){
 	std::queue<Token*> identifier_list;
-	match(T_IDENT);
+	if(look->tag != T_IDENT)
+		;          // throw exception
 	Word * tok = (Word *)look;
+	move();
 	identifier_list.push(tok);
 	while(look->tag != T_COLON){
 		match(T_COMMA);
-		match(T_IDENT);
+		if(look->tag != T_IDENT)
+			;           // throw exception
 		tok = (Word *)look;
+		move();
 		identifier_list.push(tok);
 	}
 	move();
 	Type * t = type();
 	Id * id;
 	while(identifier_list.empty() == false){
-		tok = (Word *)identifier_list.front();				
-		identifier_list.pop();				
+		tok = (Word *)identifier_list.front();
+		identifier_list.pop();
 		id = new Id((Word*)tok,t,top->used);
 		top->used += t->width;
 		top->put(tok,id);
@@ -156,8 +162,10 @@ Type* Parser::type(){
 		case T_ARRAY:{
 				move();
 				match(T_OPENBRACKET);
-				match(T_NUMBER);
+				if(look->tag != T_NUMBER)
+                    ;           // throw exception
 				Num * t = (Num*)look;
+				move();
 				int size = t->value;
 				match(T_CLOSEBRACKET);
 				match(T_OF);

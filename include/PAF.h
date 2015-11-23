@@ -27,7 +27,7 @@ class Program :public Node{
 class Proc : public Program{
 	public :
 		std::vector<Id*> paralist;
-		Word* name; 
+		Word* name;
 		label l;
 //		std::string symtype = "procedure";
 		Proc(Program  *p,Word *w , int l) { prev = p;name = w;level = l+1;}
@@ -37,10 +37,10 @@ class Func : public Program{
 	public :
 		std::vector<Id*> paralist;
 		label l;                     // L label:
-		Word* name; 
+		Word* name;
 		Type* type;
 //		std::string symtype = "function";
-		Func(Program *p,Word *w, int l) {prev = p;name = w;level = l+1;}
+		Func(Program *p,Word *w, int l) {prev = p;name = w;level = l;}
 };
 
 class Seq_PAF : public Program{

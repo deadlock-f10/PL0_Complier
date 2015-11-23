@@ -9,10 +9,16 @@ Program* Parser::seq_paf(){
 	//First = {T_PROCEDURE,T_FUNCTION,\epsilon};
 	//static Tag_Set Follow = {T_BEGIN};
 	switch (look->tag){
-		case T_PROCEDURE:
-			return new Seq_PAF(proc_decl(),seq_paf());
-		case T_FUNCTION:
-			return new Seq_PAF(func_decl(),seq_paf());
+		case T_PROCEDURE:{
+            Proc * p = proc_decl();
+            top->put(p->name,p);
+			return new Seq_PAF(p,seq_paf());
+			}
+		case T_FUNCTION:{
+            Func * f = func_decl();
+            top->put(f->name,f);
+			return new Seq_PAF(f,seq_paf());
+			}
 		default:
 			;
 	}
@@ -24,9 +30,11 @@ Program* Parser::seq_paf(){
 Proc* Parser::proc_decl(){
 	match(T_PROCEDURE);
 	Program * save = top;
+	if(look->tag != T_IDENT)
+		;          // throw exception
 	Word * word = (Word *)look;
-	match(T_IDENT);
-	Proc * p = new Proc(top,word,top->level + 1); 
+	move();
+	Proc * p = new Proc(top,word,top->level + 1);
 	top = p;
 	p->put(word,p);
 	optional_para();
@@ -38,21 +46,24 @@ Proc* Parser::proc_decl(){
 }
 
 Func* Parser::func_decl(){
-	match(T_PROCEDURE);
+	match(T_FUNCTION);
 	Program * save = top;
+	if(look->tag != T_IDENT)
+		;          // throw exception
 	Word * word = (Word *)look;
-	match(T_IDENT);
-	Func * f = new Func(top,word,top->level + 1); 
+	move();
+	Func * f = new Func(top,word,top->level + 1);
 	top = f;
 	optional_para();
 	match(T_COLON);
 	if(look->tag != T_INT && look->tag != T_CHARACTER)
 		;             // throw exception . Cause function type must be basic type
 	f->type = type();
+	top->put(word,new Id(word,f->type,f->used));
+	top->used += f->type->width ;
+	match(T_SEMICOLON);
 	f->block = block();
 	match(T_SEMICOLON);
-	top->put(word,f);
-	top->used += f->type->width ;
 	top = save;
 	return f;
 }
@@ -86,13 +97,17 @@ void Parser::form_para_seg(){
 			isref = true;
 		case T_IDENT:{
 			std::vector<Word *> identifier_list;
-			match(T_IDENT);
+			if(look->tag != T_IDENT)
+				;         // throw exception
 			Word * tok = (Word *)look;
+			move();
 			identifier_list.push_back(tok);
 			while(look->tag != T_COLON){
 				match(T_COMMA);
+				if(look->tag != T_IDENT)
+					;         // throw exception
 				tok = (Word *)look;
-				match(T_IDENT);
+				move();
 				identifier_list.push_back(tok);
 			}
 			move();

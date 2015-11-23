@@ -6,16 +6,19 @@
 
 
 void Parser::match(Tag t){
-	if(look->tag == t)
+	if(look->tag == t && t != T_DOT)
 		move();
+	else if(t == T_DOT)
+        ;
 	else
 		;                  // throw exception
 }
 
 Program* Parser::program(){
+	std::cout<<"this is the whole program"<<endl;
 	Program * p  = new Program();
 	top = p;
-	p->block = block();	
+	p->block = block();
 	match(T_DOT);
 	label begin = p->newlabel();
 	label after = p->newlabel();
@@ -32,11 +35,13 @@ Block* Parser::block(){
 	b->seq_paf = (Seq_PAF*)seq_paf();
 	//decl_procandfunc();
 	b->seq_stmt = (Seq *)compoundstmt();
+	std::cout<<"this is a block"<<endl;
 	return b;
 }
 
 Stmt* Parser::compoundstmt(){
-	match(T_BEGIN);	
+	std::cout<<"this is a compoundstmt"<<endl;
+	match(T_BEGIN);
 	Seq * c = new Seq(statement(),seq_statement()) ;
 	match(T_END);
 	return c;
@@ -47,7 +52,7 @@ Stmt* Parser::statement(){
 	//static Tag_Set Follow = {T_ELSE,T_WHILE,T_SEMICOLON,T_END};
 	switch (look->tag){
 		case T_IF:
-			return ifstatement(); 
+			return ifstatement();
 		case T_DO:
 			return dowhilestatement();
 		case T_BEGIN:
@@ -81,15 +86,20 @@ Stmt* Parser::statement(){
 
 Stmt* Parser::inputstatement(){
 	match(T_READ);
+    std::cout<<"this is a readstatement"<<endl;
 	match(T_OPENPARENTHESIS);
-	std::queue<Word*> * list;
-	match(T_IDENT);
+	std::queue<Word*> * list = new std::queue<Word*>();
+	if(look->tag != T_IDENT)
+		;         // throw exception
 	Word * tok = (Word*)look;
+	move();
 	list->push(tok);
 	while(look->tag != T_CLOSEPARENTHESIS){
 		match(T_COMMA);
-		match(T_IDENT);
+		if(look->tag != T_IDENT)
+			;         // throw exception
 		tok = (Word *)look;
+		move();
 		list->push(tok);
 	}
 	move();
@@ -100,11 +110,14 @@ Stmt* Parser::outputstatement(){
 	//static Tag_Set tag= {T_PLUS,T_MINUS,T_IDENT,T_NUMBER,T_OPENPARENTHESIS};
 	STring * s;
 	Expr * e;
+	std::cout<<"this is a writestatement"<<endl;
 	match(T_WRITE);
 	match(T_OPENPARENTHESIS);
 	if(look->tag == T_STRING){
-		match(T_STRING);
+		if(look->tag != T_STRING)
+			;              // throw exception
 		s = (STring *) look;
+		move();
 		if(look->tag == T_CLOSEPARENTHESIS){
 			move();
 			return new Output(nullptr,s);
@@ -125,20 +138,22 @@ Stmt* Parser::outputstatement(){
 	return new Output(e,nullptr);
 }
 
-Stmt* Parser::assignstatement(){    // incomplete 
-	match(T_IDENT);
+Stmt* Parser::assignstatement(){    // incomplete
+	if(look->tag != T_IDENT)
+		;         // throw exception
 	Word * dest = (Word*)look;
+    std::cout<<"this is a assignstatement"<<endl;
+	move();
 	Id *id ;
 	id = (Id *)top->get(dest);
-	if(look->tag == T_ASSIGN){       // check is function or variable,check if const 
+	if(look->tag == T_ASSIGN){       // check is function or variable,check if const
 		move();
-
 		return new Assign(id,expr());
 	}
 	else if(look->tag == T_OPENBRACKET){
 		move();
 		Access* ac = new Access(id,id->type,expr());
-		match(T_CLOSEPARENTHESIS);
+		match(T_CLOSEBRACKET);
 		match(T_ASSIGN);
 		return new AssignElem(ac,expr());
 	}
@@ -148,12 +163,13 @@ Stmt* Parser::assignstatement(){    // incomplete
 }
 
 Stmt* Parser::ifstatement(){
+	std::cout<<"this is a ifstatement"<<endl;
 	match(T_IF);
 	Rel * r = condition();
 	match(T_THEN);
 	Stmt * s = statement();
 	if(look->tag != T_ELSE){
-		return new If(r,s);	
+		return new If(r,s);
 	}
 	else{
 		match(T_ELSE);
@@ -163,8 +179,11 @@ Stmt* Parser::ifstatement(){
 
 Stmt* Parser::forstatement(){        // incomlete . unchecked identifier information
 	match(T_FOR);
-	match(T_IDENT);
+    std::cout<<"this is a forstatement"<<endl;
+	if(look->tag != T_IDENT)
+		;         // throw exception
 	Word *tok = (Word*)look;
+	move();
 	Node * nod = top->get(tok);
 	if(Id *id = dynamic_cast<Id *>(nod)){
 		match(T_ASSIGN);
@@ -177,6 +196,7 @@ Stmt* Parser::forstatement(){        // incomlete . unchecked identifier informa
 		else{
 			;           // throw exception
 		}
+		move();
 		Expr* e2 = expr();
 		match(T_DO);
 		return new For(id,e1,is_to,e2,statement());
@@ -189,21 +209,25 @@ Stmt* Parser::forstatement(){        // incomlete . unchecked identifier informa
 
 Stmt* Parser::dowhilestatement(){
 	match(T_DO);
+    std::cout<<"this is a dowhilestatement"<<endl;
 	Stmt * s = statement();
 	match(T_WHILE);
 	return new DoWhile(condition(),s);
 }
 
 Stmt* Parser::callprocstatement(){
-	match(T_IDENT);
+	if(look->tag != T_IDENT)
+		;         // throw exception
 	Word * w = (Word*)look;
+    std::cout<<"this is a callstatement"<<endl;
+	move();
 	Node * nod = top->get(w);
 	Expr * e;
 	if(Proc * proc = dynamic_cast<Proc*>(nod)){
-		if(proc->paralist.size() == 0)				
+		if(proc->paralist.size() == 0)
 			return new Callproc(proc,nullptr);
 		else{
-			std::vector<Expr*> *list ;
+			std::vector<Expr*> *list = new std::vector<Expr*>();
 			match(T_OPENPARENTHESIS);
 			e = expr();
 			list->push_back(e);
@@ -213,7 +237,7 @@ Stmt* Parser::callprocstatement(){
 			}
 			else{
 				for(unsigned int i = 1; i < proc->paralist.size() ; i++){
-					match(T_COMMA);	
+					match(T_COMMA);
 					e = expr();
 					list->push_back(e);
 				}
@@ -233,6 +257,7 @@ Stmt* Parser::seq_statement(){
 	//static Tag_Set Follow = {T_END};
 	switch (look->tag){
 		case T_SEMICOLON:
+			move();
 			return new Seq(statement(),seq_statement());
 		default:
 			;
