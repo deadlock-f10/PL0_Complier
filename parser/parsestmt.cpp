@@ -15,7 +15,6 @@ void Parser::match(Tag t){
 }
 
 Program* Parser::program(){
-	std::cout<<"this is the whole program"<<endl;
 	Program * p  = new Program();
 	top = p;
 	p->block = block();
@@ -35,12 +34,10 @@ Block* Parser::block(){
 	b->seq_paf = (Seq_PAF*)seq_paf();
 	//decl_procandfunc();
 	b->seq_stmt = (Seq *)compoundstmt();
-	std::cout<<"this is a block"<<endl;
 	return b;
 }
 
 Stmt* Parser::compoundstmt(){
-	std::cout<<"this is a compoundstmt"<<endl;
 	match(T_BEGIN);
 	Seq * c = new Seq(statement(),seq_statement()) ;
 	match(T_END);
@@ -86,7 +83,6 @@ Stmt* Parser::statement(){
 
 Stmt* Parser::inputstatement(){
 	match(T_READ);
-    std::cout<<"this is a readstatement"<<endl;
 	match(T_OPENPARENTHESIS);
 	std::queue<Word*> * list = new std::queue<Word*>();
 	if(look->tag != T_IDENT)
@@ -110,7 +106,6 @@ Stmt* Parser::outputstatement(){
 	//static Tag_Set tag= {T_PLUS,T_MINUS,T_IDENT,T_NUMBER,T_OPENPARENTHESIS};
 	STring * s;
 	Expr * e;
-	std::cout<<"this is a writestatement"<<endl;
 	match(T_WRITE);
 	match(T_OPENPARENTHESIS);
 	if(look->tag == T_STRING){
@@ -142,7 +137,6 @@ Stmt* Parser::assignstatement(){    // incomplete
 	if(look->tag != T_IDENT)
 		;         // throw exception
 	Word * dest = (Word*)look;
-    std::cout<<"this is a assignstatement"<<endl;
 	move();
 	Id *id ;
 	id = (Id *)top->get(dest);
@@ -163,7 +157,6 @@ Stmt* Parser::assignstatement(){    // incomplete
 }
 
 Stmt* Parser::ifstatement(){
-	std::cout<<"this is a ifstatement"<<endl;
 	match(T_IF);
 	Rel * r = condition();
 	match(T_THEN);
@@ -179,7 +172,6 @@ Stmt* Parser::ifstatement(){
 
 Stmt* Parser::forstatement(){        // incomlete . unchecked identifier information
 	match(T_FOR);
-    std::cout<<"this is a forstatement"<<endl;
 	if(look->tag != T_IDENT)
 		;         // throw exception
 	Word *tok = (Word*)look;
@@ -209,7 +201,6 @@ Stmt* Parser::forstatement(){        // incomlete . unchecked identifier informa
 
 Stmt* Parser::dowhilestatement(){
 	match(T_DO);
-    std::cout<<"this is a dowhilestatement"<<endl;
 	Stmt * s = statement();
 	match(T_WHILE);
 	return new DoWhile(condition(),s);
@@ -219,7 +210,6 @@ Stmt* Parser::callprocstatement(){
 	if(look->tag != T_IDENT)
 		;         // throw exception
 	Word * w = (Word*)look;
-    std::cout<<"this is a callstatement"<<endl;
 	move();
 	Node * nod = top->get(w);
 	Expr * e;
