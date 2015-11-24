@@ -8,14 +8,14 @@ void Expr::jumping(label iftrue , label iffalse){
 }
 void Expr::emitjumps(std::string test , label iftrue , label iffalse){
 	if(iftrue != 0 && iffalse != 0){
-		emit("if "+test+ "goto L"+ std::to_string(iftrue));
+		emit("if "+test+ "goto L"+ patch::to_string(iftrue));
 		emit("goto L" + iffalse);
 	}
 	else if(iffalse != 0){
-		emit("iffalse "+test + "goto L" + std::to_string(iffalse));
+		emit("iffalse "+test + "goto L" + patch::to_string(iffalse));
 	}
 	else if(iftrue != 0){
-		emit("if " + test + "goto L" +std::to_string(iftrue));
+		emit("if " + test + "goto L" +patch::to_string(iftrue));
 	}
 }
 

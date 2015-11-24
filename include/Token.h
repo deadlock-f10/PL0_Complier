@@ -17,14 +17,14 @@ class Num : public Token{
 	public :
 		int value;
 		Num(int v) : Token(T_NUMBER) {value = v;}
-		std::string toString() {return std::to_string(value);}
+		std::string toString() {return patch::to_string(value);}
 };
 class Character : public Token{
 	public:
 		char character;
 		int value;
 		Character(char c) : Token(T_CHARACTER){character = c; value = character;}
-		std::string toString() {return std::to_string(character);}
+		std::string toString() {return patch::to_string(character);}
 };
 class STring : public Token{
 	public :

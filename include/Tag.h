@@ -1,3 +1,5 @@
+#include <sstream>
+#include <string>
 #ifndef Tags_H
 #define Tags_H
 enum Tag :int{
@@ -61,5 +63,13 @@ enum Tag :int{
 //	T_DQUOTE, // "
 //	T_SQUOTE // '
 };
-
+namespace patch
+{
+    template < typename T > std::string to_string( const T& n )
+    {
+        std::ostringstream stm ;
+        stm << n ;
+        return stm.str() ;
+    }
+}
 #endif
