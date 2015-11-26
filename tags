@@ -18,7 +18,6 @@ BUILDDIR	inter/Makefile	/^BUILDDIR = ..\/obj\/inter\/$/;"	m
 BUILDDIR	lexer/Makefile	/^BUILDDIR = ..\/obj\/lexer\/$/;"	m
 BUILDDIR	parser/Makefile	/^BUILDDIR = ..\/obj\/parser\/$/;"	m
 BUILDDIR	symboltable/Makefile	/^BUILDDIR = ..\/obj\/symboltable\/$/;"	m
-Block	include/PAF.h	/^	Block(Program *p){belongto = p;}$/;"	f	class:Block
 Block	include/PAF.h	/^class Block {$/;"	c
 CC	inter/Makefile	/^CC = g++$/;"	m
 CC	lexer/Makefile	/^CC = g++$/;"	m
@@ -56,9 +55,24 @@ HEADER_PATH	lexer/Makefile	/^HEADER_PATH = ..\/include$/;"	m
 HEADER_PATH	parser/Makefile	/^HEADER_PATH = ..\/include$/;"	m
 HEADER_PATH	symboltable/Makefile	/^HEADER_PATH = ..\/include$/;"	m
 Hashtable	include/PAF.h	/^typedef std::unordered_map<Token* , Node*> Hashtable;$/;"	t
-Id	include/Expr.h	/^		Id(Word* w , Type* t , int o , bool b): Expr(w,t) {offset = o; isConst = b;}$/;"	f	class:Id
-Id	include/Expr.h	/^		Id(Word* w , Type* t , int o , bool b1 , bool b2): Expr(w,t) {offset = o; isConst = b1; isRef = b2;}$/;"	f	class:Id
-Id	include/Expr.h	/^		Id(Word* w , Type* t , int o): Expr(w,t) {offset = o; isConst = false;}$/;"	f	class:Id
+INSTRUCTION_H	include/Instruction.h	3;"	d
+I_ADD	include/Instruction.h	/^	I_ADD = "+",$/;"	m	class:Instruction
+I_CALLFUNC	include/Instruction.h	/^	I_CALLFUNC = "callfunc",$/;"	m	class:Instruction
+I_CALLPROC	include/Instruction.h	/^	I_CALLPROC = "callproc",$/;"	m	class:Instruction
+I_COPY	include/Instruction.h	/^	I_COPY = "copy",$/;"	m	class:Instruction
+I_COPYIND	include/Instruction.h	/^	I_COPYIND = "copyind",$/;"	m	class:Instruction
+I_DIV	include/Instruction.h	/^	I_DIV = "\/",$/;"	m	class:Instruction
+I_IF	include/Instruction.h	/^	I_IF = "if",$/;"	m	class:Instruction
+I_IFFALSE	include/Instruction.h	/^	I_IFFALSE = "iffalse",$/;"	m	class:Instruction
+I_INDCOPY	include/Instruction.h	/^	I_INDCOPY = "indcopy",$/;"	m	class:Instruction
+I_MINUS	include/Instruction.h	/^	I_MINUS = "-",$/;"	m	class:Instruction
+I_MULT	include/Instruction.h	/^	I_MULT = "*",$/;"	m	class:Instruction
+I_PARAM	include/Instruction.h	/^	I_PARAM = "param",$/;"	m	class:Instruction
+I_READ	include/Instruction.h	/^	I_READ = "read",$/;"	m	class:Instruction
+I_WRITE	include/Instruction.h	/^	I_WRITE = "write",$/;"	m	class:Instruction
+Id	include/Expr.h	/^		Id(Word* w , Type* t , int o , bool b,int l): Expr(w,t) {offset = o; isConst = b; level = l;}$/;"	f	class:Id
+Id	include/Expr.h	/^		Id(Word* w , Type* t , int o , bool b1 , bool b2,int l): Expr(w,t) {offset = o; isConst = b1; isRef = b2; level = l;}$/;"	f	class:Id
+Id	include/Expr.h	/^		Id(Word* w , Type* t , int o,int l): Expr(w,t) {offset = o; isConst = false; level = l;}$/;"	f	class:Id
 Id	include/Expr.h	/^class Id : public Expr {          \/\/ need add field which specify whether this identifier is const or not$/;"	c
 If	include/Stmt.h	/^		If(Expr *expr , Stmt *stmt){e = expr;s =stmt;}$/;"	f	class:If
 If	include/Stmt.h	/^class If : public Stmt{$/;"	c
@@ -66,6 +80,7 @@ IfElse	include/Stmt.h	/^		IfElse(Expr *expr , Stmt *stmt1, Stmt *stmt2){e = expr
 IfElse	include/Stmt.h	/^class IfElse : public Stmt{$/;"	c
 Input	include/Stmt.h	/^	Input(std::queue<Word*> *list) {idlist = list;}$/;"	f	class:Input
 Input	include/Stmt.h	/^class Input: public Stmt{$/;"	c
+Instruction	include/Instruction.h	/^enum class Instruction : std::string{$/;"	c
 Int	include/Type.h	/^		static Type *Int,*Char;$/;"	m	class:Type
 Int	lexer/Type.cpp	/^Type* Type::Int = new Type(T_INT , Int_Width , "integer") ;$/;"	m	class:Type	file:
 Int_Width	lexer/Type.cpp	2;"	d	file:
@@ -106,14 +121,14 @@ Op	include/Expr.h	/^class Op : public Expr {$/;"	c
 Output	include/Stmt.h	/^	Output(Expr *x,STring *string){s = string;e=x;}$/;"	f	class:Output
 Output	include/Stmt.h	/^class Output: public Stmt{$/;"	c
 PAF_H	include/PAF.h	8;"	d
-PARSER_H	include/Parser.h	9;"	d
+PARSER_H	include/Parser.h	10;"	d
 Parser	include/Parser.h	/^		Parser(Lexer* l) {lex = l; move();}$/;"	f	class:Parser
 Parser	include/Parser.h	/^class Parser{$/;"	c
 Plus	include/Token.h	/^		static Word *Plus ; $/;"	m	class:Word
 Plus	lexer/Lexer.cpp	/^Word	*Word::Plus = new Word("+",T_PLUS);$/;"	m	class:Word	file:
 Proc	include/PAF.h	/^		Proc(Program  *p,Word *w , int l) { prev = p;name = w;level = l;}$/;"	f	class:Proc
 Proc	include/PAF.h	/^class Proc : public Program{$/;"	c
-Program	include/PAF.h	/^		Program(){level = 1;}$/;"	f	class:Program
+Program	include/PAF.h	/^		Program(){level = 1;name = new Word("main",T_IDENT);}$/;"	f	class:Program
 Program	include/PAF.h	/^class Program :public Node{$/;"	c
 Rel	include/Expr.h	/^class Rel : public Expr {$/;"	c
 Rel	inter/Expr.cpp	/^Rel::Rel (Token *t ,Expr *x1 , Expr *x2) : Expr(t,nullptr){$/;"	f	class:Rel
@@ -149,12 +164,11 @@ array	include/Stmt.h	/^		Id * array;$/;"	m	class:AssignElem
 assign	include/Token.h	/^		static Word  *assign;$/;"	m	class:Word
 assign	lexer/Lexer.cpp	/^Word *  Word::assign = new Word(":=",T_ASSIGN);$/;"	m	class:Word	file:
 assignstatement	parser/parsestmt.cpp	/^Stmt* Parser::assignstatement(){    \/\/ incomplete$/;"	f	class:Parser
-belongto	include/PAF.h	/^	Program * belongto;$/;"	m	class:Block
 block	include/PAF.h	/^		Block *block;$/;"	m	class:Program
 block	parser/parsestmt.cpp	/^Block* Parser::block(){$/;"	f	class:Parser
 c	include/Expr.h	/^		int c ;$/;"	m	class:Constant
-callfunc	parser/parseexpr.cpp	/^Callfunc* Parser::callfunc(){$/;"	f	class:Parser
-callprocstatement	parser/parsestmt.cpp	/^Stmt* Parser::callprocstatement(){$/;"	f	class:Parser
+callfunc	parser/parseexpr.cpp	/^Callfunc* Parser::callfunc(Func *func){$/;"	f	class:Parser
+callprocstatement	parser/parsestmt.cpp	/^Callproc* Parser::callprocstatement(){$/;"	f	class:Parser
 character	include/Token.h	/^		char character;$/;"	m	class:Character
 check	inter/Expr.cpp	/^bool Rel::check(Type *p1 , Type *p2){$/;"	f	class:Rel
 check	inter/Stmt.cpp	/^bool Assign::check(Type *a,Type *b){$/;"	f	class:Assign
@@ -169,18 +183,19 @@ column	include/Lexer.h	/^		static int column;$/;"	m	class:Lexer
 column	lexer/Lexer.cpp	/^int Lexer::column = 0;$/;"	m	class:Lexer	file:
 comma	include/Token.h	/^		static Word *comma ; $/;"	m	class:Word
 comma	lexer/Lexer.cpp	/^Word	*Word::comma = new Word(",",T_COMMA);	$/;"	m	class:Word	file:
-compoundstmt	parser/parsestmt.cpp	/^Stmt* Parser::compoundstmt(){$/;"	f	class:Parser
+compoundstmt	parser/parsestmt.cpp	/^Seq* Parser::compoundstmt(){$/;"	f	class:Parser
 condition	parser/parseexpr.cpp	/^Rel * Parser::condition(){$/;"	f	class:Parser
 constDeclaration	parser/parsedeclconst.cpp	/^void Parser::constDeclaration(){        \/\/  imcomplete due to lack of protaction for const. deal with it$/;"	f	class:Parser
 constant	parser/parsedeclconst.cpp	/^Token* Parser::constant(){$/;"	f	class:Parser
 constants	parser/parsedeclconst.cpp	/^void Parser::constants(){$/;"	f	class:Parser
 count	include/Expr.h	/^	static int count;$/;"	m	class:Temp
 count	inter/Expr.cpp	/^int Temp::count = 0;$/;"	m	class:Temp	file:
+count	parser/parsestmt.cpp	/^		int count = 1;$/;"	m	class:Parser::labelcounter	file:
 decl_constants	parser/parsedeclconst.cpp	/^void Parser::decl_constants(){$/;"	f	class:Parser
 decl_variables	parser/parsedeclconst.cpp	/^void Parser::decl_variables(){$/;"	f	class:Parser
 dot	include/Token.h	/^		static Word *dot ; $/;"	m	class:Word
 dot	lexer/Lexer.cpp	/^Word	*Word::dot = new Word(".",T_DOT);	$/;"	m	class:Word	file:
-dowhilestatement	parser/parsestmt.cpp	/^Stmt* Parser::dowhilestatement(){$/;"	f	class:Parser
+dowhilestatement	parser/parsestmt.cpp	/^DoWhile* Parser::dowhilestatement(){$/;"	f	class:Parser
 e	include/Expr.h	/^		Expr* e;$/;"	m	class:Unary
 e	include/Stmt.h	/^		Expr * e;		$/;"	m	class:Assign
 e	include/Stmt.h	/^		Expr * e;$/;"	m	class:DoWhile
@@ -205,7 +220,7 @@ f	include/Expr.h	/^	Func* f;           \/\/ form para with "var" must correspond
 factor	parser/parseexpr.cpp	/^Expr* Parser::factor(){$/;"	f	class:Parser
 form_para	parser/parsedeclpaf.cpp	/^void Parser::form_para(){$/;"	f	class:Parser
 form_para_seg	parser/parsedeclpaf.cpp	/^void Parser::form_para_seg(){$/;"	f	class:Parser
-forstatement	parser/parsestmt.cpp	/^Stmt* Parser::forstatement(){        \/\/ incomlete . unchecked identifier information$/;"	f	class:Parser
+forstatement	parser/parsestmt.cpp	/^For* Parser::forstatement(){        \/\/ incomlete . unchecked identifier information$/;"	f	class:Parser
 framesize	include/PAF.h	/^		int framesize;$/;"	m	class:Program
 fs	include/Lexer.h	/^		std::fstream *fs;$/;"	m	class:Lexer
 func_decl	parser/parsedeclpaf.cpp	/^Func* Parser::func_decl(){$/;"	f	class:Parser
@@ -225,6 +240,7 @@ gen	inter/Stmt.cpp	/^void IfElse::gen(label before, label after)$/;"	f	class:IfE
 gen	inter/Stmt.cpp	/^void Seq::gen(label begin , label after){$/;"	f	class:Seq
 get	symboltable/PAF.cpp	/^Node* Program::get(Token *w) {$/;"	f	class:Program
 getfsize	include/PAF.h	/^		int getfsize(){return framesize;}$/;"	f	class:Program
+getlabel	parser/parsestmt.cpp	/^std::string Parser::getlabel(Word *w){$/;"	f	class:Parser
 gt	include/Token.h	/^		static Word *gt ; $/;"	m	class:Word
 gt	lexer/Lexer.cpp	/^Word	*Word::gt = new Word(">",T_GT);	$/;"	m	class:Word	file:
 hashtable	include/Lexer.h	/^typedef std::unordered_map<std::string , Word*> hashtable;$/;"	t
@@ -234,19 +250,23 @@ idlist	include/Stmt.h	/^	std::queue<Word*> *idlist;$/;"	m	class:Input
 ifstatement	parser/parsestmt.cpp	/^Stmt* Parser::ifstatement(){$/;"	f	class:Parser
 index	include/Expr.h	/^		Expr * index ; $/;"	m	class:Access
 index	include/Stmt.h	/^		Expr *index;$/;"	m	class:AssignElem
-inputstatement	parser/parsestmt.cpp	/^Stmt* Parser::inputstatement(){$/;"	f	class:Parser
+inputstatement	parser/parsestmt.cpp	/^Input* Parser::inputstatement(){$/;"	f	class:Parser
 isConst	include/Expr.h	/^		bool isConst;$/;"	m	class:Id
 isRef	include/Expr.h	/^		bool isRef = false;$/;"	m	class:Id
 is_to	include/Stmt.h	/^		bool is_to;$/;"	m	class:For
 jumping	include/Expr.h	/^		void jumping(label iftrue, label iffalse) {emitjumps(reduce()->toString(),iftrue,iffalse);}$/;"	f	class:Access
 jumping	inter/Expr.cpp	/^void Expr::jumping(label iftrue , label iffalse){$/;"	f	class:Expr
-l	include/PAF.h	/^		label l;                     \/\/ L label:$/;"	m	class:Func
-l	include/PAF.h	/^		label l;$/;"	m	class:Proc
 label	include/Node.h	/^typedef int label;$/;"	t
+label	include/PAF.h	/^		std::string label;$/;"	m	class:Program
+labelcounter	parser/parsestmt.cpp	/^		labelcounter(Word* m){x = m;}$/;"	f	class:Parser::labelcounter
+labelcounter	parser/parsestmt.cpp	/^class Parser::labelcounter{$/;"	c	class:Parser	file:
 labels	include/Node.h	/^	static label labels;$/;"	m	class:Node
 labels	inter/Expr.cpp	/^label Node::labels = 0;$/;"	m	class:Node	file:
+lcounter	include/Parser.h	/^		static std::unordered_map<Word*,Parser::labelcounter*>  lcounter;$/;"	m	class:Parser
+lcounter	parser/parsestmt.cpp	/^std::unordered_map<Word*,Parser::labelcounter*>  Parser::lcounter; $/;"	m	class:Parser	file:
 le	include/Token.h	/^		static Word *le ; $/;"	m	class:Word
 le	lexer/Lexer.cpp	/^Word	*Word::le = new Word("<=",T_LE);	$/;"	m	class:Word	file:
+level	include/Expr.h	/^		int level ;         \/\/don't need level   --no~~~~ we need it$/;"	m	class:Id
 level	include/PAF.h	/^		int level;$/;"	m	class:Program
 lex	include/Parser.h	/^		Lexer *lex;$/;"	m	class:Parser
 lexeme	include/Token.h	/^		std::string lexeme;$/;"	m	class:Word
@@ -262,8 +282,7 @@ main	test/test_parser.cpp	/^int main(){$/;"	f
 match	parser/parsestmt.cpp	/^void Parser::match(Tag t){$/;"	f	class:Parser
 max	lexer/Type.cpp	/^Type* Type::max(Type *p1, Type *p2)$/;"	f	class:Type
 move	include/Parser.h	/^		void move(){look = lex->scan();}$/;"	f	class:Parser
-name	include/PAF.h	/^		Word* name;$/;"	m	class:Func
-name	include/PAF.h	/^		Word* name;$/;"	m	class:Proc
+name	include/PAF.h	/^		Word* name;$/;"	m	class:Program
 ne	include/Token.h	/^		static Word *ne ; $/;"	m	class:Word
 ne	lexer/Lexer.cpp	/^Word	*Word::ne = new Word("<>",T_NE);	$/;"	m	class:Word	file:
 newlabel	include/Node.h	/^	label newlabel() {return ++labels;}$/;"	f	class:Node
@@ -278,10 +297,12 @@ openbracket	lexer/Lexer.cpp	/^Word	*Word::openbracket = new Word("[",T_OPENBRACK
 openparenthesis	include/Token.h	/^		static Word *openparenthesis ; $/;"	m	class:Word
 openparenthesis	lexer/Lexer.cpp	/^Word	*Word::openparenthesis = new Word("(",T_OPENPARENTHESIS);	$/;"	m	class:Word	file:
 optional_para	parser/parsedeclpaf.cpp	/^void Parser::optional_para(){$/;"	f	class:Parser
-outputstatement	parser/parsestmt.cpp	/^Stmt* Parser::outputstatement(){$/;"	f	class:Parser
+outputstatement	parser/parsestmt.cpp	/^Output* Parser::outputstatement(){$/;"	f	class:Parser
 p	include/Stmt.h	/^	Proc* p;           \/\/ form para with "var" must correspond to a Id in actual para. should check that$/;"	m	class:Callproc
 paf	include/PAF.h	/^	Program* paf;$/;"	m	class:Seq_PAF
 pafs	include/PAF.h	/^	Program* pafs;$/;"	m	class:Seq_PAF
+para_used	include/PAF.h	/^		int para_used = 0;$/;"	m	class:Func
+para_used	include/PAF.h	/^		int para_used = 0;$/;"	m	class:Proc
 paralist	include/PAF.h	/^		std::vector<Id*> paralist;$/;"	m	class:Func
 paralist	include/PAF.h	/^		std::vector<Id*> paralist;$/;"	m	class:Proc
 parentheisfactor	parser/parseexpr.cpp	/^Expr *Parser::parentheisfactor(){$/;"	f	class:Parser
@@ -311,11 +332,11 @@ seq_constDeclaration	parser/parsedeclconst.cpp	/^void Parser::seq_constDeclarati
 seq_formpara_seg	parser/parsedeclpaf.cpp	/^void Parser::seq_formpara_seg(){$/;"	f	class:Parser
 seq_paf	include/PAF.h	/^	Seq_PAF * seq_paf;$/;"	m	class:Block
 seq_paf	parser/parsedeclpaf.cpp	/^Program* Parser::seq_paf(){$/;"	f	class:Parser
-seq_statement	parser/parsestmt.cpp	/^Stmt* Parser::seq_statement(){$/;"	f	class:Parser
+seq_statement	parser/parsestmt.cpp	/^Seq* Parser::seq_statement(){$/;"	f	class:Parser
 seq_stmt	include/PAF.h	/^	Seq * seq_stmt;$/;"	m	class:Block
 seq_variableDeclaration	parser/parsedeclconst.cpp	/^void Parser::seq_variableDeclaration(){$/;"	f	class:Parser
-setfsize	include/PAF.h	/^		void setfsize(){framesize == align(used);}        \/\/ align 4$/;"	f	class:Proc
-setfsize	include/PAF.h	/^		void setfsize(){framesize == align(used);}        \/\/ align 4$/;"	f	class:Program
+setfsize	include/PAF.h	/^		void setfsize(){framesize = align(used);}        \/\/ align 4$/;"	f	class:Proc
+setfsize	include/PAF.h	/^		void setfsize(){framesize = align(used);}        \/\/ align 4$/;"	f	class:Program
 size	include/Type.h	/^	int size = 1;$/;"	m	class:Array
 statement	parser/parsestmt.cpp	/^Stmt* Parser::statement(){$/;"	f	class:Parser
 symboltable	include/PAF.h	/^		Hashtable symboltable;$/;"	m	class:Program
@@ -348,3 +369,4 @@ variableDeclaration	parser/parsedeclconst.cpp	/^void Parser::variableDeclaration
 variables	parser/parsedeclconst.cpp	/^void Parser::variables(){$/;"	f	class:Parser
 width	include/Type.h	/^		int width;$/;"	m	class:Type
 words	include/Lexer.h	/^		hashtable words;$/;"	m	class:Lexer
+x	parser/parsestmt.cpp	/^		Word* x;$/;"	m	class:Parser::labelcounter	file:

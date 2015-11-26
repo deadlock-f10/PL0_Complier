@@ -5,10 +5,14 @@
 #include "../include/PAF.h"
 #include <iostream>
 #include <string>
+#include <unordered_map>
 #ifndef PARSER_H
 #define PARSER_H
 class Parser{
 	public:
+		class labelcounter;
+		static std::unordered_map<Word*,Parser::labelcounter*>  lcounter;
+		static std::string getlabel(Word *w);
 		Lexer *lex;
 		Token *look;
 		Program * top = nullptr;

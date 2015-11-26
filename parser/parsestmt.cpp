@@ -13,6 +13,26 @@ void Parser::match(Tag t){
 		cout<<"unmatched "<<t<<endl;                  // throw exception
 }
 
+class Parser::labelcounter{
+	public:
+		Word* x;
+		int count = 1;
+		labelcounter(Word* m){x = m;}
+};
+std::unordered_map<Word*,Parser::labelcounter*>  Parser::lcounter; 
+std::string Parser::getlabel(Word *w){
+		std::unordered_map<Word*,labelcounter*>::const_iterator found = lcounter.find(w); 
+		if(found == lcounter.end()){
+			lcounter.insert(std::make_pair(w,new labelcounter(w)));
+			return w->lexeme;
+		}
+		else{
+			labelcounter *x = found->second;
+			x->count++;
+			return w->lexeme + patch::to_string(x->count);
+		}
+}
+
 Program* Parser::program(){
 	Program * p  = new Program();
 	top = p;

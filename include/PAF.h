@@ -12,8 +12,10 @@ class Block;
 class Seq;
 class Id;
 class Program;
+class Parser;
 class Program :public Node{
 	public :
+		std::string label;
 		Word* name;
 		Program *prev = nullptr;
 		int level;
@@ -21,7 +23,7 @@ class Program :public Node{
 		Block *block;
 		int used = 0;
 		static Program* Null;
-		Program(){level = 1;name = new Word("",T_IDENT);}
+		Program(){level = 1;name = new Word("main",T_IDENT);label = Parser::getlabel(name);}
 		virtual void gen(label begin , label after){};
 		void put(Token* t , Node* i){symboltable.insert(std::make_pair(t,i));}
 		Node* get(Token* w);
@@ -34,9 +36,9 @@ class Proc : public Program{
 	public :
 		std::vector<Id*> paralist;
 		int para_used = 0;
-		label l;
+		//label l;
 //		std::string symtype = "procedure";
-		Proc(Program  *p,Word *w , int l) { prev = p;name = w;level = l;}
+		Proc(Program  *p,Word *w , int l) { prev = p;name = w;level = l;label = Parser::getlabel(name);}
 		void setfsize(){framesize = align(used);}        // align 4
 };
 
@@ -44,10 +46,10 @@ class Func : public Program{
 	public :
 		int para_used = 0;
 		std::vector<Id*> paralist;
-		label l;                     // L label:
+		//label l;                     // L label:
 		Type* type;
 //		std::string symtype = "function";
-		Func(Program *p,Word *w, int l) {prev = p;name = w;level = l;}
+		Func(Program *p,Word *w, int l) {prev = p;name = w;level = l;label = Parser::getlabel(name);}
 };
 
 class Seq_PAF : public Program{
