@@ -1,24 +1,24 @@
 #include "../include/Parser.h"
 #include <unordered_set>
 #include <queue>
+#include <iostream>
 
 //typedef std::unordered_set<Tag> Tag_Set;
 
 
 void Parser::match(Tag t){
-	if(look->tag == t && t != T_DOT)
+	if(look->tag == t)
 		move();
-	else if(t == T_DOT)
-        ;
 	else
-		;                  // throw exception
+		cout<<"unmatched "<<t<<endl;                  // throw exception
 }
 
 Program* Parser::program(){
 	Program * p  = new Program();
 	top = p;
 	p->block = block();
-	match(T_DOT);
+	if(look->tag != T_DOT)
+		;                 // throw exception
 	label begin = p->newlabel();
 	label after = p->newlabel();
 	p->emitlabel(begin);
@@ -28,7 +28,7 @@ Program* Parser::program(){
 }
 
 Block* Parser::block(){
-	Block * b = new Block(top);
+	Block * b = new Block();
 	decl_constants();
 	decl_variables();
 	b->seq_paf = (Seq_PAF*)seq_paf();
@@ -37,7 +37,7 @@ Block* Parser::block(){
 	return b;
 }
 
-Stmt* Parser::compoundstmt(){
+Seq* Parser::compoundstmt(){
 	match(T_BEGIN);
 	Seq * c = new Seq(statement(),seq_statement()) ;
 	match(T_END);
@@ -81,7 +81,7 @@ Stmt* Parser::statement(){
 	return nullptr;
 }
 
-Stmt* Parser::inputstatement(){
+Input* Parser::inputstatement(){
 	match(T_READ);
 	match(T_OPENPARENTHESIS);
 	std::queue<Word*> * list = new std::queue<Word*>();
@@ -102,7 +102,7 @@ Stmt* Parser::inputstatement(){
 	return new Input(list);
 }
 
-Stmt* Parser::outputstatement(){
+Output* Parser::outputstatement(){
 	//static Tag_Set tag= {T_PLUS,T_MINUS,T_IDENT,T_NUMBER,T_OPENPARENTHESIS};
 	STring * s;
 	Expr * e;
@@ -153,7 +153,7 @@ Stmt* Parser::assignstatement(){    // incomplete
 	}
 	else
 		;           // throw exception
-	return nullptr;
+	return nullptr;      // should never excuted
 }
 
 Stmt* Parser::ifstatement(){
@@ -170,7 +170,7 @@ Stmt* Parser::ifstatement(){
 	}
 }
 
-Stmt* Parser::forstatement(){        // incomlete . unchecked identifier information
+For* Parser::forstatement(){        // incomlete . unchecked identifier information
 	match(T_FOR);
 	if(look->tag != T_IDENT)
 		;         // throw exception
@@ -196,17 +196,17 @@ Stmt* Parser::forstatement(){        // incomlete . unchecked identifier informa
 	else {
 		;        //throw exception
 	}
-	return nullptr;
+	return nullptr;// should never excuted
 }
 
-Stmt* Parser::dowhilestatement(){
+DoWhile* Parser::dowhilestatement(){
 	match(T_DO);
 	Stmt * s = statement();
 	match(T_WHILE);
 	return new DoWhile(condition(),s);
 }
 
-Stmt* Parser::callprocstatement(){
+Callproc* Parser::callprocstatement(){
 	if(look->tag != T_IDENT)
 		;         // throw exception
 	Word * w = (Word*)look;
@@ -239,10 +239,10 @@ Stmt* Parser::callprocstatement(){
 	else {
 		; // throw exception
 	}
-	return nullptr;
+	return nullptr;// should never excuted
 }
 
-Stmt* Parser::seq_statement(){
+Seq* Parser::seq_statement(){
 	//First = {T_SEMICOLON,\epsilon};
 	//static Tag_Set Follow = {T_END};
 	switch (look->tag){

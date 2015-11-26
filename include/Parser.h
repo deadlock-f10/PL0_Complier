@@ -46,25 +46,25 @@ class Parser{
 		void formpara_seg();
 		
 
-		Stmt* compoundstmt();
+		Seq* compoundstmt();
 		Stmt* statement();
-		Stmt* seq_statement();
-		Stmt* inputstatement();
-		Stmt* outputstatement();
+		Seq* seq_statement();
+		Input* inputstatement();
+		Output* outputstatement();
 		Stmt* assignstatement();        //incomplete .no type checking
 		Stmt* ifstatement();
-		Stmt* forstatement();
-		Stmt* dowhilestatement();
-		Stmt* callprocstatement();
+		For* forstatement();
+		DoWhile* dowhilestatement();
+		Callproc* callprocstatement();
 
 		Expr* expr();
 		Expr* unary();
 		Expr* unsignedexpr();
-		Expr* factor();
+		Expr* factor();              // try some function recursion
 		Expr* term();
 		Expr* parentheisfactor();
 		Access* offset(Id *id);
-		Callfunc* callfunc();
+		Callfunc* callfunc(Func * func);
 
 		Rel * condition();
 };

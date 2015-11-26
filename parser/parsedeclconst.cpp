@@ -62,7 +62,7 @@ void Parser::constDeclaration(){        //  imcomplete due to lack of protaction
 	else{
 		;           // throw exception
 	}
-	id = new Id(tok,t,top->used,true);  // Should assign Const.Value to this ID      deal with it
+	id = new Id(tok,t,top->used,true,top->level);  // Should assign Const.Value to this ID      deal with it
 	top->used += t->width;
 	top->put(tok,id);
 }
@@ -145,7 +145,7 @@ void Parser::variableDeclaration(){
 	while(identifier_list.empty() == false){
 		tok = (Word *)identifier_list.front();
 		identifier_list.pop();
-		id = new Id((Word*)tok,t,top->used);
+		id = new Id((Word*)tok,t,top->used,top->level);
 		top->used += t->width;
 		top->put(tok,id);
 	}

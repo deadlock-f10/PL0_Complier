@@ -11,12 +11,12 @@ Program* Parser::seq_paf(){
 	switch (look->tag){
 		case T_PROCEDURE:{
             Proc * p = proc_decl();
-            top->put(p->name,p);
+ //           top->put(p->name,p);
 			return new Seq_PAF(p,seq_paf());
 			}
 		case T_FUNCTION:{
             Func * f = func_decl();
-            top->put(f->name,f);
+//            top->put(f->name,f);
 			return new Seq_PAF(f,seq_paf());
 			}
 		default:
@@ -35,9 +35,12 @@ Proc* Parser::proc_decl(){
 	Word * word = (Word *)look;
 	move();
 	Proc * p = new Proc(top,word,top->level + 1);
+	top->put(word,p);              // something like a declaration rather than definitoin
 	top = p;
-	p->put(word,p);
 	optional_para();
+/*	//p->type = Type::Int;                                      just for consistency with Func 
+	top->put(word,new Id(word,Type::Int,p->used,true,top->level));	  keep proc const, so it can't be assign a value like a function 
+	top->used += Type::Int->width ;                              */
 	match(T_SEMICOLON);
 	p->block = block();
 	match(T_SEMICOLON);
@@ -53,14 +56,15 @@ Func* Parser::func_decl(){
 	Word * word = (Word *)look;
 	move();
 	Func * f = new Func(top,word,top->level + 1);
+	top->put(word,f);
 	top = f;
 	optional_para();
 	match(T_COLON);
 	if(look->tag != T_INT && look->tag != T_CHARACTER)
 		;             // throw exception . Cause function type must be basic type
 	f->type = type();
-	top->put(word,new Id(word,f->type,f->used));
-	top->used += f->type->width ;
+	top->put(word,new Id(word,f->type,f->used,top->level));
+	top->used += f->type->width;
 	match(T_SEMICOLON);
 	f->block = block();
 	match(T_SEMICOLON);
@@ -118,16 +122,17 @@ void Parser::form_para_seg(){
 			if(Proc * p = dynamic_cast<Proc*>(top)){
 				for(unsigned int i = 0; i < identifier_list.size(); i++){
 					tok = identifier_list[i];
-					id = new Id((Word*)tok,t,top->used,false,isref);
+					p->para_used -= t->width;
+					id = new Id((Word*)tok,t,p->para_used,false,isref,p->level);
 					p->paralist.push_back(id);
-					p->used += t->width;
 					p->put(tok,id);
 				}
 			}
 			else if(Func *p = dynamic_cast<Func*>(top)){
 				for(unsigned int i = 0; i < identifier_list.size(); i++){
 					tok = identifier_list[i];
-					id = new Id((Word*)tok,t,top->used,false,isref);
+					p->para_used -= t->width;
+					id = new Id((Word*)tok,t,p->para_used,false,isref,p->level);
 					p->paralist.push_back(id);
 					p->used += t->width;
 					p->put(tok,id);

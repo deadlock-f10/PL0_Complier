@@ -18,12 +18,12 @@ class Expr : public Node{
 class Id : public Expr {          // need add field which specify whether this identifier is const or not
 	public :
 		int offset ;        // relative address ( of what ?)
-		int level ;
+		int level ;         //don't need level   --no~~~~ we need it
 		bool isConst;
 		bool isRef = false;
-		Id(Word* w , Type* t , int o): Expr(w,t) {offset = o; isConst = false;}
-		Id(Word* w , Type* t , int o , bool b): Expr(w,t) {offset = o; isConst = b;}
-		Id(Word* w , Type* t , int o , bool b1 , bool b2): Expr(w,t) {offset = o; isConst = b1; isRef = b2;}
+		Id(Word* w , Type* t , int o,int l): Expr(w,t) {offset = o; isConst = false; level = l;}
+		Id(Word* w , Type* t , int o , bool b,int l): Expr(w,t) {offset = o; isConst = b; level = l;}
+		Id(Word* w , Type* t , int o , bool b1 , bool b2,int l): Expr(w,t) {offset = o; isConst = b1; isRef = b2; level = l;}
 };
 
 class Callfunc : public Expr{
@@ -89,4 +89,3 @@ class Access : public Op{
 		std::string toString(){return array->toString()+"[" + index->toString() + "]";}
 };
 #endif
-

@@ -2,12 +2,13 @@
 #include "../include/Parser.h"
 
 Expr* Parser::factor(){
-	Token* tok;
 	switch(look->tag){
-		case T_NUMBER:
+		case T_NUMBER:{
+			Token* tok;
 			tok = (Num *) look;
 			move();
 			return new Constant((Num *)tok);
+		}
 		/*case T_CHARACTER:
 			tok = (Character *) look;
 			move();
@@ -15,19 +16,26 @@ Expr* Parser::factor(){
 		case T_OPENPARENTHESIS:
 			return parentheisfactor();
 		case T_IDENT:{
-				tok = (Word *)look;
-				Node * nod = top->get(tok);
-				if(nod == nullptr)
-					;             // throw exception
-				if(Id * id = dynamic_cast<Id *>(nod)){
-					move();
-					if(look->tag != T_OPENBRACKET)
-						return id;
-					else
-						return offset(id);
+				Word* tok = (Word *)look;
+				if(tok->lexeme != top->name->lexeme){
+					Node * nod = top->get(tok);
+					if(nod == nullptr)
+						;             // throw exception
+					if(Id * id = dynamic_cast<Id *>(nod)){
+						move();
+						if(look->tag != T_OPENBRACKET)
+							return id;
+						else
+							return offset(id);
+					}
+					else if(Func *func = dynamic_cast<Func*>(nod)){
+						move();
+						return callfunc(func);
+					}
 				}
-				else if( dynamic_cast<Func*>(nod)){
-					return callfunc();
+				else if(tok->lexeme == top->name->lexeme){
+					move();
+					return callfunc(dynamic_cast<Func*>(top->prev->get(tok)));
 				}
 				else {
 					;              // throw exception
@@ -39,41 +47,30 @@ Expr* Parser::factor(){
 	return nullptr ; // will not excuted
 }
 
-Callfunc* Parser::callfunc(){
-	if(look->tag != T_IDENT)
-		;            // throw exception
-	Word * w = (Word*)look;
-	move();
-	Node * nod = top->get(w);
+Callfunc* Parser::callfunc(Func *func){
 	Expr * e;
-	if(Func * func = dynamic_cast<Func*>(nod)){
-		if(func->paralist.size() == 0)
-			return new Callfunc(func,nullptr);
+	if(func->paralist.size() == 0)
+		return new Callfunc(func,nullptr);
+	else{
+		std::vector<Expr*> *list = new std::vector<Expr*>();
+		match(T_OPENPARENTHESIS);
+		e = expr();
+		list->push_back(e);
+		if(func->paralist.size() == 1){
+			match(T_CLOSEPARENTHESIS);
+			return new Callfunc(func,list);
+		}
 		else{
-			std::vector<Expr*> *list = new std::vector<Expr*>();
-			match(T_OPENPARENTHESIS);
-			e = expr();
-			list->push_back(e);
-			if(func->paralist.size() == 1){
-				match(T_CLOSEPARENTHESIS);
-				return new Callfunc(func,list);
+			for(unsigned int i = 1; i < func->paralist.size() ; i++){
+				match(T_COMMA);
+				e = expr();
+				list->push_back(e);
 			}
-			else{
-				for(unsigned int i = 1; i < func->paralist.size() ; i++){
-					match(T_COMMA);
-					e = expr();
-					list->push_back(e);
-				}
-				match(T_CLOSEPARENTHESIS);
-				return new Callfunc(func,list);
-			}
+			match(T_CLOSEPARENTHESIS);
+			return new Callfunc(func,list);
 		}
 	}
-	else {
-		; // throw exception
-	}
 	return nullptr ; // will not excuted
-
 }
 
 Expr* Parser::term(){
