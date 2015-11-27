@@ -1,0 +1,12 @@
+label	Instr		arg1				arg2			 result		meaning
+		read										     id			read a integer(char) into id
+		write		string				id							write a string or id or both
+		if			rel									 L			if relation holds then goto label L
+		iffalse		rel									 L			if relation doesnt' holds then goto label L
+		param		(id,integer)									parameter id(for future use)
+		callproc	proc				integer						call procedure with n parameters
+		callfunc	func				integer			 id			call function with n parameters , store return value in id	
+		copy		idx									 idy		x = y
+		copyind		idx					idi				 idy	    y = x[i]
+		indcopy		idx					idi				 idy		x[i] = y
+		op			idy					idz				 idx		x = y op z (op can be +,-,*,/)
