@@ -6,6 +6,20 @@
 !_TAG_PROGRAM_VERSION	5.8	//
 Access	include/Expr.h	/^		Access (Id *id ,Type * t, Expr * e) : Op(new Word("[]" ,T_INDEX),t) {array = id ; index = e; }$/;"	f	class:Access
 Access	include/Expr.h	/^class Access : public Op{$/;"	c
+Arg1	include/Quadruple.h	/^class Arg1{$/;"	c
+Arg2	include/Quadruple.h	/^class Arg2{$/;"	c
+Arg_func	include/Quadruple.h	/^		Arg_func(Func *f){func = f;}$/;"	f	class:Arg_func
+Arg_func	include/Quadruple.h	/^class Arg_func : public Arg1{$/;"	c
+Arg_id	include/Quadruple.h	/^		Arg_id(Id *x){id = x;}$/;"	f	class:Arg_id
+Arg_id	include/Quadruple.h	/^class Arg_id : public Arg1 ,Arg2,Result{$/;"	c
+Arg_int	include/Quadruple.h	/^		Arg_int(int x) { value = x;}$/;"	f	class:Arg_int
+Arg_int	include/Quadruple.h	/^class Arg_int : public Arg1 , Arg2{$/;"	c
+Arg_proc	include/Quadruple.h	/^		Arg_proc(Proc *p){proc = p;}$/;"	f	class:Arg_proc
+Arg_proc	include/Quadruple.h	/^class Arg_proc : public Arg1{$/;"	c
+Arg_rel	include/Quadruple.h	/^		Arg_rel(Rel * r) {relation = r;}$/;"	f	class:Arg_rel
+Arg_rel	include/Quadruple.h	/^class Arg_rel : public Arg1{$/;"	c
+Arg_string	include/Quadruple.h	/^		Arg_string(std::string s){str = s;}$/;"	f	class:Arg_string
+Arg_string	include/Quadruple.h	/^class Arg_string : public Arg1{$/;"	c
 Arith	include/Expr.h	/^class Arith : public Op {$/;"	c
 Arith	inter/Expr.cpp	/^Arith::Arith(Token* tok , Expr *x1 , Expr* x2) : Op(tok, nullptr){$/;"	f	class:Arith
 Array	include/Type.h	/^	Array(int sz , Type* t) : Type(T_ARRAY , sz*(t->width), "array")$/;"	f	class:Array
@@ -48,28 +62,27 @@ Expr	include/Expr.h	/^		Expr(Token* tok , Type *t) {op = tok ; type = t;}$/;"	f	
 Expr	include/Expr.h	/^class Expr : public Node{$/;"	c
 For	include/Stmt.h	/^		For(Id * i,Expr *x1,bool to,Expr* x2,Stmt* stmt){$/;"	f	class:For
 For	include/Stmt.h	/^class For : public Stmt{$/;"	c
-Func	include/PAF.h	/^		Func(Program *p,Word *w, int l) {prev = p;name = w;level = l;}$/;"	f	class:Func
 Func	include/PAF.h	/^class Func : public Program{$/;"	c
+Func	parser/parsedeclpaf.cpp	/^Func::Func(Program *p,Word *w, int l) {prev = p;name = w;level = l;beginlabel = Parser::getlabel(name);}$/;"	f	class:Func
 HEADER_PATH	inter/Makefile	/^HEADER_PATH = ..\/include$/;"	m
 HEADER_PATH	lexer/Makefile	/^HEADER_PATH = ..\/include$/;"	m
 HEADER_PATH	parser/Makefile	/^HEADER_PATH = ..\/include$/;"	m
 HEADER_PATH	symboltable/Makefile	/^HEADER_PATH = ..\/include$/;"	m
 Hashtable	include/PAF.h	/^typedef std::unordered_map<Token* , Node*> Hashtable;$/;"	t
-INSTRUCTION_H	include/Instruction.h	3;"	d
-I_ADD	include/Instruction.h	/^	I_ADD = "+",$/;"	m	class:Instruction
-I_CALLFUNC	include/Instruction.h	/^	I_CALLFUNC = "callfunc",$/;"	m	class:Instruction
-I_CALLPROC	include/Instruction.h	/^	I_CALLPROC = "callproc",$/;"	m	class:Instruction
-I_COPY	include/Instruction.h	/^	I_COPY = "copy",$/;"	m	class:Instruction
-I_COPYIND	include/Instruction.h	/^	I_COPYIND = "copyind",$/;"	m	class:Instruction
-I_DIV	include/Instruction.h	/^	I_DIV = "\/",$/;"	m	class:Instruction
-I_IF	include/Instruction.h	/^	I_IF = "if",$/;"	m	class:Instruction
-I_IFFALSE	include/Instruction.h	/^	I_IFFALSE = "iffalse",$/;"	m	class:Instruction
-I_INDCOPY	include/Instruction.h	/^	I_INDCOPY = "indcopy",$/;"	m	class:Instruction
-I_MINUS	include/Instruction.h	/^	I_MINUS = "-",$/;"	m	class:Instruction
-I_MULT	include/Instruction.h	/^	I_MULT = "*",$/;"	m	class:Instruction
-I_PARAM	include/Instruction.h	/^	I_PARAM = "param",$/;"	m	class:Instruction
-I_READ	include/Instruction.h	/^	I_READ = "read",$/;"	m	class:Instruction
-I_WRITE	include/Instruction.h	/^	I_WRITE = "write",$/;"	m	class:Instruction
+I_ADD	include/OP.h	/^	I_ADD ,$/;"	m	class:OP
+I_CALLFUNC	include/OP.h	/^	I_CALLFUNC ,$/;"	m	class:OP
+I_CALLPROC	include/OP.h	/^	I_CALLPROC ,$/;"	m	class:OP
+I_COPY	include/OP.h	/^	I_COPY ,$/;"	m	class:OP
+I_COPYIND	include/OP.h	/^	I_COPYIND ,$/;"	m	class:OP
+I_DIV	include/OP.h	/^	I_DIV ,$/;"	m	class:OP
+I_IF	include/OP.h	/^	I_IF  ,$/;"	m	class:OP
+I_IFFALSE	include/OP.h	/^	I_IFFALSE ,$/;"	m	class:OP
+I_INDCOPY	include/OP.h	/^	I_INDCOPY  ,$/;"	m	class:OP
+I_MINUS	include/OP.h	/^	I_MINUS ,$/;"	m	class:OP
+I_MULT	include/OP.h	/^	I_MULT ,$/;"	m	class:OP
+I_PARAM	include/OP.h	/^	I_PARAM ,$/;"	m	class:OP
+I_READ	include/OP.h	/^	I_READ = 0 ,$/;"	m	class:OP
+I_WRITE	include/OP.h	/^	I_WRITE  ,$/;"	m	class:OP
 Id	include/Expr.h	/^		Id(Word* w , Type* t , int o , bool b,int l): Expr(w,t) {offset = o; isConst = b; level = l;}$/;"	f	class:Id
 Id	include/Expr.h	/^		Id(Word* w , Type* t , int o , bool b1 , bool b2,int l): Expr(w,t) {offset = o; isConst = b1; isRef = b2; level = l;}$/;"	f	class:Id
 Id	include/Expr.h	/^		Id(Word* w , Type* t , int o,int l): Expr(w,t) {offset = o; isConst = false; level = l;}$/;"	f	class:Id
@@ -80,7 +93,7 @@ IfElse	include/Stmt.h	/^		IfElse(Expr *expr , Stmt *stmt1, Stmt *stmt2){e = expr
 IfElse	include/Stmt.h	/^class IfElse : public Stmt{$/;"	c
 Input	include/Stmt.h	/^	Input(std::queue<Word*> *list) {idlist = list;}$/;"	f	class:Input
 Input	include/Stmt.h	/^class Input: public Stmt{$/;"	c
-Instruction	include/Instruction.h	/^enum class Instruction : std::string{$/;"	c
+Instrlist	include/PAF.h	/^		QuadList Instrlist;$/;"	m	class:Program
 Int	include/Type.h	/^		static Type *Int,*Char;$/;"	m	class:Type
 Int	lexer/Type.cpp	/^Type* Type::Int = new Type(T_INT , Int_Width , "integer") ;$/;"	m	class:Type	file:
 Int_Width	lexer/Type.cpp	2;"	d	file:
@@ -103,7 +116,7 @@ Minus	include/Token.h	/^		static Word *Minus ; $/;"	m	class:Word
 Minus	lexer/Lexer.cpp	/^Word	*Word::Minus = new Word("-",T_MINUS);$/;"	m	class:Word	file:
 Mult	include/Token.h	/^		static Word *Mult ; $/;"	m	class:Word
 Mult	lexer/Lexer.cpp	/^Word	*Word::Mult = new Word("*",T_MULT);	$/;"	m	class:Word	file:
-NODE_H	include/Node.h	7;"	d
+NODE_H	include/Node.h	9;"	d
 Node	include/Node.h	/^	Node () {lexline = Lexer::line;}$/;"	f	class:Node
 Node	include/Node.h	/^class Node{$/;"	c
 Null	include/PAF.h	/^		static Program* Null;$/;"	m	class:Program
@@ -116,22 +129,33 @@ OBJS	inter/Makefile	/^OBJS = $(patsubst %.cpp,$(BUILDDIR)%.o,$(LEXER_C))$/;"	m
 OBJS	lexer/Makefile	/^OBJS = $(patsubst %.cpp,$(BUILDDIR)%.o,$(LEXER_C))$/;"	m
 OBJS	parser/Makefile	/^OBJS = $(patsubst %.cpp,$(BUILDDIR)%.o,$(LEXER_C))$/;"	m
 OBJS	symboltable/Makefile	/^OBJS = $(patsubst %.cpp,$(BUILDDIR)%.o,$(LEXER_C))$/;"	m
+OP	include/OP.h	/^enum class OP {$/;"	c
+OP_H	include/OP.h	3;"	d
 Op	include/Expr.h	/^		Op(Token* tok , Type* t) : Expr(tok , t){}$/;"	f	class:Op
 Op	include/Expr.h	/^class Op : public Expr {$/;"	c
+OptoString	include/OP.h	/^std::string *OptoString;$/;"	v
+OptoString	parser/parsestmt.cpp	/^std::string OptoString[I_MINUS + 1] = {"read","write","if", "iffalse", "param", "callproc", "callfunc", "copy", "copyind","indcopy", "*", "\/", "+", "-"};$/;"	v
 Output	include/Stmt.h	/^	Output(Expr *x,STring *string){s = string;e=x;}$/;"	f	class:Output
 Output	include/Stmt.h	/^class Output: public Stmt{$/;"	c
-PAF_H	include/PAF.h	8;"	d
+PAF_H	include/PAF.h	9;"	d
 PARSER_H	include/Parser.h	10;"	d
 Parser	include/Parser.h	/^		Parser(Lexer* l) {lex = l; move();}$/;"	f	class:Parser
 Parser	include/Parser.h	/^class Parser{$/;"	c
 Plus	include/Token.h	/^		static Word *Plus ; $/;"	m	class:Word
 Plus	lexer/Lexer.cpp	/^Word	*Word::Plus = new Word("+",T_PLUS);$/;"	m	class:Word	file:
-Proc	include/PAF.h	/^		Proc(Program  *p,Word *w , int l) { prev = p;name = w;level = l;}$/;"	f	class:Proc
 Proc	include/PAF.h	/^class Proc : public Program{$/;"	c
-Program	include/PAF.h	/^		Program(){level = 1;name = new Word("main",T_IDENT);}$/;"	f	class:Program
+Proc	parser/parsedeclpaf.cpp	/^Proc::Proc(Program  *p,Word *w , int l) { prev = p;name = w;level = l;beginlabel = Parser::getlabel(name);}$/;"	f	class:Proc
 Program	include/PAF.h	/^class Program :public Node{$/;"	c
+Program	parser/parsedeclpaf.cpp	/^Program::Program(){level = 1;name = new Word("main",T_IDENT);beginlabel = Parser::getlabel(name);}$/;"	f	class:Program
+QUADRUPLE_H	include/Quadruple.h	5;"	d
+QuadList	include/PAF.h	/^typedef std::vector<Quadruple*> QuadList;$/;"	t
+Quadruple	include/Quadruple.h	/^	Quadruple(std::vector<std::string> *l,OP Op, Arg1 * a1, Arg2* a2, Result *r){labellist = new std::vector<std::string>(*l);op = Op;arg1=a1;arg2=a2;result=r;}$/;"	f	class:Quadruple
+Quadruple	include/Quadruple.h	/^class Quadruple{$/;"	c
 Rel	include/Expr.h	/^class Rel : public Expr {$/;"	c
 Rel	inter/Expr.cpp	/^Rel::Rel (Token *t ,Expr *x1 , Expr *x2) : Expr(t,nullptr){$/;"	f	class:Rel
+Result	include/Quadruple.h	/^class Result{$/;"	c
+Result_label	include/Quadruple.h	/^		Result_label(std::string s){label = s;}$/;"	f	class:Result_label
+Result_label	include/Quadruple.h	/^class Result_label : public Result{$/;"	c
 STMT_H	include/Stmt.h	7;"	d
 STring	include/Token.h	/^		STring(std::string s) : Token(T_STRING){line = s;}$/;"	f	class:STring
 STring	include/Token.h	/^class STring : public Token{$/;"	c
@@ -158,12 +182,18 @@ Word	include/Token.h	/^		Word(std::string s, Tag tag) : Token(tag) {lexeme = s;}
 Word	include/Token.h	/^class Word : public Token{$/;"	c
 actuallist	include/Expr.h	/^	std::vector<Expr*> *actuallist;$/;"	m	class:Callfunc
 actuallist	include/Stmt.h	/^	std::vector<Expr*> *actuallist;$/;"	m	class:Callproc
-align	include/PAF.h	9;"	d
+addinstr	include/PAF.h	/^		void addinstr(OP op,Arg1* arg1 , Arg2* arg2,Result * result){Instrlist.push_back(new Quadruple(labellist,op,arg1 ,arg2,result)); labellist = nullptr;}$/;"	f	class:Program
+addlabel	include/PAF.h	/^		void addlabel(int l ){if(labellist == nullptr) labellist = new std::vector<std::string>(); labellist->push_back("L"+patch::to_string(l));}$/;"	f	class:Program
+addlabel	include/PAF.h	/^		void addlabel(std::string s){if(labellist == nullptr) labellist = new std::vector<std::string>(); labellist->push_back(s);}$/;"	f	class:Program
+align	include/PAF.h	10;"	d
+arg1	include/Quadruple.h	/^	Arg1 * arg1;$/;"	m	class:Quadruple
+arg2	include/Quadruple.h	/^	Arg2 * arg2;$/;"	m	class:Quadruple
 array	include/Expr.h	/^		Id * array ;$/;"	m	class:Access
 array	include/Stmt.h	/^		Id * array;$/;"	m	class:AssignElem
 assign	include/Token.h	/^		static Word  *assign;$/;"	m	class:Word
 assign	lexer/Lexer.cpp	/^Word *  Word::assign = new Word(":=",T_ASSIGN);$/;"	m	class:Word	file:
 assignstatement	parser/parsestmt.cpp	/^Stmt* Parser::assignstatement(){    \/\/ incomplete$/;"	f	class:Parser
+beginlabel	include/PAF.h	/^		std::string beginlabel;$/;"	m	class:Program
 block	include/PAF.h	/^		Block *block;$/;"	m	class:Program
 block	parser/parsestmt.cpp	/^Block* Parser::block(){$/;"	f	class:Parser
 c	include/Expr.h	/^		int c ;$/;"	m	class:Constant
@@ -209,9 +239,13 @@ e1	include/Stmt.h	/^		Expr* e1;$/;"	m	class:For
 e2	include/Expr.h	/^		Expr * e2;$/;"	m	class:Arith
 e2	include/Expr.h	/^		Expr *e2;$/;"	m	class:Rel
 e2	include/Stmt.h	/^		Expr* e2;$/;"	m	class:For
-emit	include/Node.h	/^	void emit(std::string s) {;}$/;"	f	class:Node
-emitjumps	inter/Expr.cpp	/^void Expr::emitjumps(std::string test , label iftrue , label iffalse){$/;"	f	class:Expr
-emitlabel	include/Node.h	/^	virtual void emitlabel(label l) {;}$/;"	f	class:Node
+emit	include/Node.h	/^	virtual void emit(OP op,Arg1* arg1 , Arg2* arg2,Result * result,Program *p){helper::emit(op,arg1 , arg2, result,p);}$/;"	f	class:Node
+emit	inter/Expr.cpp	/^void helper::emit(OP op,Arg1* arg1 , Arg2* arg2,Result * result,Program *p){p->addinstr(op,arg1 , arg2, result);}$/;"	f	class:helper
+emitjumps	inter/Expr.cpp	/^void Expr::emitjumps(Rel* rel , label iftrue , label iffalse){$/;"	f	class:Expr
+emitlabel	include/Node.h	/^	virtual void emitlabel(label l,Program *p) {helper::emitlabel(l,p);}$/;"	f	class:Node
+emitlabel	include/Node.h	/^	virtual void emitlabel(std::string s, Program *p) {helper::emitlabel(s,p);}$/;"	f	class:Node
+emitlabel	inter/Expr.cpp	/^void helper::emitlabel(label l,Program *p) {p->addlabel(l);}$/;"	f	class:helper
+emitlabel	inter/Expr.cpp	/^void helper::emitlabel(std::string s, Program *p) {p->addlabel(s);}$/;"	f	class:helper
 eq	include/Token.h	/^		static Word *eq ; $/;"	m	class:Word
 eq	lexer/Lexer.cpp	/^Word	*Word::eq = new Word("=",T_EQ);	$/;"	m	class:Word	file:
 error	include/Parser.h	/^		void error(std::string s){;}     \/\/unimplemented$/;"	f	class:Parser
@@ -223,6 +257,7 @@ form_para_seg	parser/parsedeclpaf.cpp	/^void Parser::form_para_seg(){$/;"	f	clas
 forstatement	parser/parsestmt.cpp	/^For* Parser::forstatement(){        \/\/ incomlete . unchecked identifier information$/;"	f	class:Parser
 framesize	include/PAF.h	/^		int framesize;$/;"	m	class:Program
 fs	include/Lexer.h	/^		std::fstream *fs;$/;"	m	class:Lexer
+func	include/Quadruple.h	/^		Func * func;$/;"	m	class:Arg_func
 func_decl	parser/parsedeclpaf.cpp	/^Func* Parser::func_decl(){$/;"	f	class:Parser
 ge	include/Token.h	/^		static Word *ge ; $/;"	m	class:Word
 ge	lexer/Lexer.cpp	/^Word	*Word::ge = new Word(">=",T_GE);	$/;"	m	class:Word	file:
@@ -239,11 +274,12 @@ gen	inter/Stmt.cpp	/^void If::gen(label before, label after)$/;"	f	class:If
 gen	inter/Stmt.cpp	/^void IfElse::gen(label before, label after)$/;"	f	class:IfElse
 gen	inter/Stmt.cpp	/^void Seq::gen(label begin , label after){$/;"	f	class:Seq
 get	symboltable/PAF.cpp	/^Node* Program::get(Token *w) {$/;"	f	class:Program
-getfsize	include/PAF.h	/^		int getfsize(){return framesize;}$/;"	f	class:Program
 getlabel	parser/parsestmt.cpp	/^std::string Parser::getlabel(Word *w){$/;"	f	class:Parser
 gt	include/Token.h	/^		static Word *gt ; $/;"	m	class:Word
 gt	lexer/Lexer.cpp	/^Word	*Word::gt = new Word(">",T_GT);	$/;"	m	class:Word	file:
 hashtable	include/Lexer.h	/^typedef std::unordered_map<std::string , Word*> hashtable;$/;"	t
+helper	include/Node.h	/^namespace helper$/;"	n
+id	include/Quadruple.h	/^		Id * id;$/;"	m	class:Arg_id
 id	include/Stmt.h	/^		Id * id;$/;"	m	class:For
 id	include/Stmt.h	/^		Id* id;$/;"	m	class:Assign
 idlist	include/Stmt.h	/^	std::queue<Word*> *idlist;$/;"	m	class:Input
@@ -257,9 +293,11 @@ is_to	include/Stmt.h	/^		bool is_to;$/;"	m	class:For
 jumping	include/Expr.h	/^		void jumping(label iftrue, label iffalse) {emitjumps(reduce()->toString(),iftrue,iffalse);}$/;"	f	class:Access
 jumping	inter/Expr.cpp	/^void Expr::jumping(label iftrue , label iffalse){$/;"	f	class:Expr
 label	include/Node.h	/^typedef int label;$/;"	t
-label	include/PAF.h	/^		std::string label;$/;"	m	class:Program
+label	include/Quadruple.h	/^		std::string label;$/;"	m	class:Result_label
 labelcounter	parser/parsestmt.cpp	/^		labelcounter(Word* m){x = m;}$/;"	f	class:Parser::labelcounter
 labelcounter	parser/parsestmt.cpp	/^class Parser::labelcounter{$/;"	c	class:Parser	file:
+labellist	include/PAF.h	/^		std::vector<std::string> *labellist;$/;"	m	class:Program
+labellist	include/Quadruple.h	/^	std::vector<std::string> *labellist;$/;"	m	class:Quadruple
 labels	include/Node.h	/^	static label labels;$/;"	m	class:Node
 labels	inter/Expr.cpp	/^label Node::labels = 0;$/;"	m	class:Node	file:
 lcounter	include/Parser.h	/^		static std::unordered_map<Word*,Parser::labelcounter*>  lcounter;$/;"	m	class:Parser
@@ -292,6 +330,7 @@ of	include/Type.h	/^	Type *of ;$/;"	m	class:Array
 offset	include/Expr.h	/^		int offset ;        \/\/ relative address ( of what ?)$/;"	m	class:Id
 offset	parser/parseexpr.cpp	/^Access * Parser::offset(Id *id){$/;"	f	class:Parser
 op	include/Expr.h	/^		Token *op;$/;"	m	class:Expr
+op	include/Quadruple.h	/^	OP	 op;$/;"	m	class:Quadruple
 openbracket	include/Token.h	/^		static Word *openbracket ; $/;"	m	class:Word
 openbracket	lexer/Lexer.cpp	/^Word	*Word::openbracket = new Word("[",T_OPENBRACKET);	$/;"	m	class:Word	file:
 openparenthesis	include/Token.h	/^		static Word *openparenthesis ; $/;"	m	class:Word
@@ -309,6 +348,7 @@ parentheisfactor	parser/parseexpr.cpp	/^Expr *Parser::parentheisfactor(){$/;"	f	
 patch	include/Tag.h	/^namespace patch$/;"	n
 peek	include/Lexer.h	/^		char peek = ' ';$/;"	m	class:Lexer
 prev	include/PAF.h	/^		Program *prev = nullptr;$/;"	m	class:Program
+proc	include/Quadruple.h	/^		Proc * proc;$/;"	m	class:Arg_proc
 proc_decl	parser/parsedeclpaf.cpp	/^Proc* Parser::proc_decl(){$/;"	f	class:Parser
 program	parser/parsestmt.cpp	/^Program* Parser::program(){$/;"	f	class:Parser
 put	include/PAF.h	/^		void put(Token* t , Node* i){symboltable.insert(std::make_pair(t,i));}$/;"	f	class:Program
@@ -316,7 +356,9 @@ readch	lexer/Lexer.cpp	/^bool Lexer::readch(char c){$/;"	f	class:Lexer
 readch	lexer/Lexer.cpp	/^inline void Lexer::readch(){$/;"	f	class:Lexer
 reduce	include/Expr.h	/^		virtual Expr* reduce() {return this;}$/;"	f	class:Expr
 reduce	inter/Expr.cpp	/^Expr* Op::reduce(){$/;"	f	class:Op
+relation	include/Quadruple.h	/^		Rel * relation;$/;"	m	class:Arg_rel
 reserve	include/Lexer.h	/^		void reserve(Word* w) {words.insert(std::make_pair(w->lexeme,w));}$/;"	f	class:Lexer
+result	include/Quadruple.h	/^	Result * result;$/;"	m	class:Quadruple
 s	include/Stmt.h	/^		Stmt * s;$/;"	m	class:DoWhile
 s	include/Stmt.h	/^		Stmt* s;$/;"	m	class:For
 s	include/Stmt.h	/^		Stmt* s;$/;"	m	class:If
@@ -336,9 +378,9 @@ seq_statement	parser/parsestmt.cpp	/^Seq* Parser::seq_statement(){$/;"	f	class:P
 seq_stmt	include/PAF.h	/^	Seq * seq_stmt;$/;"	m	class:Block
 seq_variableDeclaration	parser/parsedeclconst.cpp	/^void Parser::seq_variableDeclaration(){$/;"	f	class:Parser
 setfsize	include/PAF.h	/^		void setfsize(){framesize = align(used);}        \/\/ align 4$/;"	f	class:Proc
-setfsize	include/PAF.h	/^		void setfsize(){framesize = align(used);}        \/\/ align 4$/;"	f	class:Program
 size	include/Type.h	/^	int size = 1;$/;"	m	class:Array
 statement	parser/parsestmt.cpp	/^Stmt* Parser::statement(){$/;"	f	class:Parser
+str	include/Quadruple.h	/^		std::string str;$/;"	m	class:Arg_string
 symboltable	include/PAF.h	/^		Hashtable symboltable;$/;"	m	class:Program
 tag	include/Token.h	/^		Tag tag;$/;"	m	class:Token
 temp	include/Token.h	/^		static Word *temp;$/;"	m	class:Word
@@ -363,6 +405,7 @@ type	parser/parsedeclconst.cpp	/^Type* Parser::type(){$/;"	f	class:Parser
 unary	parser/parseexpr.cpp	/^Expr* Parser::unary(){$/;"	f	class:Parser
 unsignedexpr	parser/parseexpr.cpp	/^Expr* Parser::unsignedexpr(){$/;"	f	class:Parser
 used	include/PAF.h	/^		int used = 0;$/;"	m	class:Program
+value	include/Quadruple.h	/^		int value;$/;"	m	class:Arg_int
 value	include/Token.h	/^		int value;$/;"	m	class:Character
 value	include/Token.h	/^		int value;$/;"	m	class:Num
 variableDeclaration	parser/parsedeclconst.cpp	/^void Parser::variableDeclaration(){$/;"	f	class:Parser

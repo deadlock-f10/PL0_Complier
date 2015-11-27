@@ -1,10 +1,12 @@
 #include "../include/Parser.h"
+#include "../include/OP.h"
 #include <unordered_set>
 #include <queue>
 #include <iostream>
 
 //typedef std::unordered_set<Tag> Tag_Set;
 
+std::string OptoString[I_MINUS + 1] = {"read","write","if", "iffalse","goto", "param", "callproc", "callfunc", "copy", "copyind","indcopy", "*", "/", "+", "-"};
 
 void Parser::match(Tag t){
 	if(look->tag == t)
@@ -40,7 +42,7 @@ Program* Parser::program(){
 	if(look->tag != T_DOT)
 		;                 // throw exception
 	label begin = p->newlabel();
-	label after = p->newlabel();
+	label after = p->newlabel();        //suppose type checking , name lookup have already done in parse phase
 	p->emitlabel(begin);
 	p->gen(begin , after);
 	p->emitlabel(after);
@@ -98,7 +100,7 @@ Stmt* Parser::statement(){
 	if(look->tag != T_ELSE && look->tag != T_WHILE && look->tag != T_SEMICOLON && look->tag != T_END)
 		;          // throw exception
 	// look in follow .
-	return nullptr;
+	return Stmt::Null;
 }
 
 Input* Parser::inputstatement(){
@@ -173,7 +175,7 @@ Stmt* Parser::assignstatement(){    // incomplete
 	}
 	else
 		;           // throw exception
-	return nullptr;      // should never excuted
+	return Stmt::Null;      // should never excuted
 }
 
 Stmt* Parser::ifstatement(){
@@ -216,7 +218,7 @@ For* Parser::forstatement(){        // incomlete . unchecked identifier informat
 	else {
 		;        //throw exception
 	}
-	return nullptr;// should never excuted
+	return Stmt::Null;// should never excuted
 }
 
 DoWhile* Parser::dowhilestatement(){
@@ -259,7 +261,7 @@ Callproc* Parser::callprocstatement(){
 	else {
 		; // throw exception
 	}
-	return nullptr;// should never excuted
+	return Stmt::Null;// should never excuted
 }
 
 Seq* Parser::seq_statement(){
@@ -275,5 +277,5 @@ Seq* Parser::seq_statement(){
 	if(look->tag != T_END)
 		;          // throw exception
 	// look in follow .
-	return nullptr;
+	return Stmt::Null;
 }

@@ -7,38 +7,41 @@
 #define STMT_H
 
 class Stmt;
+class Program;
 class Stmt : public Node{
 	public :
 		Stmt(){}
 		static Stmt* Null;
-		virtual void gen(label begin , label after){}
+		virtual void gen(Program *p){;}
 //		label after = 0;         used for break
 };
 
 
 class If : public Stmt{
 	public :
-		Expr* e;
+		Rel* e;
 		Stmt* s;
-		If(Expr *expr , Stmt *stmt){e = expr;s =stmt;}
-		void gen(label before, label after);
+		If(Rel *expr , Stmt *stmt){e = expr;s =stmt;}
+		void gen(Program *p);
 };
 
 class IfElse : public Stmt{
 	public :
-		Expr * e;
+		Rel * e;
 		Stmt * s1;
 		Stmt * s2;
-		IfElse(Expr *expr , Stmt *stmt1, Stmt *stmt2){e = expr;s1 =stmt1; s2 = stmt2;}
-		void gen(label before, label after);
+		IfElse(Rel *expr , Stmt *stmt1, Stmt *stmt2){e = expr;s1 =stmt1; s2 = stmt2;}
+		//void gen(label before, label after);
+		void gen(Program *p);
 };
 
 class DoWhile : public Stmt{
 	public :
-		Expr * e;
+		Rel * e;
 		Stmt * s;
-		DoWhile(Expr *expr , Stmt *stmt){e = expr;s =stmt;}
-		void gen(label before, label after);
+		DoWhile(Rel *expr , Stmt *stmt){e = expr;s =stmt;}
+		//void gen(label before, label after);
+		void gen(Program *p);
 };
 
 class For : public Stmt{
@@ -51,6 +54,7 @@ class For : public Stmt{
 		For(Id * i,Expr *x1,bool to,Expr* x2,Stmt* stmt){
 			id = i; e1=x1;is_to = to; e2=x2;stmt = s;
 		}
+		void gen(Program *p);
 };
 
 class Assign : public Stmt{
@@ -59,7 +63,8 @@ class Assign : public Stmt{
 		Expr * e;		
 		Assign(Id *id,Expr *e);
 		bool check(Type *a,Type *b);
-		void gen(label begin , label after){emit(id->toString()+" = "+e->gen()->toString());}
+		//void gen(label begin , label after){emit(id->toString()+" = "+e->gen()->toString());}
+		void gen(Program *p);
 };
 
 class AssignElem : public Stmt{
@@ -69,7 +74,8 @@ class AssignElem : public Stmt{
 		Expr *e;
 		AssignElem(Access * x,Expr* y);
 		bool check(Type *a ,Type *b);    // unimplemented
-		void gen(label begin,label after); 
+		//void gen(label begin,label after); 
+		void gen(Program *p);
 };
 
 class Seq : public Stmt{
@@ -77,7 +83,7 @@ class Seq : public Stmt{
 	Stmt * s1;
 	Stmt * s2;
 	Seq(Stmt *stmt1,Stmt *stmt2){s1 = stmt1; s2 = stmt2;}
-	void gen(label begin , label after);
+	void gen(Program *p);
 };
 /*
 class Compound : public stmt{
@@ -91,6 +97,7 @@ class Input: public Stmt{
 	public :
 	std::queue<Word*> *idlist;
 	Input(std::queue<Word*> *list) {idlist = list;}
+	void gen(Program *p);
 };
 
 class Output: public Stmt{
@@ -98,12 +105,14 @@ class Output: public Stmt{
 	STring * s;
 	Expr * e;
 	Output(Expr *x,STring *string){s = string;e=x;}
+	void gen(Program *p);
 };
 
 class Callproc: public Stmt{        
 	public:
-	Proc* p;           // form para with "var" must correspond to a Id in actual para. should check that
+	Proc* prc;           // form para with "var" must correspond to a Id in actual para. should check that
 	std::vector<Expr*> *actuallist;
-	Callproc(Proc *proc , std::vector<Expr*> *list){p = proc;list = actuallist;}
+	Callproc(Proc *proc , std::vector<Expr*> *list){prc = proc;list = actuallist;}
+	void gen(Program *p);
 };
 #endif

@@ -1,4 +1,6 @@
-#include "Instruction.h"
+#include "OP.h"
+#include <string>
+#include <vector>
 #ifndef  QUADRUPLE_H
 #define QUADRUPLE_H
 class Arg1{
@@ -10,7 +12,11 @@ class Arg2{
 class Result{
 	;
 };
-class Arg_id : public Arg1 ,Arg2,Result{
+class Func;
+class Proc;
+class Id;
+class Rel;
+class Arg_id : public Arg1 ,Arg2,Result{             // maybe temp ?
 	public :
 		Id * id;
 		Arg_id(Id *x){id = x;}
@@ -19,7 +25,7 @@ class Arg_string : public Arg1{
 	public :
 		std::string str;
 		Arg_string(std::string s){str = s;}
-}
+};
 class Arg_int : public Arg1 , Arg2{
 	public :
 		int value;
@@ -47,10 +53,11 @@ class Result_label : public Result{
 };
 class Quadruple{
 	public :
-	Instruction	 instr;
+	std::vector<std::string> *labellist;
+	OP	 op;
 	Arg1 * arg1;
 	Arg2 * arg2;
 	Result * result;
-	Quadruple(Instruction i, Arg1 * a1, Arg2* a2, Result *r){instr = i;arg1=a1;arg2=a2;result=r;}
+	Quadruple(std::vector<std::string> *l,OP Op, Arg1 * a1, Arg2* a2, Result *r){labellist = new std::vector<std::string>(*l);op = Op;arg1=a1;arg2=a2;result=r;}
 };
 #endif

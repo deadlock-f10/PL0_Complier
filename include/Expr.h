@@ -3,16 +3,17 @@
 #include <vector>
 #ifndef EXPR_H
 #define EXPR_H
+class Rel;
 class Expr : public Node{
 	public :
 		Token *op;
 		Type *type;
 		Expr(Token* tok , Type *t) {op = tok ; type = t;}
-		virtual Expr* gen() {return this;}
-		virtual Expr* reduce() {return this;}
-		virtual void jumping(label iftrue , label iffalse);
-		virtual void emitjumps(std::string test , label iftrue , label iffalse);
-		virtual std::string toString(){return op->toString();}
+		virtual Expr* gen(Program *p) {return this;} //genarate a object with its subobject reduced
+		virtual Expr* reduce(Program *p) {return this;} // resolve to a single address(identifier or constant)
+		//virtual void jumping(label iftrue , label iffalse,Program *p);
+		//virtual void emitjumps(Rel* rel, label iftrue , label iffalse,Program *p);
+		//virtual std::string toString(){return op->toString();}
 };
 
 class Id : public Expr {          // need add field which specify whether this identifier is const or not
@@ -31,11 +32,12 @@ class Callfunc : public Expr{
 	Func* f;           // form para with "var" must correspond to a Id in actual para. should check that
 	std::vector<Expr*> *actuallist;
 	Callfunc(Func *func , std::vector<Expr*> *list):Expr(func->name,func->type){f = func;list = actuallist;}
+	Expr* reduce(Program *p);
 };
 class Op : public Expr {
 	public :
 		Op(Token* tok , Type* t) : Expr(tok , t){}
-		Expr* reduce();
+		Expr* reduce(Program *p);
 };
 
 class Arith : public Op {
@@ -43,8 +45,9 @@ class Arith : public Op {
 		Expr * e1;
 		Expr * e2;
 		Arith(Token* tok , Expr *x1 , Expr* x2); 
-		Expr* gen(){ return new Arith(op, e1->reduce() , e2->reduce()); }
-		std::string toString() {return e1->toString() + " " + op->toString() + " " + e2->toString();}
+		Expr* gen(Program *p){ return new Arith(op, e1->reduce(p) , e2->reduce(p)); }
+		Expr* reduce(Program *p);
+		//std::string toString() {return e1->toString() + " " + op->toString() + " " + e2->toString();}
 };
 
 class Temp : public  Expr {
@@ -52,15 +55,16 @@ class Temp : public  Expr {
 	static int count;
 	int number = 0;
 	Temp(Type *t) : Expr(Word::temp , t) {number = ++count;}
-	std::string toString(){return "t"+number;}
+	//std::string toString(){return "t"+number;}
 };
 
-class Unary : public Op {
+class Unary : public Op { // its  op will only be minus
 	public :
 		Expr* e;
 		Unary(Token *tok , Expr *x);
-		Expr* gen(){return new Unary(op, e->reduce()) ;}
-		std::string  toString(){return op->toString() + " " + e->toString();}
+		Expr* gen(Program *p){return new Unary(op, e->reduce(p)) ;}
+		Expr* reduce(Program *p);
+		//std::string  toString(){return op->toString() + " " + e->toString();}
 };
 
 class Constant : public Expr {
@@ -75,6 +79,8 @@ class Rel : public Expr {
 		Expr *e1;
 		Expr *e2;
 		Rel (Token *t ,Expr *x1 , Expr *x2);
+		Expr* gen(Program *p);
+		//Expr* reduce(Program *p);
 	private:
 		bool check( Type* p1 ,Type *p2) ;    
 };
@@ -84,8 +90,8 @@ class Access : public Op{
 		Id * array ;
 		Expr * index ; 
 		Access (Id *id ,Type * t, Expr * e) : Op(new Word("[]" ,T_INDEX),t) {array = id ; index = e; }
-		Expr * gen() {return new Access(array,type,index->reduce());}
-		void jumping(label iftrue, label iffalse) {emitjumps(reduce()->toString(),iftrue,iffalse);}
-		std::string toString(){return array->toString()+"[" + index->toString() + "]";}
+		Expr * gen(Program *p) {return new Access(array,type,index->reduce(p));}
+		//void jumping(label iftrue, label iffalse) {emitjumps(reduce()->toString(),iftrue,iffalse);}
+		//std::string toString(){return array->toString()+"[" + index->toString() + "]";}
 };
 #endif

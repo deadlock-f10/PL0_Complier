@@ -1,4 +1,5 @@
 #include "Node.h"
+#include "Quadruple.h"
 //#include "Expr.h"
 //#include "Stmt.h"
 #include <utility>
@@ -8,14 +9,18 @@
 #define PAF_H
 #define align(x) ((x) % 4 == 0 ? (x) : (x) + 4 - (x) % 4)
 typedef std::unordered_map<Token* , Node*> Hashtable;
+typedef std::vector<Quadruple*> QuadList;
 class Block;
 class Seq;
 class Id;
 class Program;
 class Parser;
+//typedef label int;
 class Program :public Node{
 	public :
-		std::string label;
+		QuadList Instrlist;
+		std::vector<std::string> *labellist;
+		std::string beginlabel;
 		Word* name;
 		Program *prev = nullptr;
 		int level;
@@ -23,12 +28,15 @@ class Program :public Node{
 		Block *block;
 		int used = 0;
 		static Program* Null;
-		Program(){level = 1;name = new Word("main",T_IDENT);label = Parser::getlabel(name);}
+		Program();
 		virtual void gen(label begin , label after){};
 		void put(Token* t , Node* i){symboltable.insert(std::make_pair(t,i));}
 		Node* get(Token* w);
-		void setfsize(){framesize = align(used);}        // align 4
-		int getfsize(){return framesize;}
+		void addlabel(std::string s){if(labellist == nullptr) labellist = new std::vector<std::string>(); labellist->push_back(s);}
+		void addlabel(int l ){if(labellist == nullptr) labellist = new std::vector<std::string>(); labellist->push_back("L"+patch::to_string(l));}
+		void addinstr(OP op,Arg1* arg1 , Arg2* arg2,Result * result){Instrlist.push_back(new Quadruple(labellist,op,arg1 ,arg2,result)); labellist = nullptr;}
+		/*void setfsize(){framesize = align(used);}        // align 4
+		int getfsize(){return framesize;}*/
 	protected :
 		int framesize;
 };
@@ -38,7 +46,7 @@ class Proc : public Program{
 		int para_used = 0;
 		//label l;
 //		std::string symtype = "procedure";
-		Proc(Program  *p,Word *w , int l) { prev = p;name = w;level = l;label = Parser::getlabel(name);}
+		Proc(Program  *p,Word *w , int l);
 		void setfsize(){framesize = align(used);}        // align 4
 };
 
@@ -49,7 +57,7 @@ class Func : public Program{
 		//label l;                     // L label:
 		Type* type;
 //		std::string symtype = "function";
-		Func(Program *p,Word *w, int l) {prev = p;name = w;level = l;label = Parser::getlabel(name);}
+		Func(Program *p,Word *w, int l);
 };
 
 class Seq_PAF : public Program{

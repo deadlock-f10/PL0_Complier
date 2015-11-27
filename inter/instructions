@@ -6,7 +6,8 @@ label	Instr		arg1				arg2			 result		meaning
 		param		(id,integer)									parameter id(for future use)
 		callproc	proc				integer						call procedure with n parameters
 		callfunc	func				integer			 id			call function with n parameters , store return value in id	
-		copy		idx									 idy		x = y
-		copyind		idx					idi				 idy	    y = x[i]
-		indcopy		idx					idi				 idy		x[i] = y
-		op			idy					idz				 idx		x = y op z (op can be +,-,*,/)
+		copy		(idy,integer)						 idx		x = y
+		copyind		idx					(idi,integer)	 idy	    y = x[i]
+		indcopy		(idy,integer)		idi				 idx		x[i] = y
+		op			(idy,integer)		(idz,integer)	 idx		x = y op z (op can be +,-,*,/)
+		goto											 L          goto L
