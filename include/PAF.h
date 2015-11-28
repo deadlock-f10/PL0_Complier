@@ -14,7 +14,7 @@ class Block;
 class Seq;
 class Id;
 class Program;
-class Parser;
+//class Parser;
 //typedef label int;
 class Program :public Node{
 	public :
@@ -28,12 +28,22 @@ class Program :public Node{
 		int used = 0;
 		static Program* Null;
 		Program();
-		virtual void gen(label begin , label after){};
-		void put(Token* t , Node* i){symboltable.insert(std::make_pair(t,i));}
+		virtual void gen();
+		void put(Token* t , Node* i){
+			symboltable.insert(std::make_pair(t,i));
+		}
 		Node* get(Token* w);
-		void addlabel(std::string s){if(labellist == nullptr) labellist = new std::vector<std::string>(); labellist->push_back(s);}
-		void addlabel(int l ){if(labellist == nullptr) labellist = new std::vector<std::string>(); labellist->push_back("L"+patch::to_string(l));}
-		void addinstr(OP op,Arg1* arg1 , Arg2* arg2,Result * result){Instrlist.push_back(new Quadruple(labellist,op,arg1 ,arg2,result)); labellist = nullptr;}
+		void addlabel(std::string s){
+			if(labellist == nullptr) 
+				labellist = new std::vector<std::string>(); 
+			labellist->push_back(s);
+		}
+		void addlabel(int l ){
+			if(labellist == nullptr) 
+				labellist = new std::vector<std::string>(); 
+			labellist->push_back("L"+patch::to_string(l));
+		}
+		void addinstr(OP op,Arg1* arg1 , Arg2* arg2,Result * result);
 		virtual void print();
 		/*void setfsize(){framesize = align(used);}        // align 4
 		int getfsize(){return framesize;}*/
@@ -67,6 +77,7 @@ class Seq_PAF : public Program{
 	Program* pafs;
 	Seq_PAF(Program* p1,Program *p2){paf = p1; pafs = p2;}
 	void print();
+	void gen();
 };
 
 class Block {
@@ -74,5 +85,6 @@ class Block {
 	Seq_PAF * seq_paf;
 	Seq * seq_stmt;
 	void print();
+	void gen(Program *p);
 };
 #endif

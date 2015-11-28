@@ -11,7 +11,7 @@ Arg2	include/Quadruple.h	/^class Arg2{$/;"	c
 Arg_func	include/Quadruple.h	/^		Arg_func(Func *f){func = f;}$/;"	f	class:Arg_func
 Arg_func	include/Quadruple.h	/^class Arg_func : public Arg1{$/;"	c
 Arg_id	include/Quadruple.h	/^		Arg_id(Id *x){id = x;}$/;"	f	class:Arg_id
-Arg_id	include/Quadruple.h	/^class Arg_id : public Arg1 ,Arg2,Result{$/;"	c
+Arg_id	include/Quadruple.h	/^class Arg_id : public Arg1 ,Arg2,Result{             \/\/ maybe temp ?$/;"	c
 Arg_int	include/Quadruple.h	/^		Arg_int(int x) { value = x;}$/;"	f	class:Arg_int
 Arg_int	include/Quadruple.h	/^class Arg_int : public Arg1 , Arg2{$/;"	c
 Arg_proc	include/Quadruple.h	/^		Arg_proc(Proc *p){proc = p;}$/;"	f	class:Arg_proc
@@ -43,7 +43,7 @@ CFLAGS	parser/Makefile	/^CFLAGS = -Wall --std=c++11$/;"	m
 CFLAGS	symboltable/Makefile	/^CFLAGS = -Wall --std=c++11$/;"	m
 Callfunc	include/Expr.h	/^	Callfunc(Func *func , std::vector<Expr*> *list):Expr(func->name,func->type){f = func;list = actuallist;}$/;"	f	class:Callfunc
 Callfunc	include/Expr.h	/^class Callfunc : public Expr{$/;"	c
-Callproc	include/Stmt.h	/^	Callproc(Proc *proc , std::vector<Expr*> *list){p = proc;list = actuallist;}$/;"	f	class:Callproc
+Callproc	include/Stmt.h	/^	Callproc(Proc *proc , std::vector<Expr*> *list){prc = proc;list = actuallist;}$/;"	f	class:Callproc
 Callproc	include/Stmt.h	/^class Callproc: public Stmt{        $/;"	c
 Char	include/Type.h	/^		static Type *Int,*Char;$/;"	m	class:Type
 Char	lexer/Type.cpp	/^Type* Type::Char = new Type(T_CHAR , Char_Width , "char");  $/;"	m	class:Type	file:
@@ -55,7 +55,7 @@ Constant	include/Expr.h	/^		Constant (Num *t): Expr(t , Type::Int){c = t->value;
 Constant	include/Expr.h	/^class Constant : public Expr {$/;"	c
 Div	include/Token.h	/^		static Word *Div ; $/;"	m	class:Word
 Div	lexer/Lexer.cpp	/^Word	*Word::Div = new Word("\/",T_DIV);	$/;"	m	class:Word	file:
-DoWhile	include/Stmt.h	/^		DoWhile(Expr *expr , Stmt *stmt){e = expr;s =stmt;}$/;"	f	class:DoWhile
+DoWhile	include/Stmt.h	/^		DoWhile(Rel *expr , Stmt *stmt){e = expr;s =stmt;}$/;"	f	class:DoWhile
 DoWhile	include/Stmt.h	/^class DoWhile : public Stmt{$/;"	c
 EXPR_H	include/Expr.h	5;"	d
 Expr	include/Expr.h	/^		Expr(Token* tok , Type *t) {op = tok ; type = t;}$/;"	f	class:Expr
@@ -69,27 +69,28 @@ HEADER_PATH	lexer/Makefile	/^HEADER_PATH = ..\/include$/;"	m
 HEADER_PATH	parser/Makefile	/^HEADER_PATH = ..\/include$/;"	m
 HEADER_PATH	symboltable/Makefile	/^HEADER_PATH = ..\/include$/;"	m
 Hashtable	include/PAF.h	/^typedef std::unordered_map<Token* , Node*> Hashtable;$/;"	t
-I_ADD	include/OP.h	/^	I_ADD ,$/;"	m	class:OP
-I_CALLFUNC	include/OP.h	/^	I_CALLFUNC ,$/;"	m	class:OP
-I_CALLPROC	include/OP.h	/^	I_CALLPROC ,$/;"	m	class:OP
-I_COPY	include/OP.h	/^	I_COPY ,$/;"	m	class:OP
-I_COPYIND	include/OP.h	/^	I_COPYIND ,$/;"	m	class:OP
-I_DIV	include/OP.h	/^	I_DIV ,$/;"	m	class:OP
-I_IF	include/OP.h	/^	I_IF  ,$/;"	m	class:OP
-I_IFFALSE	include/OP.h	/^	I_IFFALSE ,$/;"	m	class:OP
-I_INDCOPY	include/OP.h	/^	I_INDCOPY  ,$/;"	m	class:OP
-I_MINUS	include/OP.h	/^	I_MINUS ,$/;"	m	class:OP
-I_MULT	include/OP.h	/^	I_MULT ,$/;"	m	class:OP
-I_PARAM	include/OP.h	/^	I_PARAM ,$/;"	m	class:OP
-I_READ	include/OP.h	/^	I_READ = 0 ,$/;"	m	class:OP
-I_WRITE	include/OP.h	/^	I_WRITE  ,$/;"	m	class:OP
+I_ADD	include/OP.h	/^	I_ADD ,$/;"	e	enum:OP
+I_CALLFUNC	include/OP.h	/^	I_CALLFUNC ,$/;"	e	enum:OP
+I_CALLPROC	include/OP.h	/^	I_CALLPROC ,$/;"	e	enum:OP
+I_COPY	include/OP.h	/^	I_COPY ,$/;"	e	enum:OP
+I_COPYIND	include/OP.h	/^	I_COPYIND ,$/;"	e	enum:OP
+I_DIV	include/OP.h	/^	I_DIV ,$/;"	e	enum:OP
+I_GOTO	include/OP.h	/^	I_GOTO,$/;"	e	enum:OP
+I_IF	include/OP.h	/^	I_IF  ,$/;"	e	enum:OP
+I_IFFALSE	include/OP.h	/^	I_IFFALSE ,$/;"	e	enum:OP
+I_INDCOPY	include/OP.h	/^	I_INDCOPY  ,$/;"	e	enum:OP
+I_MINUS	include/OP.h	/^	I_MINUS ,$/;"	e	enum:OP
+I_MULT	include/OP.h	/^	I_MULT ,$/;"	e	enum:OP
+I_PARAM	include/OP.h	/^	I_PARAM ,$/;"	e	enum:OP
+I_READ	include/OP.h	/^	I_READ = 0 ,$/;"	e	enum:OP
+I_WRITE	include/OP.h	/^	I_WRITE  ,$/;"	e	enum:OP
 Id	include/Expr.h	/^		Id(Word* w , Type* t , int o , bool b,int l): Expr(w,t) {offset = o; isConst = b; level = l;}$/;"	f	class:Id
 Id	include/Expr.h	/^		Id(Word* w , Type* t , int o , bool b1 , bool b2,int l): Expr(w,t) {offset = o; isConst = b1; isRef = b2; level = l;}$/;"	f	class:Id
 Id	include/Expr.h	/^		Id(Word* w , Type* t , int o,int l): Expr(w,t) {offset = o; isConst = false; level = l;}$/;"	f	class:Id
 Id	include/Expr.h	/^class Id : public Expr {          \/\/ need add field which specify whether this identifier is const or not$/;"	c
-If	include/Stmt.h	/^		If(Expr *expr , Stmt *stmt){e = expr;s =stmt;}$/;"	f	class:If
+If	include/Stmt.h	/^		If(Rel *expr , Stmt *stmt){e = expr;s =stmt;}$/;"	f	class:If
 If	include/Stmt.h	/^class If : public Stmt{$/;"	c
-IfElse	include/Stmt.h	/^		IfElse(Expr *expr , Stmt *stmt1, Stmt *stmt2){e = expr;s1 =stmt1; s2 = stmt2;}$/;"	f	class:IfElse
+IfElse	include/Stmt.h	/^		IfElse(Rel *expr , Stmt *stmt1, Stmt *stmt2){e = expr;s1 =stmt1; s2 = stmt2;}$/;"	f	class:IfElse
 IfElse	include/Stmt.h	/^class IfElse : public Stmt{$/;"	c
 Input	include/Stmt.h	/^	Input(std::queue<Word*> *list) {idlist = list;}$/;"	f	class:Input
 Input	include/Stmt.h	/^class Input: public Stmt{$/;"	c
@@ -121,7 +122,7 @@ Node	include/Node.h	/^	Node () {lexline = Lexer::line;}$/;"	f	class:Node
 Node	include/Node.h	/^class Node{$/;"	c
 Null	include/PAF.h	/^		static Program* Null;$/;"	m	class:Program
 Null	include/Stmt.h	/^		static Stmt* Null;$/;"	m	class:Stmt
-Null	inter/Stmt.cpp	/^Stmt* Stmt::Null = new Stmt();$/;"	m	class:Stmt	file:
+Null	inter/Stmt.cpp	/^Stmt* Stmt::Null = new Stmt();         \/\/ null statement generate emptyinstruction$/;"	m	class:Stmt	file:
 Null	symboltable/PAF.cpp	/^Program * Program::Null = nullptr;$/;"	m	class:Program	file:
 Num	include/Token.h	/^		Num(int v) : Token(T_NUMBER) {value = v;}$/;"	f	class:Num
 Num	include/Token.h	/^class Num : public Token{$/;"	c
@@ -129,12 +130,12 @@ OBJS	inter/Makefile	/^OBJS = $(patsubst %.cpp,$(BUILDDIR)%.o,$(LEXER_C))$/;"	m
 OBJS	lexer/Makefile	/^OBJS = $(patsubst %.cpp,$(BUILDDIR)%.o,$(LEXER_C))$/;"	m
 OBJS	parser/Makefile	/^OBJS = $(patsubst %.cpp,$(BUILDDIR)%.o,$(LEXER_C))$/;"	m
 OBJS	symboltable/Makefile	/^OBJS = $(patsubst %.cpp,$(BUILDDIR)%.o,$(LEXER_C))$/;"	m
-OP	include/OP.h	/^enum class OP {$/;"	c
+OP	include/OP.h	/^enum OP {$/;"	g
 OP_H	include/OP.h	3;"	d
 Op	include/Expr.h	/^		Op(Token* tok , Type* t) : Expr(tok , t){}$/;"	f	class:Op
 Op	include/Expr.h	/^class Op : public Expr {$/;"	c
 OptoString	include/OP.h	/^std::string *OptoString;$/;"	v
-OptoString	parser/parsestmt.cpp	/^std::string OptoString[I_MINUS + 1] = {"read","write","if", "iffalse", "param", "callproc", "callfunc", "copy", "copyind","indcopy", "*", "\/", "+", "-"};$/;"	v
+OptoString	parser/parsestmt.cpp	/^std::string OptoString[I_MINUS + 1] = {"read","write","if", "iffalse","goto", "param", "callproc", "callfunc", "copy", "copyind","indcopy", "*", "\/", "+", "-"};$/;"	v
 Output	include/Stmt.h	/^	Output(Expr *x,STring *string){s = string;e=x;}$/;"	f	class:Output
 Output	include/Stmt.h	/^class Output: public Stmt{$/;"	c
 PAF_H	include/PAF.h	9;"	d
@@ -175,7 +176,7 @@ Token	include/Token.h	/^		Token (Tag i){$/;"	f	class:Token
 Token	include/Token.h	/^class Token{$/;"	c
 Type	include/Type.h	/^		Type(Tag t , int w, std::string s) : Word(s,t) {width = w;}$/;"	f	class:Type
 Type	include/Type.h	/^class Type : public Word{$/;"	c
-Unary	include/Expr.h	/^class Unary : public Op {$/;"	c
+Unary	include/Expr.h	/^class Unary : public Op { \/\/ its  op will only be minus$/;"	c
 Unary	inter/Expr.cpp	/^Unary::Unary(Token *tok, Expr *x) : Op(tok,nullptr) {$/;"	f	class:Unary
 Word	include/Token.h	/^		Word(char const *s, Tag tag) : Token(tag) {lexeme = s;}$/;"	f	class:Word
 Word	include/Token.h	/^		Word(std::string s, Tag tag) : Token(tag) {lexeme = s;}$/;"	f	class:Word
@@ -228,10 +229,10 @@ dot	lexer/Lexer.cpp	/^Word	*Word::dot = new Word(".",T_DOT);	$/;"	m	class:Word	f
 dowhilestatement	parser/parsestmt.cpp	/^DoWhile* Parser::dowhilestatement(){$/;"	f	class:Parser
 e	include/Expr.h	/^		Expr* e;$/;"	m	class:Unary
 e	include/Stmt.h	/^		Expr * e;		$/;"	m	class:Assign
-e	include/Stmt.h	/^		Expr * e;$/;"	m	class:DoWhile
-e	include/Stmt.h	/^		Expr * e;$/;"	m	class:IfElse
 e	include/Stmt.h	/^		Expr *e;$/;"	m	class:AssignElem
-e	include/Stmt.h	/^		Expr* e;$/;"	m	class:If
+e	include/Stmt.h	/^		Rel * e;$/;"	m	class:DoWhile
+e	include/Stmt.h	/^		Rel * e;$/;"	m	class:IfElse
+e	include/Stmt.h	/^		Rel* e;$/;"	m	class:If
 e	include/Stmt.h	/^	Expr * e;$/;"	m	class:Output
 e1	include/Expr.h	/^		Expr * e1;$/;"	m	class:Arith
 e1	include/Expr.h	/^		Expr *e1;$/;"	m	class:Rel
@@ -239,11 +240,9 @@ e1	include/Stmt.h	/^		Expr* e1;$/;"	m	class:For
 e2	include/Expr.h	/^		Expr * e2;$/;"	m	class:Arith
 e2	include/Expr.h	/^		Expr *e2;$/;"	m	class:Rel
 e2	include/Stmt.h	/^		Expr* e2;$/;"	m	class:For
-emit	include/Node.h	/^	virtual void emit(OP op,Arg1* arg1 , Arg2* arg2,Result * result,Program *p){helper::emit(op,arg1 , arg2, result,p);}$/;"	f	class:Node
+emit	include/Node.h	/^	void emit(OP op,Arg1* arg1 , Arg2* arg2,Result * result,Program *p){helper::emit(op,arg1 , arg2, result,p);}$/;"	f	class:Node
 emit	inter/Expr.cpp	/^void helper::emit(OP op,Arg1* arg1 , Arg2* arg2,Result * result,Program *p){p->addinstr(op,arg1 , arg2, result);}$/;"	f	class:helper
-emitjumps	inter/Expr.cpp	/^void Expr::emitjumps(Rel* rel , label iftrue , label iffalse){$/;"	f	class:Expr
-emitlabel	include/Node.h	/^	virtual void emitlabel(label l,Program *p) {helper::emitlabel(l,p);}$/;"	f	class:Node
-emitlabel	include/Node.h	/^	virtual void emitlabel(std::string s, Program *p) {helper::emitlabel(s,p);}$/;"	f	class:Node
+emitlabel	include/Node.h	/^	void emitlabel(std::string s, Program *p) {helper::emitlabel(s,p);}$/;"	f	class:Node
 emitlabel	inter/Expr.cpp	/^void helper::emitlabel(label l,Program *p) {p->addlabel(l);}$/;"	f	class:helper
 emitlabel	inter/Expr.cpp	/^void helper::emitlabel(std::string s, Program *p) {p->addlabel(s);}$/;"	f	class:helper
 eq	include/Token.h	/^		static Word *eq ; $/;"	m	class:Word
@@ -261,18 +260,23 @@ func	include/Quadruple.h	/^		Func * func;$/;"	m	class:Arg_func
 func_decl	parser/parsedeclpaf.cpp	/^Func* Parser::func_decl(){$/;"	f	class:Parser
 ge	include/Token.h	/^		static Word *ge ; $/;"	m	class:Word
 ge	lexer/Lexer.cpp	/^Word	*Word::ge = new Word(">=",T_GE);	$/;"	m	class:Word	file:
-gen	include/Expr.h	/^		Expr * gen() {return new Access(array,type,index->reduce());}$/;"	f	class:Access
-gen	include/Expr.h	/^		Expr* gen(){ return new Arith(op, e1->reduce() , e2->reduce()); }$/;"	f	class:Arith
-gen	include/Expr.h	/^		Expr* gen(){return new Unary(op, e->reduce()) ;}$/;"	f	class:Unary
-gen	include/Expr.h	/^		virtual Expr* gen() {return this;}$/;"	f	class:Expr
+gen	include/Expr.h	/^		Expr * gen(Program *p) {return new Access(array,type,index->reduce(p));}$/;"	f	class:Access
+gen	include/Expr.h	/^		Expr* gen(Program *p){ return new Arith(op, e1->reduce(p) , e2->reduce(p)); }$/;"	f	class:Arith
+gen	include/Expr.h	/^		Expr* gen(Program *p){return new Unary(op, e->reduce(p)) ;}$/;"	f	class:Unary
+gen	include/Expr.h	/^		virtual Expr* gen(Program *p) {return this;} \/\/genarate a object with its subobject reduced$/;"	f	class:Expr
 gen	include/PAF.h	/^		virtual void gen(label begin , label after){};$/;"	f	class:Program
-gen	include/Stmt.h	/^		virtual void gen(label begin , label after){}$/;"	f	class:Stmt
-gen	include/Stmt.h	/^		void gen(label begin , label after){emit(id->toString()+" = "+e->gen()->toString());}$/;"	f	class:Assign
-gen	inter/Stmt.cpp	/^void AssignElem::gen(label begin,label after){$/;"	f	class:AssignElem
-gen	inter/Stmt.cpp	/^void DoWhile::gen(label before, label after)$/;"	f	class:DoWhile
-gen	inter/Stmt.cpp	/^void If::gen(label before, label after)$/;"	f	class:If
-gen	inter/Stmt.cpp	/^void IfElse::gen(label before, label after)$/;"	f	class:IfElse
-gen	inter/Stmt.cpp	/^void Seq::gen(label begin , label after){$/;"	f	class:Seq
+gen	include/Stmt.h	/^		virtual void gen(Program *p){;}$/;"	f	class:Stmt
+gen	inter/Expr.cpp	/^Expr* Rel::gen(Program *p){$/;"	f	class:Rel
+gen	inter/Stmt.cpp	/^void Assign::gen(Program *p){$/;"	f	class:Assign
+gen	inter/Stmt.cpp	/^void AssignElem::gen(Program *p){$/;"	f	class:AssignElem
+gen	inter/Stmt.cpp	/^void Callproc::gen(Program *p){$/;"	f	class:Callproc
+gen	inter/Stmt.cpp	/^void DoWhile::gen(Program *p)$/;"	f	class:DoWhile
+gen	inter/Stmt.cpp	/^void For::gen(Program *p){$/;"	f	class:For
+gen	inter/Stmt.cpp	/^void If::gen(Program *p)$/;"	f	class:If
+gen	inter/Stmt.cpp	/^void IfElse::gen(Program *p)$/;"	f	class:IfElse
+gen	inter/Stmt.cpp	/^void Input::gen(Program *p){$/;"	f	class:Input
+gen	inter/Stmt.cpp	/^void Output::gen(Program *p){$/;"	f	class:Output
+gen	inter/Stmt.cpp	/^void Seq::gen(Program *p){$/;"	f	class:Seq
 get	symboltable/PAF.cpp	/^Node* Program::get(Token *w) {$/;"	f	class:Program
 getlabel	parser/parsestmt.cpp	/^std::string Parser::getlabel(Word *w){$/;"	f	class:Parser
 gt	include/Token.h	/^		static Word *gt ; $/;"	m	class:Word
@@ -290,9 +294,7 @@ inputstatement	parser/parsestmt.cpp	/^Input* Parser::inputstatement(){$/;"	f	cla
 isConst	include/Expr.h	/^		bool isConst;$/;"	m	class:Id
 isRef	include/Expr.h	/^		bool isRef = false;$/;"	m	class:Id
 is_to	include/Stmt.h	/^		bool is_to;$/;"	m	class:For
-jumping	include/Expr.h	/^		void jumping(label iftrue, label iffalse) {emitjumps(reduce()->toString(),iftrue,iffalse);}$/;"	f	class:Access
-jumping	inter/Expr.cpp	/^void Expr::jumping(label iftrue , label iffalse){$/;"	f	class:Expr
-label	include/Node.h	/^typedef int label;$/;"	t
+label	include/Node.h	/^typedef std::string label;$/;"	t
 label	include/Quadruple.h	/^		std::string label;$/;"	m	class:Result_label
 labelcounter	parser/parsestmt.cpp	/^		labelcounter(Word* m){x = m;}$/;"	f	class:Parser::labelcounter
 labelcounter	parser/parsestmt.cpp	/^class Parser::labelcounter{$/;"	c	class:Parser	file:
@@ -323,7 +325,7 @@ move	include/Parser.h	/^		void move(){look = lex->scan();}$/;"	f	class:Parser
 name	include/PAF.h	/^		Word* name;$/;"	m	class:Program
 ne	include/Token.h	/^		static Word *ne ; $/;"	m	class:Word
 ne	lexer/Lexer.cpp	/^Word	*Word::ne = new Word("<>",T_NE);	$/;"	m	class:Word	file:
-newlabel	include/Node.h	/^	label newlabel() {return ++labels;}$/;"	f	class:Node
+newlabel	include/Node.h	/^	label newlabel() {return "L"+patch::to_string(++labels);}$/;"	f	class:Node
 number	include/Expr.h	/^	int number = 0;$/;"	m	class:Temp
 numeric	lexer/Type.cpp	/^bool Type::numeric(Type *t){$/;"	f	class:Type
 of	include/Type.h	/^	Type *of ;$/;"	m	class:Array
@@ -337,7 +339,6 @@ openparenthesis	include/Token.h	/^		static Word *openparenthesis ; $/;"	m	class:
 openparenthesis	lexer/Lexer.cpp	/^Word	*Word::openparenthesis = new Word("(",T_OPENPARENTHESIS);	$/;"	m	class:Word	file:
 optional_para	parser/parsedeclpaf.cpp	/^void Parser::optional_para(){$/;"	f	class:Parser
 outputstatement	parser/parsestmt.cpp	/^Output* Parser::outputstatement(){$/;"	f	class:Parser
-p	include/Stmt.h	/^	Proc* p;           \/\/ form para with "var" must correspond to a Id in actual para. should check that$/;"	m	class:Callproc
 paf	include/PAF.h	/^	Program* paf;$/;"	m	class:Seq_PAF
 pafs	include/PAF.h	/^	Program* pafs;$/;"	m	class:Seq_PAF
 para_used	include/PAF.h	/^		int para_used = 0;$/;"	m	class:Func
@@ -347,6 +348,7 @@ paralist	include/PAF.h	/^		std::vector<Id*> paralist;$/;"	m	class:Proc
 parentheisfactor	parser/parseexpr.cpp	/^Expr *Parser::parentheisfactor(){$/;"	f	class:Parser
 patch	include/Tag.h	/^namespace patch$/;"	n
 peek	include/Lexer.h	/^		char peek = ' ';$/;"	m	class:Lexer
+prc	include/Stmt.h	/^	Proc* prc;           \/\/ form para with "var" must correspond to a Id in actual para. should check that$/;"	m	class:Callproc
 prev	include/PAF.h	/^		Program *prev = nullptr;$/;"	m	class:Program
 proc	include/Quadruple.h	/^		Proc * proc;$/;"	m	class:Arg_proc
 proc_decl	parser/parsedeclpaf.cpp	/^Proc* Parser::proc_decl(){$/;"	f	class:Parser
@@ -354,8 +356,12 @@ program	parser/parsestmt.cpp	/^Program* Parser::program(){$/;"	f	class:Parser
 put	include/PAF.h	/^		void put(Token* t , Node* i){symboltable.insert(std::make_pair(t,i));}$/;"	f	class:Program
 readch	lexer/Lexer.cpp	/^bool Lexer::readch(char c){$/;"	f	class:Lexer
 readch	lexer/Lexer.cpp	/^inline void Lexer::readch(){$/;"	f	class:Lexer
-reduce	include/Expr.h	/^		virtual Expr* reduce() {return this;}$/;"	f	class:Expr
-reduce	inter/Expr.cpp	/^Expr* Op::reduce(){$/;"	f	class:Op
+reduce	include/Expr.h	/^		virtual Expr* reduce(Program *p) {return this;} \/\/ resolve to a single address(identifier or constant)$/;"	f	class:Expr
+reduce	inter/Expr.cpp	/^Expr* Access::reduce(Program *p){$/;"	f	class:Access
+reduce	inter/Expr.cpp	/^Expr* Arith::reduce(Program *p){$/;"	f	class:Arith
+reduce	inter/Expr.cpp	/^Expr* Callfunc::reduce(Program *p){$/;"	f	class:Callfunc
+reduce	inter/Expr.cpp	/^Expr* Op::reduce(Program*p){$/;"	f	class:Op
+reduce	inter/Expr.cpp	/^Expr* Unary::reduce(Program *p){$/;"	f	class:Unary
 relation	include/Quadruple.h	/^		Rel * relation;$/;"	m	class:Arg_rel
 reserve	include/Lexer.h	/^		void reserve(Word* w) {words.insert(std::make_pair(w->lexeme,w));}$/;"	f	class:Lexer
 result	include/Quadruple.h	/^	Result * result;$/;"	m	class:Quadruple
@@ -386,11 +392,6 @@ tag	include/Token.h	/^		Tag tag;$/;"	m	class:Token
 temp	include/Token.h	/^		static Word *temp;$/;"	m	class:Word
 temp	lexer/Lexer.cpp	/^Word    *Word::temp = new Word("temp",T_TEMP);$/;"	m	class:Word	file:
 term	parser/parseexpr.cpp	/^Expr* Parser::term(){$/;"	f	class:Parser
-toString	include/Expr.h	/^		std::string  toString(){return op->toString() + " " + e->toString();}$/;"	f	class:Unary
-toString	include/Expr.h	/^		std::string toString() {return e1->toString() + " " + op->toString() + " " + e2->toString();}$/;"	f	class:Arith
-toString	include/Expr.h	/^		std::string toString(){return array->toString()+"[" + index->toString() + "]";}$/;"	f	class:Access
-toString	include/Expr.h	/^		virtual std::string toString(){return op->toString();}$/;"	f	class:Expr
-toString	include/Expr.h	/^	std::string toString(){return "t"+number;}$/;"	f	class:Temp
 toString	include/Token.h	/^		std::string toString() {return patch::to_string(character);}$/;"	f	class:Character
 toString	include/Token.h	/^		std::string toString() {return patch::to_string(value);}$/;"	f	class:Num
 toString	include/Token.h	/^		std::string toString(){return line;}$/;"	f	class:STring

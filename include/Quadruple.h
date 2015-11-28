@@ -2,62 +2,67 @@
 #include "Tag.h"
 #include <string>
 #include <vector>
+//#include "PAF.h"
+//#include "Expr.h"
 #ifndef  QUADRUPLE_H
 #define QUADRUPLE_H
 class Arg1{
-	virtual std::string to_string(){;}	
+	public:
+	virtual std::string to_string(){return "";}	
 };
 class Arg2{
-	virtual std::string to_string(){;}
+	public:
+	virtual std::string to_string(){return "";}
 };
 class Result{
-	virtual std::string to_string(){;}
+	public:
+	virtual std::string to_string(){return "";}
 };
 class Func;
 class Proc;
 class Id;
 class Rel;
-class Arg_id : public Arg1 ,Arg2,Result{             // maybe temp ?
+class Arg_id : public Arg1 ,public Arg2,public Result{             // maybe temp ?
 	public :
 		Id * id;
 		Arg_id(Id *x){id = x;}
-		std::string to_string(){return id->to_string();}
+		std::string to_string();
 };
 class Arg_string : public Arg1{
 	public :
 		std::string str;
 		Arg_string(std::string s){str = s;}
-		std::string to_string(){return str;}
+		std::string to_string();
 };
-class Arg_int : public Arg1 , Arg2{
+class Arg_int : public Arg1 , public Arg2{
 	public :
 		int value;
 		Arg_int(int x) { value = x;}
-		std::string to_string(){return patch::to_string(value);}
+		std::string to_string();
 };
 class Arg_rel : public Arg1{
 	public :
 		Rel * relation;
 		Arg_rel(Rel * r) {relation = r;}
-		std::string to_string(){return relation->toString();}
+		std::string to_string();
 };
 class Arg_func : public Arg1{
 	public :
 		Func * func;
 		Arg_func(Func *f){func = f;}
-		std::string to_string(){return func->name->toString();}
+		std::string to_string();
 };
 class Arg_proc : public Arg1{
 	public :
 		Proc * proc;
 		Arg_proc(Proc *p){proc = p;}
-		std::string to_string(){return proc->name->toString();}
+		std::string to_string();
 };
 class Result_label : public Result{
 	public :
 		std::string label;
 		Result_label(std::string s){label = s;}
-		std::string to_string(){return label;}
+		std::string to_string();
 };
 class Quadruple{
 	public :

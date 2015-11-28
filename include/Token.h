@@ -9,7 +9,7 @@ class Token{
 		Token (Tag i){
 			tag = i;
 		}
-		virtual std::string toString(){
+		virtual std::string to_string(){
 			return "Token";
 		}
 };
@@ -17,20 +17,20 @@ class Num : public Token{
 	public :
 		int value;
 		Num(int v) : Token(T_NUMBER) {value = v;}
-		std::string toString() {return patch::to_string(value);}
+		std::string to_string() {return patch::to_string(value);}
 };
 class Character : public Token{
 	public:
 		char character;
 		int value;
 		Character(char c) : Token(T_CHARACTER){character = c; value = character;}
-		std::string toString() {return patch::to_string(character);}
+		std::string to_string() {return patch::to_string(character);}
 };
 class STring : public Token{
 	public :
 		std::string line;
 		STring(std::string s) : Token(T_STRING){line = s;}
-		std::string toString(){return line;}
+		std::string to_string(){return line;}
 };
 class Word;
 class Word : public Token{
@@ -38,7 +38,7 @@ class Word : public Token{
 		std::string lexeme;
 		Word(std::string s, Tag tag) : Token(tag) {lexeme = s;}
 		Word(char const *s, Tag tag) : Token(tag) {lexeme = s;}
-		string toString() {return lexeme;}
+		string to_string() {return lexeme;}
 		static Word  *assign;
 		static Word *Plus ; 
 		static Word *Minus ; 

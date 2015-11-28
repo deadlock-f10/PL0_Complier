@@ -2,7 +2,7 @@ CC = g++
 CFLAGS = -Wall --std=c++11
 BUILDDIR = ../obj/inter/
 
-LEXER_C = Expr.cpp Stmt.cpp 
+LEXER_C = Expr.cpp Stmt.cpp Quadruple.cpp
 HEADER_PATH = ../include
 LEXER_H = $(HEADER_PATH)/Lexer.h  $(HEADER_PATH)/Tag.h $(HEADER_PATH)/Token.h $(HEADER_PATH)/Type.h
 
@@ -13,7 +13,7 @@ $(BUILDDIR)%.o: %.cpp
 all: Makefile $(OBJS)
 
 clean:
-	rm -f $(OBJS) *~ *.o parser_test
+	rm -f $(OBJS) *~ *.o 
 depend: $(LEXER_C)
 	makedepend $(LEXER_H) $^
 

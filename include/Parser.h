@@ -50,7 +50,7 @@ class Parser{
 		void formpara_seg();
 		
 
-		Seq* compoundstmt();
+/*		Seq* compoundstmt();
 		Stmt* statement();
 		Seq* seq_statement();
 		Input* inputstatement();
@@ -59,7 +59,17 @@ class Parser{
 		Stmt* ifstatement();
 		For* forstatement();
 		DoWhile* dowhilestatement();
-		Callproc* callprocstatement();
+		Callproc* callprocstatement();*/
+		Stmt* compoundstmt();
+		Stmt* statement();
+		Stmt* seq_statement();
+		Stmt* inputstatement();
+		Stmt* outputstatement();
+		Stmt* assignstatement();        //incomplete .no type checking
+		Stmt* ifstatement();
+		Stmt* forstatement();
+		Stmt* dowhilestatement();
+		Stmt* callprocstatement();
 
 		Expr* expr();
 		Expr* unary();

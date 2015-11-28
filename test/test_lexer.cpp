@@ -99,7 +99,7 @@ int main()
 		else if(t->tag == T_DOT)
 			s = "T_DOT";
 		//std::cout <<++i <<'\t' << s << '\t' <<   t->toString()<< endl;
-		printf("%d\t%-20s\t%s\n",++i,s.c_str(),t->toString().c_str());
+		printf("%d\t%-20s\t%s\n",++i,s.c_str(),t->to_string().c_str());
 	}while(t->tag != T_DOT);
 	return 0;
 }

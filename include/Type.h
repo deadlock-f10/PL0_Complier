@@ -17,8 +17,8 @@ class Array : public Type{
 	int size = 1;
 	Array(int sz , Type* t) : Type(T_ARRAY , sz*(t->width), "array")
 	{of = t; size = sz;}
-	std::string toString(){
-		return (lexeme + "[" + std::to_string(size) + "]" + "of" + of->toString());
+	std::string to_string(){
+		return (lexeme + "[" + patch::to_string(size) + "]" + "of" + of->to_string());
 	}
 };
 #endif

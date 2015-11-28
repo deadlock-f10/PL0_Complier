@@ -41,11 +41,11 @@ Program* Parser::program(){
 	p->block = block();
 	if(look->tag != T_DOT)
 		;                 // throw exception
-	label begin = p->newlabel();
-	label after = p->newlabel();        //suppose type checking , name lookup have already done in parse phase
-	p->emitlabel(begin);
-	p->gen(begin , after);
-	p->emitlabel(after);
+	//label begin = p->newlabel();
+	//label after = p->newlabel();        //suppose type checking , name lookup have already done in parse phase
+	//p->emitlabel(begin);
+	//p->emitlabel(after,p);
+	//p->gen(p);
 	return p;
 }
 
@@ -59,7 +59,7 @@ Block* Parser::block(){
 	return b;
 }
 
-Seq* Parser::compoundstmt(){
+Stmt* Parser::compoundstmt(){
 	match(T_BEGIN);
 	Seq * c = new Seq(statement(),seq_statement()) ;
 	match(T_END);
@@ -103,7 +103,7 @@ Stmt* Parser::statement(){
 	return Stmt::Null;
 }
 
-Input* Parser::inputstatement(){
+Stmt* Parser::inputstatement(){
 	match(T_READ);
 	match(T_OPENPARENTHESIS);
 	std::vector<Id*> * list = new std::vector<Id*>();
@@ -132,7 +132,7 @@ Input* Parser::inputstatement(){
 	return new Input(list);
 }
 
-Output* Parser::outputstatement(){
+Stmt* Parser::outputstatement(){
 	//static Tag_Set tag= {T_PLUS,T_MINUS,T_IDENT,T_NUMBER,T_OPENPARENTHESIS};
 	STring * s;
 	Expr * e;
@@ -200,7 +200,7 @@ Stmt* Parser::ifstatement(){
 	}
 }
 
-For* Parser::forstatement(){        // incomlete . unchecked identifier information
+Stmt* Parser::forstatement(){        // incomlete . unchecked identifier information
 	match(T_FOR);
 	if(look->tag != T_IDENT)
 		;         // throw exception
@@ -229,14 +229,14 @@ For* Parser::forstatement(){        // incomlete . unchecked identifier informat
 	return Stmt::Null;// should never excuted
 }
 
-DoWhile* Parser::dowhilestatement(){
+Stmt* Parser::dowhilestatement(){
 	match(T_DO);
 	Stmt * s = statement();
 	match(T_WHILE);
 	return new DoWhile(condition(),s);
 }
 
-Callproc* Parser::callprocstatement(){
+Stmt* Parser::callprocstatement(){
 	if(look->tag != T_IDENT)
 		;         // throw exception
 	Word * w = (Word*)look;
@@ -272,7 +272,7 @@ Callproc* Parser::callprocstatement(){
 	return Stmt::Null;// should never excuted
 }
 
-Seq* Parser::seq_statement(){
+Stmt* Parser::seq_statement(){
 	//First = {T_SEMICOLON,\epsilon};
 	//static Tag_Set Follow = {T_END};
 	switch (look->tag){

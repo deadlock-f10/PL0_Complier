@@ -1,4 +1,5 @@
 #include <string>
+#include <vector>
 #ifndef OP_H
 #define OP_H
 enum OP {
@@ -18,5 +19,5 @@ enum OP {
 	I_ADD ,
 	I_MINUS ,
 };
-std::string *OptoString;
+extern std::string OptoString[15];
 #endif
