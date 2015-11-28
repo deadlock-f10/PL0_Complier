@@ -50,7 +50,7 @@ Expr* Parser::factor(){
 Callfunc* Parser::callfunc(Func *func){
 	Expr * e;
 	if(func->paralist.size() == 0)
-		return new Callfunc(func,nullptr);
+		return new Callfunc(func,new std::vector<Expr*>());
 	else{
 		std::vector<Expr*> *list = new std::vector<Expr*>();
 		match(T_OPENPARENTHESIS);

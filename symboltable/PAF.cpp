@@ -1,6 +1,6 @@
 #include "../include/PAF.h"
 #include "../include/Parser.h"
-
+#include <stdio.h>
 Program * Program::Null = nullptr;
 
 void Program::addinstr(OP op,Arg1* arg1 , Arg2* arg2,Result * result){
@@ -10,13 +10,14 @@ void Program::addinstr(OP op,Arg1* arg1 , Arg2* arg2,Result * result){
 
 Node* Program::get(Token *w) {
 	for(Program *e = this ; e != nullptr ; e = e->prev){
-		Hashtable::const_iterator found = e->symboltable.find(w); 
-		if ( found != e->symboltable.end()) 
+		Hashtable::const_iterator found = e->symboltable.find(w);
+		if ( found != e->symboltable.end())
 			return found->second;
 	}
 	return nullptr;
 }
-std::fstream intercode("inter.txt");
+//FILE * intercode=fopen("/home/f10/Doc/a/inter.txt","w");
+std::ofstream intercode("/home/f10/pl0-compiler/my_compiler/inter.txt");
 //typedef std::unordered_set<Tag> Tag_Set;
 Program::Program(){
 	level = 1;
@@ -24,7 +25,9 @@ Program::Program(){
 	beginlabel = Parser::getlabel(name);
 }
 void Program::gen(){
+    emitlabel(beginlabel,this);
 	block->gen(this);
+	emit(I_END,nullptr,nullptr,nullptr,this);
 }
 void Block::gen(Program *p){
 	if(seq_paf != Program::Null)
@@ -33,9 +36,9 @@ void Block::gen(Program *p){
 }
 void Seq_PAF::gen(){
 	if(paf != Program::Null)
-		paf->print();
+		paf->gen();
 	if(pafs != Program::Null)
-		pafs->print();
+		pafs->gen();
 }
 Func::Func(Program *p,Word *w, int l) {
 	prev = p;
@@ -51,8 +54,15 @@ Proc::Proc(Program  *p,Word *w , int l) {
 }
 void Program::print(){
 	block->print();
-	for(unsigned int i=0; i < Instrlist.size() ; i++)
-		intercode<<Instrlist[i]->to_string()<<endl;
+	for(unsigned int i=0; i < Instrlist.size() ; i++){
+        intercode<<Instrlist[i]->to_string()<<endl;
+        intercode.flush();
+	}
+
+		/*{
+            fprintf(intercode,"%s\n",Instrlist[i]->to_string().c_str());
+            fflush(intercode);
+		}*/
 }
 void Block::print(){
 	if(seq_paf != Program::Null)

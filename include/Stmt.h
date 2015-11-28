@@ -52,15 +52,15 @@ class For : public Stmt{
 		Expr* e2;
 		Stmt* s;
 		For(Id * i,Expr *x1,bool to,Expr* x2,Stmt* stmt){
-			id = i; e1=x1;is_to = to; e2=x2;stmt = s;
+			id = i; e1=x1;is_to = to; e2=x2;s= stmt;
 		}
 		void gen(Program *p);
 };
 
 class Assign : public Stmt{
-	public : 
+	public :
 		Id* id;
-		Expr * e;		
+		Expr * e;
 		Assign(Id *id,Expr *e);
 		bool check(Type *a,Type *b);
 		//void gen(label begin , label after){emit(id->toString()+" = "+e->gen()->toString());}
@@ -74,7 +74,7 @@ class AssignElem : public Stmt{
 		Expr *e;
 		AssignElem(Access * x,Expr* y);
 		bool check(Type *a ,Type *b);    // unimplemented
-		//void gen(label begin,label after); 
+		//void gen(label begin,label after);
 		void gen(Program *p);
 };
 
@@ -108,11 +108,11 @@ class Output: public Stmt{
 	void gen(Program *p);
 };
 
-class Callproc: public Stmt{        
+class Callproc: public Stmt{
 	public:
 	Proc* prc;           // form para with "var" must correspond to a Id in actual para. should check that
 	std::vector<Expr*> *actuallist;
-	Callproc(Proc *proc , std::vector<Expr*> *list){prc = proc;list = actuallist;}
+	Callproc(Proc *proc , std::vector<Expr*> *list){prc = proc; actuallist = list;}
 	void gen(Program *p);
 };
 #endif

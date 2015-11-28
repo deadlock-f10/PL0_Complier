@@ -7,17 +7,18 @@ void IfElse::gen(Program *p)
 	label iffalse = newlabel();
 	label after = newlabel();
 
-	//e->jumping(0,iffalse);
+	e = (Rel *)e->gen(p);
 	emit(I_IFFALSE,new Arg_rel(e),nullptr,new Result_label(iffalse),p);
 	s1->gen(p);
 	emit(I_GOTO,nullptr,nullptr,new Result_label(after),p);
 	//emit("goto L"+after);
 	emitlabel(iffalse,p);
 	s2->gen(p);
+	emitlabel(after,p);
 }
 void If::gen(Program *p)
 {
-	label iffalse = newlabel();								
+	label iffalse = newlabel();
 	s->gen(p);
 	emitlabel(iffalse,p);
 }
@@ -41,7 +42,7 @@ void For::gen(Program *p){
 	Rel * r;
 	if(is_to == true)
 		r = new Rel(Word::le,id,e2);
-	else 
+	else
 		r = new Rel(Word::ge,id,e2);
 	emit(I_IFFALSE,new Arg_rel(r),nullptr,new Result_label(after),p);
 	s->gen(p);
@@ -71,13 +72,13 @@ bool Assign::check(Type *a,Type *b){
 		return false;
 	else if(a == Type::Char && b == Type::Int)
 		return false;
-	else 
+	else
 		return true;
 }
 AssignElem::AssignElem(Access *x , Expr *y){
 	array = x->array ;
-	index = x->index ; 
-	e = y; 
+	index = x->index ;
+	e = y;
 	if(!check(array->type,y->type))
 		;            //throw exception
 }
@@ -94,7 +95,7 @@ void AssignElem::gen(Program *p){
 	if(Constant *c1 = dynamic_cast<Constant*>(e1)){
 		if(Constant *c2 =dynamic_cast<Constant*>(e2))
 			emit(I_INDCOPY,new Arg_int(c1->c),new Arg_int(c2->c),new Arg_id(array),p);
-		else 
+		else
 			emit(I_INDCOPY,new Arg_int(c1->c),new Arg_id((Id *)e2),new Arg_id(array),p);
 	}
 	else{
@@ -106,7 +107,7 @@ void AssignElem::gen(Program *p){
 }
 
 void Seq::gen(Program *p){
-	/*if(s1 == Stmt::Null) 
+	/*if(s1 == Stmt::Null)
 		s2->gen(p);
 	else if(s2 == Stmt::Null)
 		s1->gen(p);

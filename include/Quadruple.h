@@ -8,7 +8,7 @@
 #define QUADRUPLE_H
 class Arg1{
 	public:
-	virtual std::string to_string(){return "";}	
+	virtual std::string to_string(){return "";}
 };
 class Arg2{
 	public:
@@ -71,7 +71,7 @@ class Quadruple{
 	Arg1 * arg1;
 	Arg2 * arg2;
 	Result * result;
-	Quadruple(std::vector<std::string> *l,OP Op, Arg1 * a1, Arg2* a2, Result *r){labellist = new std::vector<std::string>(*l);op = Op;arg1=a1;arg2=a2;result=r;}
+	Quadruple(std::vector<std::string> *l,OP Op, Arg1 * a1, Arg2* a2, Result *r);
 	std::string to_string();
 };
 #endif

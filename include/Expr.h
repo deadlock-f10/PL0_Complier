@@ -33,7 +33,7 @@ class Callfunc : public Expr{
 	public :
 	Func* f;           // form para with "var" must correspond to a Id in actual para. should check that
 	std::vector<Expr*> *actuallist;
-	Callfunc(Func *func , std::vector<Expr*> *list):Expr(func->name,func->type){f = func;list = actuallist;}
+	Callfunc(Func *func , std::vector<Expr*> *list):Expr(func->name,func->type){f = func;actuallist = list;}
 	Expr* reduce(Program *p);
 };
 class Op : public Expr {
@@ -46,13 +46,13 @@ class Arith : public Op {
 	public :
 		Expr * e1;
 		Expr * e2;
-		Arith(Token* tok , Expr *x1 , Expr* x2); 
+		Arith(Token* tok , Expr *x1 , Expr* x2);
 		Expr* gen(Program *p){return new Arith(op, e1->reduce(p) , e2->reduce(p));}
 		Expr* reduce(Program *p);
 		//std::string to_string() {return e1->to_string() + " " + op->to_string() + " " + e2->to_string();}
 };
 
-class Temp : public  Id {                    
+class Temp : public  Id {
 	public :
 	static int count;
 	//int number = 0;
@@ -87,13 +87,13 @@ class Rel : public Expr {
 		std::string to_string(){return e1->to_string() + op->to_string() + e2->to_string();};
 		//Expr* reduce(Program *p);
 	private:
-		bool check( Type* p1 ,Type *p2) ;    
+		bool check( Type* p1 ,Type *p2) ;
 };
 
 class Access : public Op{
 	public :
 		Id * array ;
-		Expr * index ; 
+		Expr * index ;
 		Access (Id *id ,Type * t, Expr * e) : Op(new Word("[]" ,T_INDEX),t) {array = id ; index = e; }
 		Expr * gen(Program *p) {return new Access(array,type,index->reduce(p));}
 		Expr* reduce(Program *p);

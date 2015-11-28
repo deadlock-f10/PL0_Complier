@@ -8,6 +8,7 @@ enum OP {
 	I_IF  ,
 	I_IFFALSE ,
 	I_GOTO,
+	I_END,
 	I_PARAM ,
 	I_CALLPROC ,
 	I_CALLFUNC ,
@@ -17,7 +18,6 @@ enum OP {
 	I_MULT ,
 	I_DIV ,
 	I_ADD ,
-	I_MINUS ,
+	I_MINUS,
 };
-extern std::string OptoString[15];
 #endif

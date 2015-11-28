@@ -6,7 +6,6 @@
 
 //typedef std::unordered_set<Tag> Tag_Set;
 
-std::string OptoString[I_MINUS + 1] = {"read","write","if", "iffalse","goto", "param", "callproc", "callfunc", "copy", "copyind","indcopy", "*", "/", "+", "-"};
 
 void Parser::match(Tag t){
 	if(look->tag == t)
@@ -21,9 +20,9 @@ class Parser::labelcounter{
 		int count = 1;
 		labelcounter(Word* m){x = m;}
 };
-std::unordered_map<Word*,Parser::labelcounter*>  Parser::lcounter; 
+std::unordered_map<Word*,Parser::labelcounter*>  Parser::lcounter;
 std::string Parser::getlabel(Word *w){
-		std::unordered_map<Word*,labelcounter*>::const_iterator found = lcounter.find(w); 
+		std::unordered_map<Word*,labelcounter*>::const_iterator found = lcounter.find(w);
 		if(found == lcounter.end()){
 			lcounter.insert(std::make_pair(w,new labelcounter(w)));
 			return w->lexeme;
@@ -245,7 +244,7 @@ Stmt* Parser::callprocstatement(){
 	Expr * e;
 	if(Proc * proc = dynamic_cast<Proc*>(nod)){
 		if(proc->paralist.size() == 0)
-			return new Callproc(proc,nullptr);
+			return new Callproc(proc,new std::vector<Expr*>());
 		else{
 			std::vector<Expr*> *list = new std::vector<Expr*>();
 			match(T_OPENPARENTHESIS);
