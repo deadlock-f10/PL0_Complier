@@ -95,8 +95,8 @@ class Compound : public stmt{
 
 class Input: public Stmt{
 	public :
-	std::queue<Word*> *idlist;
-	Input(std::queue<Word*> *list) {idlist = list;}
+	std::vector<Id*> *idlist;
+	Input(std::vector<Id*> *list) {idlist = list;}
 	void gen(Program *p);
 };
 

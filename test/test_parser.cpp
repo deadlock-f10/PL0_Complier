@@ -5,5 +5,6 @@ int main(){
 	Lexer* lex = new Lexer("test/stack.pl0");
 	Parser p(lex);
 	Program *x = p.program();
+	x->print();
 	return 0;
 }

@@ -1,6 +1,6 @@
 label	Instr		arg1				arg2			 result		meaning
 		read										     id			read a integer(char) into id
-		write		string				id							write a string or id or both
+		write		string				(id,integer)				write a string or id or both
 		if			rel									 L			if relation holds then goto label L
 		iffalse		rel									 L			if relation doesnt' holds then goto label L
 		param		(id,integer)									parameter id(for future use)
@@ -8,6 +8,6 @@ label	Instr		arg1				arg2			 result		meaning
 		callfunc	func				integer			 id			call function with n parameters , store return value in id	
 		copy		(idy,integer)						 idx		x = y
 		copyind		idx					(idi,integer)	 idy	    y = x[i]
-		indcopy		(idy,integer)		idi				 idx		x[i] = y
+		indcopy		(idy,integer)		(idi,integer)	 idx		x[i] = y
 		op			(idy,integer)		(idz,integer)	 idx		x = y op z (op can be +,-,*,/)
 		goto											 L          goto L

@@ -2,7 +2,7 @@
 #include "../include/Quadruple.h"
 
 
-void helper::emitlabel(label l,Program *p) {p->addlabel(l);}
+//void helper::emitlabel(label l,Program *p) {p->addlabel(l);}
 void helper::emitlabel(std::string s, Program *p) {p->addlabel(s);}
 void helper::emit(OP op,Arg1* arg1 , Arg2* arg2,Result * result,Program *p){p->addinstr(op,arg1 , arg2, result);}
 
@@ -47,7 +47,7 @@ Expr* Callfunc::reduce(Program *p){
 			emit(I_PARAM,Arg_int(list[i]),nullptr,nullptr,p);
 		else
 			emit(I_PARAM,Arg_id(list[i]),nullptr,nullptr,p);
-	Temp *t = new Temp(type);
+	Temp *t = new Temp(type,p->level);
 	emit(I_CALLFUNC,Arg_func(p),Arg_int(actuallist->size()),Arg_id(t));
 	return t;
 }
@@ -76,8 +76,8 @@ Expr* Arith::reduce(Program *p){
 			o = I_DIV;
 			break;
 	}
-	Temp *t = new Temp(type);
-	if((Constant *c1 = dynamic_cast<Constant*>(a->e1)) && (Constant *c2dynamic_cast<Constant*>(a->e2)))
+	Temp *t = new Temp(type,p->level);
+	if((Constant *c1 = dynamic_cast<Constant*>(a->e1)) && (Constant *c2 = dynamic_cast<Constant*>(a->e2)))
 		emit(o,Arg_int(c1->value),Arg_int(c2->value),Arg_id(t),p);
 	else if((Constant *c = dynamic_cast<Constant*>(a->e1)))
 		emit(o,Arg_int(c->value),Arg_id(a->e2),Arg_id(t),p);
@@ -93,14 +93,15 @@ Unary::Unary(Token *tok, Expr *x) : Op(tok,nullptr) {
 	if(type == nullptr) 
 		; //throw exception;
 }
-Expr* Unary::reduce(Program *p){
+Expr* Unary::reduce(Program *p){               // return constant if u->e is a constant. otherwise return a temp
 	Unary * u = gen(p);
 	if(Constant *c = dynamic_cast<Constant*>(u->e)){
 		c->value *= (-1);
 		return c;
 	}
-	Temp* t= new Temp(type);
+	Temp* t= new Temp(type,p->level);
 	emit(I_MULT,Arg_int(-1),Arg_id(u->e),Arg_id(t),p);
+	return t;
 	//emit(I_COPY,Arg_id())
 }
 
@@ -124,7 +125,7 @@ bool Rel::check(Type *p1 , Type *p2){
 
 Expr* Access::reduce(Program *p){
 	Access *a = gen(p);
-	Temp *t = new Temp(type);
+	Temp *t = new Temp(type,p->level);
 	if(Constant *c = dynamic_cast<Constant*>(a->index))
 		emit(I_COPYIND,Arg_id(a->array),Arg_int(c->value),Arg_id(t),p);
 	else 

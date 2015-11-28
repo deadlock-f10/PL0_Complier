@@ -23,7 +23,7 @@ class Node{
 	static label labels;
 	label newlabel() {return "L"+patch::to_string(++labels);}
 	//void emitlabel(label l) {std::cout << "L" + l + ":";}
-	//virtual void emitlabel(label l,Program *p) {helper::emitlabel(l,p);}
+	//void emitlabel(label l,Program *p) {helper::emitlabel(l,p);}
 	void emitlabel(std::string s, Program *p) {helper::emitlabel(s,p);}
 	//void emit(std::string s) {std::cout <<"\t"<< s << endl;}
 	//void emit(std::string s) {;}

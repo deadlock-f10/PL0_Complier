@@ -1,12 +1,7 @@
-
 #include "../include/Parser.h"
 #include <unordered_set>
 #include <vector>
-
-//typedef std::unordered_set<Tag> Tag_Set;
-Program::Program(){level = 1;name = new Word("main",T_IDENT);beginlabel = Parser::getlabel(name);}
-Func::Func(Program *p,Word *w, int l) {prev = p;name = w;level = l;beginlabel = Parser::getlabel(name);}
-Proc::Proc(Program  *p,Word *w , int l) { prev = p;name = w;level = l;beginlabel = Parser::getlabel(name);}
+#include <fstream>
 Program* Parser::seq_paf(){
 	//First = {T_PROCEDURE,T_FUNCTION,\epsilon};
 	//static Tag_Set Follow = {T_BEGIN};

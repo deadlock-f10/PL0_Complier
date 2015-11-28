@@ -106,19 +106,27 @@ Stmt* Parser::statement(){
 Input* Parser::inputstatement(){
 	match(T_READ);
 	match(T_OPENPARENTHESIS);
-	std::queue<Word*> * list = new std::queue<Word*>();
+	std::vector<Id*> * list = new std::vector<Id*>();
 	if(look->tag != T_IDENT)
 		;         // throw exception
 	Word * tok = (Word*)look;
 	move();
-	list->push(tok);
+	Node * nod = top->get(tok);
+	if(Id * id = dynamic_cast<Id*>(nod))
+		list->push_back(id);
+	else
+		;          // throw exception
 	while(look->tag != T_CLOSEPARENTHESIS){
 		match(T_COMMA);
 		if(look->tag != T_IDENT)
 			;         // throw exception
 		tok = (Word *)look;
 		move();
-		list->push(tok);
+		Node * nod = top->get(tok);
+		if(Id * id = dynamic_cast<Id*>(nod))
+			list->push_back(id);
+		else
+			;          // throw exception
 	}
 	move();
 	return new Input(list);

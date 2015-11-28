@@ -11,6 +11,7 @@ class Expr : public Node{
 		Expr(Token* tok , Type *t) {op = tok ; type = t;}
 		virtual Expr* gen(Program *p) {return this;} //genarate a object with its subobject reduced
 		virtual Expr* reduce(Program *p) {return this;} // resolve to a single address(identifier or constant)
+		virtual std::string to_string(){return "";}
 		//virtual void jumping(label iftrue , label iffalse,Program *p);
 		//virtual void emitjumps(Rel* rel, label iftrue , label iffalse,Program *p);
 		//virtual std::string toString(){return op->toString();}
@@ -18,13 +19,14 @@ class Expr : public Node{
 
 class Id : public Expr {          // need add field which specify whether this identifier is const or not
 	public :
-		int offset ;        // relative address ( of what ?)
+		int offset ;        // relative address ( of what ?)  --- symboltable of this func/proc
 		int level ;         //don't need level   --no~~~~ we need it
 		bool isConst;
 		bool isRef = false;
 		Id(Word* w , Type* t , int o,int l): Expr(w,t) {offset = o; isConst = false; level = l;}
 		Id(Word* w , Type* t , int o , bool b,int l): Expr(w,t) {offset = o; isConst = b; level = l;}
 		Id(Word* w , Type* t , int o , bool b1 , bool b2,int l): Expr(w,t) {offset = o; isConst = b1; isRef = b2; level = l;}
+		std::string to_string(){return op->toString();}
 };
 
 class Callfunc : public Expr{
@@ -45,17 +47,18 @@ class Arith : public Op {
 		Expr * e1;
 		Expr * e2;
 		Arith(Token* tok , Expr *x1 , Expr* x2); 
-		Expr* gen(Program *p){ return new Arith(op, e1->reduce(p) , e2->reduce(p)); }
+		Expr* gen(Program *p){return new Arith(op, e1->reduce(p) , e2->reduce(p));}
 		Expr* reduce(Program *p);
 		//std::string toString() {return e1->toString() + " " + op->toString() + " " + e2->toString();}
 };
 
-class Temp : public  Expr {
+class Temp : public  Id {                    
 	public :
 	static int count;
-	int number = 0;
-	Temp(Type *t) : Expr(Word::temp , t) {number = ++count;}
-	//std::string toString(){return "t"+number;}
+	//int number = 0;
+	//Temp(Type *t) : Expr(Word::temp , t) {number = ++count;}             // will not allocate space until final code generation phase
+	Temp(Type *t,int l) : Id(new Word("_t"+patch::to_string(++count),T_IDENT),t,0,l){;}      // will not allocate space until final code generation phase
+	std::string to_string(){return Op->toString();}
 };
 
 class Unary : public Op { // its  op will only be minus
@@ -72,6 +75,7 @@ class Constant : public Expr {
 		int c ;
 		Constant (Num *t): Expr(t , Type::Int){c = t->value;}
 		Constant (Character *t): Expr(t , Type::Int){c = t->value;}
+		std::string to_string(){return patch::to_string(c);}
 };
 
 class Rel : public Expr {
@@ -80,6 +84,7 @@ class Rel : public Expr {
 		Expr *e2;
 		Rel (Token *t ,Expr *x1 , Expr *x2);
 		Expr* gen(Program *p);
+		std::string to_string(return x1->to_string() + t->toString() + x2->toString(););
 		//Expr* reduce(Program *p);
 	private:
 		bool check( Type* p1 ,Type *p2) ;    

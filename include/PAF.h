@@ -19,7 +19,6 @@ class Parser;
 class Program :public Node{
 	public :
 		QuadList Instrlist;
-		std::vector<std::string> *labellist;
 		std::string beginlabel;
 		Word* name;
 		Program *prev = nullptr;
@@ -35,10 +34,12 @@ class Program :public Node{
 		void addlabel(std::string s){if(labellist == nullptr) labellist = new std::vector<std::string>(); labellist->push_back(s);}
 		void addlabel(int l ){if(labellist == nullptr) labellist = new std::vector<std::string>(); labellist->push_back("L"+patch::to_string(l));}
 		void addinstr(OP op,Arg1* arg1 , Arg2* arg2,Result * result){Instrlist.push_back(new Quadruple(labellist,op,arg1 ,arg2,result)); labellist = nullptr;}
+		virtual void print();
 		/*void setfsize(){framesize = align(used);}        // align 4
 		int getfsize(){return framesize;}*/
 	protected :
 		int framesize;
+		std::vector<std::string> *labellist;
 };
 class Proc : public Program{
 	public :
@@ -65,11 +66,13 @@ class Seq_PAF : public Program{
 	Program* paf;
 	Program* pafs;
 	Seq_PAF(Program* p1,Program *p2){paf = p1; pafs = p2;}
+	void print();
 };
 
 class Block {
 	public :
 	Seq_PAF * seq_paf;
 	Seq * seq_stmt;
+	void print();
 };
 #endif
