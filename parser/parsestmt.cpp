@@ -174,9 +174,10 @@ Stmt* Parser::assignstatement(){    // incomplete
 		return new Assign(id,expr());
 	}
 	else if(look->tag == T_OPENBRACKET){
-		move();
+		/*move();
 		Access* ac = new Access(id,id->type,expr());
-		match(T_CLOSEBRACKET);
+		match(T_CLOSEBRACKET);*/
+		Access * ac = offset(id);
 		match(T_ASSIGN);
 		return new AssignElem(ac,expr());
 	}

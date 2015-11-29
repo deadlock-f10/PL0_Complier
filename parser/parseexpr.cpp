@@ -129,6 +129,8 @@ Access * Parser::offset(Id *id){
 	Expr * e  = expr();
 	Type * t = id->type;
 	t = ((Array*)t)->of;
+	Expr* w = new Constant(new Num(t->width));
+	Expr * e1 = new Arith(Word::Mult,e,w);
 	match(T_CLOSEBRACKET);
-	return new Access(id,t,e);
+	return new Access(id,t,e1);
 }
