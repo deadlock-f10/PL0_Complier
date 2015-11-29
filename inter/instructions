@@ -11,3 +11,4 @@ label	Instr		arg1				arg2			 result		meaning
 		indcopy		(idy,integer)		(idi,integer)	 idx		x[i] = y
 		op			(idy,integer)		(idz,integer)	 idx		x = y op z (op can be +,-,*,/)
 		goto											 L          goto L
+		end															end of this proc/func/program

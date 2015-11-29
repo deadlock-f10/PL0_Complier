@@ -8,13 +8,77 @@ std::string Quadruple::to_string(){
 	if(labellist != nullptr)
         for(unsigned int i = 0 ; i < labellist->size();i++)
             s += (labellist->at(i)+": ");
-	s += "\t"+OptoString[op];
+/*	s += "\t"+OptoString[op];
 	if(arg1 != nullptr)
 		s += "\t"+arg1->to_string();
 	if(arg2 != nullptr)
 		s += "\t"+arg2->to_string();
 	if(result != nullptr)
 		s += "\t"+result->to_string();
+	return s;*/
+	switch(op){
+		case I_READ:
+			s += "\t" + OptoString[op];
+			s += "\t" + result->to_string();
+			break;
+		case I_WRITE:
+			s += "\t" + OptoString[op];
+			if(arg1 != nullptr)
+				s += "\t\""+arg1->to_string()+"\"";
+			if(arg2 != nullptr)
+				s += "\t" + arg2->to_string();
+			break;
+		case I_IF:
+		case I_IFFALSE:
+			s += "\t" + OptoString[op];
+			s += "\t" + arg1->to_string();
+			s += "\tgoto\t" + result->to_string();
+			break;
+		case I_PARAM:
+			s += "\t" + OptoString[op];
+			s += "\t" + arg1->to_string();
+			break;
+		case I_CALLPROC:
+			s += "\t" + OptoString[op];
+			s += "\t" + arg1->to_string();
+			s += "\t" + arg2->to_string();
+			break;
+		case I_CALLFUNC:
+			s += "\t" + result->to_string();
+			s += "\t=\t" + OptoString[op];
+			s += "\t" + arg1->to_string();
+			s += "\t" + arg2->to_string();
+			break;
+		case I_COPY:
+			s += "\t" + result->to_string();
+			s += "\t=\t" + arg1->to_string();
+			break;
+		case I_COPYIND:
+			s += "\t" + result->to_string();
+			s += "\t=\t" + arg1->to_string();
+			s += "["+arg2->to_string()+"]";
+			break;
+		case I_INDCOPY:
+			s += "\t" + result->to_string();
+			s += "["+arg2->to_string()+"]";
+			s += "\t=\t" + arg1->to_string();
+			break;
+		case I_MULT:
+		case I_DIV:
+		case I_ADD:
+		case I_MINUS:
+			s += "\t" + result->to_string();
+			s += "\t=\t" + arg1->to_string();
+			s += "\t" + OptoString[op];
+			s += "\t" + arg2->to_string();
+			break;
+		case I_GOTO:
+			s += "\t" + OptoString[op];
+			s += "\t" + result->to_string();
+			break;
+		case I_END:
+			s += "\t" + OptoString[op];
+	}
 	return s;
 }
 Quadruple::Quadruple(std::vector<std::string> *l,OP Op, Arg1 * a1, Arg2* a2, Result *r)

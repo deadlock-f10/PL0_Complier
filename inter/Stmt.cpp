@@ -19,6 +19,9 @@ void IfElse::gen(Program *p)
 void If::gen(Program *p)
 {
 	label iffalse = newlabel();
+
+	e = (Rel *)e->gen(p);
+	emit(I_IFFALSE,new Arg_rel(e),nullptr,new Result_label(iffalse),p);
 	s->gen(p);
 	emitlabel(iffalse,p);
 }
