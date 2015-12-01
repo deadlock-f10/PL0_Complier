@@ -1,5 +1,6 @@
 #include "Node.h"
 #include "Quadruple.h"
+#include "Optimizer.h"
 //#include "Expr.h"
 //#include "Stmt.h"
 #include <utility>
@@ -19,6 +20,7 @@ class Program;
 class Program :public Node{
 	public :
 		QuadList Instrlist;
+		std::vector<BasicBlock*> blocklist;
 		std::string beginlabel;
 		Word* name;
 		Program *prev = nullptr;
@@ -45,6 +47,7 @@ class Program :public Node{
 		}
 		void addinstr(OP op,Arg1* arg1 , Arg2* arg2,Result * result);
 		virtual void print();
+		virtual void print_block();
 		/*void setfsize(){framesize = align(used);}        // align 4
 		int getfsize(){return framesize;}*/
 	protected :
@@ -77,6 +80,7 @@ class Seq_PAF : public Program{
 	Program* pafs;
 	Seq_PAF(Program* p1,Program *p2){paf = p1; pafs = p2;}
 	void print();
+	void print_block();
 	void gen();
 };
 
@@ -85,6 +89,7 @@ class Block {
 	Seq_PAF * seq_paf;
 	Seq * seq_stmt;
 	void print();
+	void print_block();
 	void gen(Program *p);
 };
 #endif

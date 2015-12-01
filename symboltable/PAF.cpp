@@ -17,15 +17,16 @@ Node* Program::get(Token *w) {
 	return nullptr;
 }
 //FILE * intercode=fopen("/home/f10/Doc/a/inter.txt","w");
-std::ofstream intercode("/home/f10/pl0-compiler/my_compiler/inter.txt");
 //typedef std::unordered_set<Tag> Tag_Set;
+std::ofstream intercode("/home/f10/pl0-compiler/my_compiler/inter.txt");
+std::ofstream optcode("/home/f10/pl0-compiler/my_compiler/opt.txt");
 Program::Program(){
 	level = 1;
 	name = new Word("main",T_IDENT);
 	beginlabel = Parser::getlabel(name);
 }
 void Program::gen(){
-    emitlabel(beginlabel,this);
+    //emitlabel(beginlabel,this);
 	block->gen(this);
 	emit(I_END,nullptr,nullptr,nullptr,this);
 }
@@ -54,6 +55,7 @@ Proc::Proc(Program  *p,Word *w , int l) {
 }
 void Program::print(){
 	block->print();
+	intercode<<beginlabel<<":"<<endl;
 	for(unsigned int i=0; i < Instrlist.size() ; i++){
         intercode<<Instrlist[i]->to_string()<<endl;
         intercode.flush();
@@ -73,4 +75,25 @@ void Seq_PAF::print(){
 		paf->print();
 	if(pafs != Program::Null)
 		pafs->print();
+}
+
+void Program::print_block(){
+	block->print_block();
+	optcode<<beginlabel<<":"<<endl;
+	for(unsigned i = 1; i < blocklist.size(); i++){
+		BasicBlock* b = blocklist[i];
+		optcode<<b->label+":"<<endl;
+		for(unsigned j = 0 ; j < b->instrlist.size(); j++)
+			optcode<<b->instrlist[j]->to_string()<<endl;
+	}
+}
+void Block::print_block(){
+	if(seq_paf != Program::Null)
+		seq_paf->print_block();
+}
+void Seq_PAF::print_block(){
+	if(paf != Program::Null)
+		paf->print_block();
+	if(pafs != Program::Null)
+		pafs->print_block();
 }
