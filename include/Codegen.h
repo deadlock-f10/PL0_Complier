@@ -8,16 +8,32 @@
 class Program;
 class Reg_Des;
 class Addr_Des;
-class Codegen{
+class AttachedInfo{      // -3 mean correponding variable don't exit or do not need a next-use information(func,proc,const,array) , -2 represent no next use. -1 represent live on exit.
+	int a1nextuse;
+	int a2nextuse;
+	int resnextuse;
+};
+class Codegenerator{
 	public:
 	Program *p;
-	Reg_Des reg_des;
-	Addr_Des addr_des;
 	Codegen(Program *prog){p = prog;}
-	void gen();
-	void getReg(Quadruple *q);           // automatically assign register for each variable in x(modify register and address decripter,emit load code if necessary).      next-use information contained inside quadruple.
-	void emit(quadruple *q);       // consider  constant-constant rel.
+	void gen(Program *p);
+	void gen_block(Block *b);
+	void gen_seqpaf(Seq_PAF *seq);
+	//void basicblockgen();
 };
+class Bblockgenerator{
+	Reg_Des reg_des;
+	Addr_Des addr_des;       // no array variable.
+	BasicBlock *block;
+	Program *prog;
+	void getReg(Quadruple *q);           // automatically assign register for each variable in x(modify register and address decripter,emit load code if necessary).      next-use information contained inside quadruple.
+	void loadvariable(Id *id);
+	void gen();
+	void backwardscan();              // first pass backward from the last instruction of this basicblock. collect next-use info and add variable to addr_des.
+	Bblockgenerator(BasicBlock *b,Program *p){block = b; prog = p;}
+	void chooseInstr(Quadruple *q);       // consider  constant-constant rel.
+}
 class Reg_Descripter{
 	public:
 	Register r;	
@@ -38,7 +54,7 @@ class Addr_Descripter{
 };
 class Reg_Des{
 	public:
-	std::vector<Reg_Descripter*> Available{new Reg_Descripter(R_A0), new Reg_Descripter(R_A1),new Reg_Descripter(R_A2),new Reg_Descripter(R_A3),new Reg_Descripter(R_T0),new Reg_Descripter(R_T1),new Reg_Descripter(R_T2),new Reg_Descripter(R_T3),new Reg_Descripter(R_T4),new Reg_Descripter(R_T5),new Reg_Descripter(R_T6),new Reg_Descripter(R_T7),new Reg_Descripter(R_S0),new Reg_Descripter(R_S1),new Reg_Descripter(R_S2),new Reg_Descripter(R_S3),new Reg_Descripter(R_S4),new Reg_Descripter(R_S5),new Reg_Descripter(R_S6),new Reg_Descripter(R_S7)};
+	std::vector<Reg_Descripter*> Available{ new Reg_Descripter(R_A1),new Reg_Descripter(R_A2),new Reg_Descripter(R_A3),new Reg_Descripter(R_T0),new Reg_Descripter(R_T1),new Reg_Descripter(R_T2),new Reg_Descripter(R_T3),new Reg_Descripter(R_T4),new Reg_Descripter(R_T5),new Reg_Descripter(R_T6),new Reg_Descripter(R_T7),new Reg_Descripter(R_S0),new Reg_Descripter(R_S1),new Reg_Descripter(R_S2),new Reg_Descripter(R_S3),new Reg_Descripter(R_S4),new Reg_Descripter(R_S5),new Reg_Descripter(R_S6),new Reg_Descripter(R_S7),new Reg_Descripter(R_T8),new Reg_Descripter(R_T9)};
 	std::vector<Reg_Descripter*> Istaken;
 	Reg_Descripter* getAvail();
 };

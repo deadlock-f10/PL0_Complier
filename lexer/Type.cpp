@@ -1,6 +1,6 @@
 #include "../include/Type.h"
 #define Int_Width (4)
-#define Char_Width (1)
+#define Char_Width (4)                // for god sake
 Type* Type::Int = new Type(T_INT , Int_Width , "integer") ;
 Type* Type::Char = new Type(T_CHAR , Char_Width , "char");  
 Type* Type::max(Type *p1, Type *p2)

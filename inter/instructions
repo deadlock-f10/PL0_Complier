@@ -1,14 +1,80 @@
 label	Instr		arg1				arg2			 result		meaning
-		read										     id			read a integer(char) into id
-		write		string				(id,integer)				write a string or id or both
-		if			rel									 L			if relation holds then goto label L
-		iffalse		rel									 L			if relation doesnt' holds then goto label L
-		param		(id,integer)									parameter id(for future use)
-		callproc	proc				integer						call procedure with n parameters
-		callfunc	func				integer			 id			call function with n parameters , store return value in id	
-		copy		(idy,integer)						 idx		x = y
-		copyind		idx					(idi,integer)	 idy	    y = x[i]
-		indcopy		(idy,integer)		(idi,integer)	 idx		x[i] = y
-		op			(idy,integer)		(idz,integer)	 idx		x = y op z (op can be +,-,*,/)
-		goto											 L          goto L
-		end															end of this proc/func/program
+	1	read										     id			read a integer(char) into id
+		li $v0 5   read int     /        li $v0 12     read char
+		syscall
+		add $v0 id.reg
+
+	2	write		string				(id,integer)				write a string or id or both
+		.data 
+		string.name : .asciiz "string.to_string()"
+		.text
+		li $v0 4
+		la $a0 string.name
+		syscall
+
+
+		li $v0 1         write int    /   li $v0 11    write char
+		add $a0 id.reg $zero                 
+		syscall
+
+		li $v0 1
+		add $zero integer.value
+		syscall
+		
+	3	if			rel									 L			if relation holds then goto label L
+		if rel.e1 ,rel.e2  both are constant . then anther emit nothing , or emit  " b L "
+		else
+			bgt rel.e1.reg , rel.e2.reg ,  L                    注意如果有常量需要把它放在第二个参数的位置，并适当变换操作符
+			blt rel.e1.reg , rel.e2.reg ,  L
+			bne rel.e1.reg , rel.e2.reg ,  L
+			beq rel.e1.reg , rel.e2.reg ,  L
+			ble rel.e1.reg , rel.e2.reg ,  L
+			bge rel.e1.reg , rel.e2.reg ,  L
+
+
+
+
+	4	iffalse		rel									 L			if relation doesnt' holds then goto label L
+
+	5	param		(id,integer)									parameter id(for future use)
+		la $k0 integer.value
+		sw $k0 ($sp)
+		add $sp $sp 4
+
+		sw id.reg ($sp)
+		add $sp $sp 4
+	
+	6	callproc	proc				integer						call procedure with n parameters
+		b proc.name
+
+	7	callfunc	func				integer			 id			call function with n parameters , store return value in id	
+		b func.name
+		lw id.reg offset($sp)
+
+	8	copy		(idy,integer)						 idx		x = y
+		add x.reg $zero y.reg
+		add x.reg $zero integer.value
+
+	9	copyind		idx					(idi,integer)	 idy	    y = x[i]
+		lw $k0 x.offset(%fp)
+		add $k0 $k0 i.reg | integer.value
+		lw y.reg ($k0)
+		
+
+	10	indcopy		(idy,integer)		(idi,integer)	 idx		x[i] = y
+		lw $k0 x.offset(%fp)
+		add $k0 $k0 i.reg | integer.value
+		sw y.reg $(k0)
+
+	11	op			(idy,integer)		(idz,integer)	 idx		x = y op z (op can be +,-,*,/)
+		if ar1, ar2  both are constant . then  compute it and emit "li x.reg result.value"
+		else
+			add	 x.reg y.reg z.reg                              考虑顺序!
+			sub	 x.reg y.reg z.reg                         
+			mulo x.reg y.reg z.reg
+			div x.reg y.reg z.reg
+
+	12	goto											 L          goto L
+		j L
+	13	end															end of this proc/func/program
+		jr $ra             or nothing if it's program

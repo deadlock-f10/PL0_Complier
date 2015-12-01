@@ -3,6 +3,7 @@
 #include "../include/Expr.h"
 std::string OptoString[I_MINUS + 1] = {"read","write","if", "iffalse","goto", "end","param", "callproc", "callfunc", "copy", "copyind","indcopy", "*", "/", "+", "-"};
 
+int Arg_string::num=0;
 std::string Quadruple::to_string(){
 	std::string s = "";
 	if(labellist != nullptr)

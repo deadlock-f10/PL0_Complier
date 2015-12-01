@@ -2,6 +2,7 @@
 #include "Tag.h"
 #include <string>
 #include <vector>
+#include "mipsInstr.h"
 //#include "PAF.h"
 //#include "Expr.h"
 #ifndef  QUADRUPLE_H
@@ -31,7 +32,9 @@ class Arg_id : public Arg1 ,public Arg2,public Result{             // maybe temp
 class Arg_string : public Arg1{
 	public :
 		std::string str;
-		Arg_string(std::string s){str = s;}
+		static num;
+		std::string name;
+		Arg_string(std::string s){str = s;name = "string" + patch::to_string(++num);}
 		std::string to_string();
 };
 class Arg_int : public Arg1 , public Arg2{
@@ -64,6 +67,7 @@ class Result_label : public Result{
 		Result_label(std::string s){label = s;}
 		std::string to_string();
 };
+class AttachedInfo;
 class Quadruple{
 	public :
 	std::vector<std::string> *labellist;
@@ -71,6 +75,8 @@ class Quadruple{
 	Arg1 * arg1;
 	Arg2 * arg2;
 	Result * result;
+	std::vector<mipsInstr*> *instrlist;
+	AttachedInfo *info;
 	Quadruple(std::vector<std::string> *l,OP Op, Arg1 * a1, Arg2* a2, Result *r);
 	std::string to_string();
 };
