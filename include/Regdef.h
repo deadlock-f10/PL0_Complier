@@ -1,3 +1,4 @@
+#include <string>
 #ifndef REGDEF_H
 #define REGDEF_H
 enum Register{
@@ -34,4 +35,5 @@ enum Register{
 	R_FP,
 	R_RA,
 };
+extern std::string regto_string[32];
 #endif

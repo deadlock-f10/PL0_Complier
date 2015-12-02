@@ -57,7 +57,7 @@ class Program :public Node{
 class Proc : public Program{
 	public :
 		std::vector<Id*> paralist;
-		int para_used = 0;
+		int para_used = 0;                // count it !!!!
 		//label l;
 //		std::string symtype = "procedure";
 		Proc(Program  *p,Word *w , int l);

@@ -4,7 +4,7 @@ label	Instr		arg1				arg2			 result		meaning
 		syscall
 		add $v0 id.reg
 
-	2	write		string				(id,integer)				write a string or id or both
+	2	write		string				[id,integer]				write a string or id or both
 		.data 
 		string.name : .asciiz "string.to_string()"
 		.text
@@ -18,7 +18,7 @@ label	Instr		arg1				arg2			 result		meaning
 		syscall
 
 		li $v0 1
-		add $zero integer.value
+		add $a0 $zero integer.value
 		syscall
 		
 	3	if			rel									 L			if relation holds then goto label L
@@ -37,12 +37,12 @@ label	Instr		arg1				arg2			 result		meaning
 	4	iffalse		rel									 L			if relation doesnt' holds then goto label L
 
 	5	param		(id,integer)									parameter id(for future use)
-		la $k0 integer.value
-		sw $k0 ($sp)
-		add $sp $sp 4
+		la $k1 integer.value
+		sw $k1 ($sp)
+		sub $sp $sp 4
 
 		sw id.reg ($sp)
-		add $sp $sp 4
+		sub $sp $sp 4
 	
 	6	callproc	proc				integer						call procedure with n parameters
 		b proc.name
@@ -56,15 +56,15 @@ label	Instr		arg1				arg2			 result		meaning
 		add x.reg $zero integer.value
 
 	9	copyind		idx					(idi,integer)	 idy	    y = x[i]
-		lw $k0 x.offset(%fp)
-		add $k0 $k0 i.reg | integer.value
-		lw y.reg ($k0)
+		//lw $k1 x.offset(%fp)             |      不一定，x可能不在本层．
+		add $k1 $k1 i.reg | integer.value
+		lw y.reg ($k1)
 		
 
 	10	indcopy		(idy,integer)		(idi,integer)	 idx		x[i] = y
-		lw $k0 x.offset(%fp)
-		add $k0 $k0 i.reg | integer.value
-		sw y.reg $(k0)
+		//lw $k1 x.offset(%fp)             |      不一定，x可能不在本层．                getReg应该负责把x的基址加载到k1中．这样我们就不用判断了.
+		add $k1 $k1 i.reg | integer.value
+		sw y.reg ($k1)        |        li $t8 yint.value    sw $t8 ($k1)
 
 	11	op			(idy,integer)		(idz,integer)	 idx		x = y op z (op can be +,-,*,/)
 		if ar1, ar2  both are constant . then  compute it and emit "li x.reg result.value"

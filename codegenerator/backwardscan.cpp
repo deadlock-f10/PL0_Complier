@@ -15,8 +15,12 @@ Bblockgenerator::backwardscan(){
 					Id * id = dynamic_cast<Id*>(q->result);
 					std::unordered_map<Id*,int>::Iterator it = nextuse.find(id1);
 					if( It == nextuse.end()){
-						nextuse.insert(make_pair(id1,-2));
+						nextuse.insert(make_pair(id,-2));
+						if(Temp *t = dynamic_cast<Temp *>(id))
+							x->resnextuse = -2;
+						else	
 						x->resnextuse = -1;
+						addtomap(Id *id);
 					}
 					else{
 						x->resnextuse = It->second;
@@ -26,7 +30,11 @@ Bblockgenerator::backwardscan(){
 						std::unordered_map<Id*,int>::Iterator it = nextuse.find(id1);
 						if( It == nextuse.end()){
 							nextuse.insert(make_pair(id1,i));
+						if(Temp *t = dynamic_cast<Temp *>(id1))
+							x->a2nextuse = -2;
+						else	
 							x->a2nextuse = -1;
+							addtomap(Id *id1);
 						}
 						else{
 							x->a2nextuse = It->second;
@@ -41,7 +49,11 @@ Bblockgenerator::backwardscan(){
 						std::unordered_map<Id*,int>::Iterator it = nextuse.find(id1);
 						if( It == nextuse.end()){
 							nextuse.insert(make_pair(id1,i));
+						if(Temp *t = dynamic_cast<Temp *>(id1))
+							x->a1nextuse = -2;
+						else	
 							x->a1nextuse = -1;
+							addtomap(Id *id1);
 						}
 						else{
 							x->a1nextuse = It->second;
@@ -52,7 +64,11 @@ Bblockgenerator::backwardscan(){
 						std::unordered_map<Id*,int>::Iterator it = nextuse.find(id2);
 						if( It == nextuse.end()){
 							nextuse.insert(make_pair(id2,i));
+						if(Temp *t = dynamic_cast<Temp *>(id2))
+							x->a2nextuse = -2;
+						else	
 							x->a2nextuse = -1;
+							addtomap(Id *id2);
 						}
 						else{
 							x->a2nextuse = It->second;
@@ -67,8 +83,12 @@ Bblockgenerator::backwardscan(){
 					Id * id = dynamic_cast<Id*>(q->result);
 					std::unordered_map<Id*,int>::Iterator it = nextuse.find(id1);
 					if( It == nextuse.end()){
-						nextuse.insert(make_pair(id1,-2));
+						nextuse.insert(make_pair(id,-2));
+						if(Temp *t = dynamic_cast<Temp *>(id))
+							x->resnextuse = -2;
+						else	
 						x->resnextuse = -1;
+						addtomap(Id *id);
 					}
 					else{
 						x->resnextuse = It->second;
@@ -78,7 +98,11 @@ Bblockgenerator::backwardscan(){
 						std::unordered_map<Id*,int>::Iterator it = nextuse.find(id1);
 						if( It == nextuse.end()){
 							nextuse.insert(make_pair(id1,i));
+						if(Temp *t = dynamic_cast<Temp *>(id1))
+							x->a1nextuse = -2;
+						else	
 							x->a1nextuse = -1;
+							addtomap(Id *id1);
 						}
 						else{
 							x->a1nextuse = It->second;
@@ -95,8 +119,12 @@ Bblockgenerator::backwardscan(){
 					Id * id = dynamic_cast<Id*>(q->result);
 					std::unordered_map<Id*,int>::Iterator it = nextuse.find(id1);
 					if( It == nextuse.end()){
-						nextuse.insert(make_pair(id1,-2));
+						nextuse.insert(make_pair(id,-2));
+						if(Temp *t = dynamic_cast<Temp *>(id))
+							x->resnextuse = -2;
+						else	
 						x->resnextuse = -1;
+						addtomap(Id *id);
 					}
 					else{
 						x->resnextuse = It->second;
@@ -106,7 +134,11 @@ Bblockgenerator::backwardscan(){
 						std::unordered_map<Id*,int>::Iterator it = nextuse.find(id1);
 						if( It == nextuse.end()){
 							nextuse.insert(make_pair(id1,i));
+						if(Temp *t = dynamic_cast<Temp *>(id1))
+							x->a1nextuse = -2;
+						else	
 							x->a1nextuse = -1;
+							addtomap(Id *id1);
 						}
 						else{
 							x->a1nextuse = It->second;
@@ -117,7 +149,11 @@ Bblockgenerator::backwardscan(){
 						std::unordered_map<Id*,int>::Iterator it = nextuse.find(id2);
 						if( It == nextuse.end()){
 							nextuse.insert(make_pair(id2,i));
+						if(Temp *t = dynamic_cast<Temp *>(id2))
+							x->a2nextuse = -2;
+						else	
 							x->a2nextuse = -1;
+							addtomap(Id *id2);
 						}
 						else{
 							x->a2nextuse = It->second;
@@ -129,15 +165,19 @@ Bblockgenerator::backwardscan(){
 			case I_IF:
 			case I_IFFALSE:
 				{
-					Rel * r = (Rel *)q->arg1;
+					Rel * r = ((Arg_rel*)q->arg1)->relation;
 					if(Id * id1 = dynamic_cast<Id*>(r->e1)){
 						std::unordered_map<Id*,int>::Iterator it = nextuse.find(id);
 						if( It == nextuse.end()){
 							nextuse.insert(make_pair(id1,i));
-							x->resnextuse = -1;
+						if(Temp *t = dynamic_cast<Temp *>(id1))
+							x->a1nextuse = -2;
+						else	
+							x->a1nextuse = -1;
+							addtomap(Id *id1);
 						}
 						else{
-							x->resnextuse = It->second;
+							x->a1nextuse = It->second;
 							It->second = i;
 						}
 					}
@@ -145,10 +185,14 @@ Bblockgenerator::backwardscan(){
 						std::unordered_map<Id*,int>::Iterator it = nextuse.find(id);
 						if( It == nextuse.end()){
 							nextuse.insert(make_pair(id2,i));
-							x->resnextuse = -1;
+						if(Temp *t = dynamic_cast<Temp *>(id2))
+							x->a2nextuse = -2;
+						else	
+							x->a2nextuse = -1;
+							addtomap(Id *id2);
 						}
 						else{
-							x->resnextuse = It->second;
+							x->a2nextuse = It->second;
 							It->second = i;
 						}
 					}
@@ -159,27 +203,34 @@ Bblockgenerator::backwardscan(){
 					if(Id * id = dynamic_cast<Id*>(q->arg2)){
 						std::unordered_map<Id*,int>::Iterator it = nextuse.find(id);
 						if( It == nextuse.end()){
-							nextuse.insert(make_pair(id1,i));
-							x->resnextuse = -1;
+							nextuse.insert(make_pair(id,i));
+						if(Temp *t = dynamic_cast<Temp *>(id))
+							x->a2nextuse = -2;
+						else	
+							x->a2nextuse = -1;
+							addtomap(Id *id);
 						}
 						else{
-							x->resnextuse = It->second;
+							x->a2nextuse = It->second;
 							It->second = i;
 						}
 					}
 					break;
-
 				}
 			case I_PARAM:
 				{
 					if(Id * id = dynamic_cast<Id*>(q->arg1)){
 						std::unordered_map<Id*,int>::Iterator it = nextuse.find(id);
 						if( It == nextuse.end()){
-							nextuse.insert(make_pair(id1,i));
-							x->resnextuse = -1;
+							nextuse.insert(make_pair(id,i));
+						if(Temp *t = dynamic_cast<Temp *>(id))
+							x->a1nextuse = -2;
+						else	
+							x->a1nextuse = -1;
+							addtomap(Id *id);
 						}
 						else{
-							x->resnextuse = It->second;
+							x->a1nextuse = It->second;
 							It->second = i;
 						}
 					}
@@ -189,10 +240,14 @@ Bblockgenerator::backwardscan(){
 			case I_CALLFUNC:
 				{
 					Id * id = dynamic_cast<Id*>(q->result);
-					std::unordered_map<Id*i,int>::Iterator it = nextuse.find(id);
+					std::unordered_map<Id*,int>::Iterator it = nextuse.find(id);
 					if( It == nextuse.end()){
-						nextuse.insert(make_pair(id1,-2));
-						x->resnextuse = -1;
+						if(Temp *t = dynamic_cast<Temp *>(id))
+							x->resnextuse = -2;
+						else	
+							x->resnextuse = -1;
+						nextuse.insert(make_pair(id,-2));
+						addtomap(Id *id);
 					}
 					else{
 						x->resnextuse = It->second;
@@ -204,6 +259,6 @@ Bblockgenerator::backwardscan(){
 			case I_GOTO:
 			case I_END:
 		}
-					q->info = x;
+		q->info = x;
 	}
 }

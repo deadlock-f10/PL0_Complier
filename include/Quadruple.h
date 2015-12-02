@@ -75,7 +75,7 @@ class Quadruple{
 	Arg1 * arg1;
 	Arg2 * arg2;
 	Result * result;
-	std::vector<mipsInstr*> *instrlist;
+//	std::vector<mipsInstr*> *instrlist;
 	AttachedInfo *info;
 	Quadruple(std::vector<std::string> *l,OP Op, Arg1 * a1, Arg2* a2, Result *r);
 	std::string to_string();
