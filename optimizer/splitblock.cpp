@@ -41,7 +41,7 @@ void Optimizer::splitblock(Program *p){
 			if(begin.back() != (signed)i)
 				begin.push_back(i);
 		}
-		if(x->op == I_IF || x->op == I_IFFALSE || x->op == I_GOTO){
+		if(x->op == I_IF || x->op == I_IFFALSE || x->op == I_CALLFUNC || x->op == I_CALLPROC || x->op == I_GOTO){
 				begin.push_back(i+1);      // they won't be the last instruction, hence i+1 is always valid.
 		}
 	}

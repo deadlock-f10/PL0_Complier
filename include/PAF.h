@@ -58,6 +58,7 @@ class Proc : public Program{
 	public :
 		std::vector<Id*> paralist;
 		int para_used = 0;                // count it !!!!
+		int para_offset;
 		//label l;
 //		std::string symtype = "procedure";
 		Proc(Program  *p,Word *w , int l);
@@ -67,6 +68,7 @@ class Proc : public Program{
 class Func : public Program{
 	public :
 		int para_used = 0;
+		int para_offset;
 		std::vector<Id*> paralist;
 		//label l;                     // L label:
 		Type* type;

@@ -9,6 +9,7 @@ enum OP {
 	I_IFFALSE ,
 	I_GOTO,
 	I_END,
+	I_INVOKE,
 	I_PARAM ,
 	I_CALLPROC ,
 	I_CALLFUNC ,

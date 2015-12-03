@@ -1,7 +1,7 @@
 #include "../include/Quadruple.h"
 #include "../include/PAF.h"
 #include "../include/Expr.h"
-std::string OptoString[I_MINUS + 1] = {"read","write","if", "iffalse","goto", "end","param", "callproc", "callfunc", "copy", "copyind","indcopy", "*", "/", "+", "-"};
+std::string OptoString[I_MINUS + 1] = {"read","write","if", "iffalse","goto", "end","invoke","param", "callproc", "callfunc", "copy", "copyind","indcopy", "*", "/", "+", "-"};
 
 int Arg_string::num=0;
 std::string Quadruple::to_string(){
@@ -38,6 +38,11 @@ std::string Quadruple::to_string(){
 		case I_PARAM:
 			s += "\t" + OptoString[op];
 			s += " " + arg1->to_string();
+			break;
+		case I_INVOKE:
+			s += "\t" + OptoString[op];
+			s += " " + arg1->to_string();
+			s += " " + arg2->to_string();
 			break;
 		case I_CALLPROC:
 			s += "\t" + OptoString[op];

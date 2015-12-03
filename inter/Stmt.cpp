@@ -149,10 +149,12 @@ void Callproc::gen(Program *p){
 	std::vector<Expr*> list;
 	for(unsigned int i = 0; i < actuallist->size() ; i++)
 		list.push_back((Expr *)actuallist->at(i)->reduce(p));
-	emit(I_CALLPROC,new Arg_proc(prc),new Arg_int(actuallist->size()),nullptr,p);
+	//emit(I_CALLPROC,new Arg_proc(prc),new Arg_int(actuallist->size()),nullptr,p);
+	emit(I_INVOKE,new Arg_proc(prc),new Arg_int(actuallist->size()),nullptr,p);
 	for(int i = actuallist->size()-1 ; i >= 0 ; i--)
 		if(Constant *c1 = dynamic_cast<Constant*>(list[i]))
 			emit(I_PARAM,new Arg_int(c1->c),nullptr,nullptr,p);
 		else
 			emit(I_PARAM,new Arg_id((Id *)list[i]),nullptr,nullptr,p);
+	emit(I_CALLPROC,new Arg_proc(prc),new Arg_int(actuallist->size()),nullptr,p);
 }

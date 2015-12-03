@@ -32,7 +32,7 @@ class Arg_id : public Arg1 ,public Arg2,public Result{             // maybe temp
 class Arg_string : public Arg1{
 	public :
 		std::string str;
-		static num;
+		static int  num;
 		std::string name;
 		Arg_string(std::string s){str = s;name = "string" + patch::to_string(++num);}
 		std::string to_string();
