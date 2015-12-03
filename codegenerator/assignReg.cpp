@@ -2,23 +2,29 @@
 #include "../include/Regdef.h"
 #include "../include/Expr.h"
 #include <vector>
+#include <string>
 extern ofstream targetcode;
 //extern std::string regto_string[32] = {};
 Reg_Descripter* Reg_Descripter::t8 = new Reg_Descripter(R_T8);
 Reg_Descripter* Reg_Descripter::t9 = new Reg_Descripter(R_T9);
 Reg_Descripter* Reg_Descripter::k0 = new Reg_Descripter(R_K0);
 
-inline void Bblockgenerator::emit(std::string s){
-	instrlist.push_back(s);
+void Bblockgenerator::emit(std::string s){
+	//targetcode<<s.length()<<endl;
+	std::string x(s);
+    instrlist.push_back(x);
 }
 
 void Bblockgenerator::print(){
+    //targetcode<<instrlist.size()<<endl;
+ //   instrlist.push_back("mk");
 	for(std::vector<std::string>::iterator it = instrlist.begin(); it != instrlist.end();it++)
 		targetcode<<*it<<endl;
 }
 
 void Bblockgenerator::gen(){
 	emit(block->label+":");
+	backwardscan();
 	for(std::vector<Quadruple*>::iterator it = block->instrlist.begin(); it != block->instrlist.end();it++){
 		getReg(*it);
 		chooseInstr(*it);
@@ -47,9 +53,9 @@ void Bblockgenerator::getReg(Quadruple *q){
 		case I_IFFALSE:
 		case I_IF:
 			{
-				Rel *r = (Rel *)q->arg1;
+				Rel *r = ((Arg_rel*)q->arg1)->relation;
 				if(Id * id1 = dynamic_cast<Id*>(r->e1))
-					findload(new Arg_id(id1),Reg_Descripter::t8);				
+					findload(new Arg_id(id1),Reg_Descripter::t8);
 				if(Id * id2 = dynamic_cast<Id*>(r->e2))
 					findload(new Arg_id(id2),Reg_Descripter::t9);
 				break;
@@ -73,7 +79,7 @@ void Bblockgenerator::getReg(Quadruple *q){
 				if(Arg_id * id2 = dynamic_cast<Arg_id*>(q->arg2)) //use k1 as intermediate
 					 findload(id2,Reg_Descripter::t9);
 				Arg_id * id1 = dynamic_cast<Arg_id*>(q->result);
-				findstore(id1);                                     
+				findstore(id1);
 				Arg_id* arg1 = dynamic_cast<Arg_id*>(q->arg1);
 				loadarrayaddr(arg1);                                 //store addr in k1
 				break;
@@ -117,7 +123,7 @@ void Bblockgenerator::findload(Arg_id *argid,Reg_Descripter *backup){//use  k1
 			loadvariable(argid,x->r);
 		}
 		else{
-			//ad.clear();					
+			//ad.clear();
 			ad->deleteReg();
 			ad->assignReg(backup);
 			loadvariable(argid,backup->r);
@@ -139,22 +145,22 @@ void Bblockgenerator::findstore(Arg_id * argid){    //find register to store
 	}
 	//ad->invalidatestack();
 }
-void Bblockgenerator::loadarrayaddr(Arg_id * argid){//store addr in k1 
+void Bblockgenerator::loadarrayaddr(Arg_id * argid){//store addr in k1
 	Id * id = argid->id;
 		if(id->level == prog->level)
 			emit("lw "+regto_string[R_K1]+patch::to_string(-(id->offset))+"($fp)");
 		else{
-			int m = 4 * (prog->level + 3 - id->level); 
+			int m = 4 * (prog->level + 3 - id->level);
 			emit("lw "+regto_string[R_K1]+" "+patch::to_string(-m)+"("+regto_string[R_FP]+")");
 			emit("lw "+regto_string[R_K1]+patch::to_string(-(id->offset))+"("+regto_string[R_K1]+")");
 		}
 }
 void Bblockgenerator::loadvariable(Arg_id * argid,Register r){       // use k1
-	// watch out for var 
+	// watch out for var
 	Id * id = argid->id;
 	Register reg = R_FP;
 	if(id->level != prog->level){
-			int m = 4 * (prog->level + 3 - id->level); 
+			int m = 4 * (prog->level + 3 - id->level);
 			emit("lw "+regto_string[R_K1]+" "+patch::to_string(-m)+"("+regto_string[R_FP]+")");
 			//emit("lw "+regto_string[r]+" "+patch::to_string(id->offset)+"("+regto_string[R_K1]+")");
 			reg = R_K1;
@@ -185,7 +191,7 @@ void Bblockgenerator::loadaddress(Arg_id * argid){//store addr in k1
 	Id * id = argid->id;
 	Register reg = R_FP;
 	if(id->level != prog->level){
-			int m = 4 * (prog->level + 3 - id->level); 
+			int m = 4 * (prog->level + 3 - id->level);
 			emit("lw "+regto_string[R_K1]+" "+patch::to_string(-m)+"("+regto_string[R_FP]+")");
 			//emit("lw "+regto_string[r]+" "+patch::to_string(id->offset)+"("+regto_string[R_K1]+")");
 			reg = R_K1;
@@ -211,7 +217,7 @@ void Bblockgenerator::storevariable(Arg_id * argid,Register r){//use  k1
 	Id * id = argid->id;
 	Register reg = R_FP;
 	if(id->level != prog->level){
-			int m = 4 * (prog->level + 3 - id->level); 
+			int m = 4 * (prog->level + 3 - id->level);
 			emit("lw "+regto_string[R_K1]+" "+patch::to_string(-m)+"("+regto_string[R_FP]+")");
 			//emit("lw "+regto_string[r]+" "+patch::to_string(id->offset)+"("+regto_string[R_K1]+")");
 			reg = R_K1;
@@ -238,7 +244,7 @@ void Bblockgenerator::storevariable(Arg_id * argid,Register r){//use  k1
 	}
 }
 
-void Addr_Des::addtomap(Id *i)            // temp 
+void Addr_Des::addtomap(Id *i)            // temp
 {
 /*	if(Temp *t  =  dynamic_cast<Temp*>(i)){
 		Addr_Descripter ad = new Addr_Descripter(t);
@@ -265,7 +271,7 @@ Reg_Descripter* Reg_Des::getAvail(){
 		Istaken.push_back(x);
 		return x;
 	}
-	else 
+	else
 		return nullptr;
 }
 void Reg_Des::availReg(Reg_Descripter *r){

@@ -4,6 +4,8 @@
 #include <unordered_map>
 #include "PAF.h"
 #include "Optimizer.h"
+#include <string>
+//#include <queue>
 
 #ifndef CODEGEN_H
 #define CODEGEN_H
@@ -34,7 +36,7 @@ class Addr_Descripter;
 class Reg_Descripter;
 class Reg_Descripter{
 	public:
-	Register r;	
+	Register r;
 	Addr_Descripter* addr;
 	Reg_Descripter(Register reg) {r = reg;}
 	void assignId(Addr_Descripter *x) { addr = x;}
@@ -54,7 +56,7 @@ class Addr_Descripter{
 	Addr_Descripter(Id *i){id = i;}
 	void assignReg(Reg_Descripter *r) { reg = r;}
 	Reg_Descripter* getReg(){return reg;}
-	void deleteReg(){reg->deleteId();reg = nullptr;}
+	void deleteReg(){if(reg !=nullptr ) reg->deleteId();reg = nullptr;}
 	void invalidatestack(){valueonstack = false;}
 	//void clear();
 };
@@ -68,7 +70,7 @@ class Reg_Des{
 class Addr_Des{
 	public:
 	std::unordered_map<Id*,Addr_Descripter*> map;
-	void addtomap(Id *i);            // temp 
+	void addtomap(Id *i);            // temp
 	Addr_Descripter * find(Id *i);
 };
 class Bblockgenerator{
@@ -84,6 +86,7 @@ class Bblockgenerator{
 	void print();
 	void backwardscan();              // first pass backward from the last instruction of this basicblock. collect next-use info and add variable to addr_des.
 	Bblockgenerator(BasicBlock *b,Program *p){block = b; prog = p;}
+	//void emit(std::string s){std::string x ="";x += s;instrlist.push_back(x);}
 	void emit(std::string s);
 	void chooseInstr(Quadruple *q);       // consider  constant-constant rel.
 	void findstore(Arg_id *argid);

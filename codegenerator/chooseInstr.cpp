@@ -142,7 +142,7 @@ void Bblockgenerator::chooseInstr(Quadruple *q){
 					emit("sub "+ regto_string[R_K1] +" "+regto_string[R_K1] + " " + patch::to_string(in->value));
 				}
 				else{
-					Arg_id* arg2 = dynamic_cast<Arg_id*>(q->arg2); 
+					Arg_id* arg2 = dynamic_cast<Arg_id*>(q->arg2);
 					Addr_Descripter *addr2 = addr_des.find(arg2->id);
 					Reg_Descripter * reg2 = addr2->getReg();
 					emit("sub "+ regto_string[R_K1] +" "+regto_string[R_K1] + " " + regto_string[reg2->r]);
@@ -157,6 +157,7 @@ void Bblockgenerator::chooseInstr(Quadruple *q){
 					addr->deleteReg();
 					reg_des.availReg(reg);
 				}
+				break;
 			}
 		case I_INDCOPY:
 			{
@@ -165,7 +166,7 @@ void Bblockgenerator::chooseInstr(Quadruple *q){
 					emit("sub "+regto_string[R_K1]+" "+regto_string[R_K1] +" " + patch::to_string(in2->value));
 				}
 				else{
-					Arg_id* arg2 = dynamic_cast<Arg_id*>(q->arg2); 
+					Arg_id* arg2 = dynamic_cast<Arg_id*>(q->arg2);
 					Addr_Descripter *addr2 = addr_des.find(arg2->id);
 					Reg_Descripter * reg2 = addr2->getReg();
 					emit("sub "+regto_string[R_K1]+" "+regto_string[R_K1] +" " + regto_string[reg2->r]);
@@ -180,7 +181,7 @@ void Bblockgenerator::chooseInstr(Quadruple *q){
 					emit("sw "+regto_string[R_T8]+" "+"("+regto_string[R_K1]+")");
 				}
 				else{
-					Arg_id* arg1 = dynamic_cast<Arg_id*>(q->arg1); 
+					Arg_id* arg1 = dynamic_cast<Arg_id*>(q->arg1);
 					Addr_Descripter *addr1 = addr_des.find(arg1->id);
 					Reg_Descripter * reg1 = addr1->getReg();
 					emit("sw "+regto_string[reg1->r]+" "+"("+regto_string[R_K1]+")");
@@ -193,7 +194,7 @@ void Bblockgenerator::chooseInstr(Quadruple *q){
 			}
 		case I_COPY:
 			{
-				Arg_id* result = dynamic_cast<Arg_id*>(q->result); 
+				Arg_id* result = dynamic_cast<Arg_id*>(q->result);
 				Addr_Descripter *addr = addr_des.find(result->id);
 				Reg_Descripter * reg = addr->getReg();
 				if(x->a1nextuse == -3){
@@ -201,7 +202,7 @@ void Bblockgenerator::chooseInstr(Quadruple *q){
 					emit("li "+ regto_string[reg->r]  + " " + patch::to_string(in->value));
 				}
 				else{
-					Arg_id* arg1 = dynamic_cast<Arg_id*>(q->arg1); 
+					Arg_id* arg1 = dynamic_cast<Arg_id*>(q->arg1);
 					Addr_Descripter *addr1 = addr_des.find(arg1->id);
 					Reg_Descripter * reg1 = addr1->getReg();
 					emit("add "+ regto_string[reg->r] +" "+regto_string[R_ZERO] + " " + regto_string[reg1->r]);
@@ -215,6 +216,7 @@ void Bblockgenerator::chooseInstr(Quadruple *q){
 					addr->deleteReg();
 					reg_des.availReg(reg);
 				}
+				break;
 			}
 		case I_IF:
 		case I_IFFALSE:
@@ -340,6 +342,7 @@ void Bblockgenerator::chooseInstr(Quadruple *q){
 					addr->deleteReg();
 					reg_des.availReg(reg);
 				}
+				break;
 			}
 		case I_WRITE:
 			{
