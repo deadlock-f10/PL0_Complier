@@ -95,7 +95,8 @@ void Parser::form_para_seg(){
 	bool isref = false;
 	switch(look->tag){
 		case T_VAR:
-			isref = true;
+			isref = true;                 // fall through
+			move();
 		case T_IDENT:{
 			std::vector<Word *> identifier_list;
 			if(look->tag != T_IDENT)
@@ -131,7 +132,7 @@ void Parser::form_para_seg(){
 					p->para_used -= t->width;
 					id = new Id((Word*)tok,t,p->para_used,false,isref,p->level);
 					p->paralist.push_back(id);
-					p->used += t->width;
+					//p->used += t->width;
 					p->put(tok,id);
 				}
 			}

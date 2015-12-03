@@ -11,7 +11,6 @@ int main(){
 	Parser p(lex);
 	Program *x = p.program();
 	x->gen();
-	/*x->print();*/
 	Optimizer *o = new Optimizer(x);
 	o->optimize();
 	Codegenerator *c = new Codegenerator(x);
@@ -19,4 +18,3 @@ int main(){
 	c->print(x);
 	return 0;
 }
-

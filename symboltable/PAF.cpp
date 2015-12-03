@@ -46,14 +46,14 @@ Func::Func(Program *p,Word *w, int l) {
 	name = w;
 	level = l;
 	beginlabel = Parser::getlabel(name);
-	para_offset = -4*(3+level-1);
+	para_offset = -4*(3+level);
 }
 Proc::Proc(Program  *p,Word *w , int l) {
 	prev = p;
 	name = w;
 	level = l;
 	beginlabel = Parser::getlabel(name);
-	para_offset = -4*(3+level-1);
+	para_offset = -4*(3+level);
 }
 void Program::print(){
 	block->print();

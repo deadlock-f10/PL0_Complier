@@ -1,8 +1,11 @@
 #include "../include/Codegen.h"
 #include <unordered_map>
 #include "../include/OP.h"
-Bblockgenerator::backwardscan(){
-	std::unordered_map<Id *i,int> nextuse;
+#include "../include/Quadruple.h"
+#include "../include/Expr.h"
+
+void Bblockgenerator::backwardscan(){
+	std::unordered_map<Id *,int> nextuse;
 	for(int i = block->instrlist.size() - 1; i >= 0 ; i--){
 		Quadruple *q = block->instrlist[i];
 		AttachedInfo *x = new AttachedInfo();
@@ -12,36 +15,36 @@ Bblockgenerator::backwardscan(){
 		switch(q->op){
 			case I_COPYIND:
 				{
-					Id * id = dynamic_cast<Id*>((Arg_id*)(q->result)->id);
-					std::unordered_map<Id*,int>::iterator it = nextuse.find(id);
-					if( It == nextuse.end()){
-						nextuse.insert(make_pair(id,-1));
-						if(Temp *t = dynamic_cast<Temp *>(id))
+					Id * result = dynamic_cast<Id*>(((Arg_id*)(q->result))->id);
+					std::unordered_map<Id*,int>::iterator it = nextuse.find(result);
+					if( it == nextuse.end()){
+						nextuse.insert(make_pair(result,-1));
+						if(Temp *t = dynamic_cast<Temp *>(result))
 						{
-							p->put(t->op,t);
-							t->offset = p->used;
-							p->used += t->width;
+							prog->put(t->op,t);
+							t->offset = prog->used;
+							prog->used += t->type->width;
 						}
 						x->resnextuse = -1;
-						addtomap(Id *id);
+						addr_des.addtomap(result);
 					}
 					else{
-						x->resnextuse = It->second;
-						It->second = -1;
+						x->resnextuse = it->second;
+						it->second = -1;
 					}
 					if(Arg_id * argid2 = dynamic_cast<Arg_id*>(q->arg2)){
 						Id *id2 = argid2->id;
 						std::unordered_map<Id*,int>::iterator it = nextuse.find(id2);
-						if( It == nextuse.end()){
+						if( it == nextuse.end()){
 							if(Temp *t = dynamic_cast<Temp *>(id2))
 							{
-								p->put(t->op,t);
-								t->offset = p->used;
-								p->used += t->width;
+								prog->put(t->op,t);
+								t->offset = prog->used;
+								prog->used += t->type->width;
 							}
 							nextuse.insert(make_pair(id2,i));
 							x->a2nextuse = -1;
-							addtomap(Id *id1);
+							addr_des.addtomap(id2);
 						}
 						else{
 							x->a2nextuse = it->second;
@@ -55,35 +58,35 @@ Bblockgenerator::backwardscan(){
 					if(Arg_id * argid1 = dynamic_cast<Arg_id*>(q->arg1)){
 						Id *id1 = argid1->id;
 						std::unordered_map<Id*,int>::iterator it = nextuse.find(id1);
-						if( It == nextuse.end()){
+						if( it == nextuse.end()){
 							nextuse.insert(make_pair(id1,i));
 						if(Temp *t = dynamic_cast<Temp *>(id1))
 						{
-								p->put(t->op,t);
-								t->offset = p->used;
-								p->used += t->width;
+								prog->put(t->op,t);
+								t->offset = prog->used;
+								prog->used += t->type->width;
 						}
 							x->a1nextuse = -1;
-							addtomap(Id *id1);
+							addr_des.addtomap(id1);
 						}
 						else{
-							x->a1nextuse = It->second;
-							It->second = i;
+							x->a1nextuse = it->second;
+							it->second = i;
 						}
 					}
 					if(Arg_id * argid2 = dynamic_cast<Arg_id*>(q->arg2)){
 						Id *id2 = argid2->id;
 						std::unordered_map<Id*,int>::iterator it = nextuse.find(id2);
-						if( It == nextuse.end()){
+						if( it == nextuse.end()){
+							if(Temp *t = dynamic_cast<Temp *>(id2))
+							{
+								prog->put(t->op,t);
+								t->offset = prog->used;
+								prog->used += t->type->width;
+							}
 							nextuse.insert(make_pair(id2,i));
-						if(Temp *t = dynamic_cast<Temp *>(id2))
-						{
-								p->put(t->op,t);
-								t->offset = p->used;
-								p->used += t->width;
-						}
 							x->a2nextuse = -1;
-							addtomap(Id *id2);
+							addr_des.addtomap(id2);
 						}
 						else{
 							x->a2nextuse = it->second;
@@ -95,40 +98,40 @@ Bblockgenerator::backwardscan(){
 				}
 			case I_COPY:
 				{
-					Id * id = dynamic_cast<Id*>((Arg_id*)(q->result)->id);
-					std::unordered_map<Id*,int>::iterator it = nextuse.find(id1);
-					if( It == nextuse.end()){
-						nextuse.insert(make_pair(id,-1));
-						if(Temp *t = dynamic_cast<Temp *>(id))
+					Id * result = dynamic_cast<Id*>(((Arg_id*)(q->result))->id);
+					std::unordered_map<Id*,int>::iterator it = nextuse.find(result);
+					if( it == nextuse.end()){
+						nextuse.insert(make_pair(result,-1));
+						if(Temp *t = dynamic_cast<Temp *>(result))
 						{
-								p->put(t->op,t);
-								t->offset = p->used;
-								p->used += t->width;
+							prog->put(t->op,t);
+							t->offset = prog->used;
+							prog->used += t->type->width;
 						}
 						x->resnextuse = -1;
-						addtomap(Id *id);
+						addr_des.addtomap(result);
 					}
 					else{
-						x->resnextuse = It->second;
-						It->second = -1;
+						x->resnextuse = it->second;
+						it->second = -1;
 					}
 					if(Arg_id * argid1 = dynamic_cast<Arg_id*>(q->arg1)){
 						Id *id1 = argid1->id;
 						std::unordered_map<Id*,int>::iterator it = nextuse.find(id1);
-						if( It == nextuse.end()){
-							nextuse.insert(make_pair(id1,i));
+						if( it == nextuse.end()){
 						if(Temp *t = dynamic_cast<Temp *>(id1))
 						{
-							p->put(t->op,t);
-							t->offset = p->used;
-							p->used += t->width;
+								prog->put(t->op,t);
+								t->offset = prog->used;
+								prog->used += t->type->width;
 						}
+							nextuse.insert(make_pair(id1,i));
 							x->a1nextuse = -1;
-							addtomap(Id *id1);
+							addr_des.addtomap(id1);
 						}
 						else{
-							x->a1nextuse = It->second;
-							It->second = i;
+							x->a1nextuse = it->second;
+							it->second = i;
 						}
 					}
 					break;
@@ -138,58 +141,58 @@ Bblockgenerator::backwardscan(){
 			case I_DIV:
 			case I_MINUS:
 				{
-					Id * id = dynamic_cast<Id*>((Arg_id*)(q->result)->id);
-					std::unordered_map<Id*,int>::iterator it = nextuse.find(id1);
-					if( It == nextuse.end()){
-						nextuse.insert(make_pair(id,-1));
-						if(Temp *t = dynamic_cast<Temp *>(id))
+					Id * result = dynamic_cast<Id*>(((Arg_id*)(q->result))->id);
+					std::unordered_map<Id*,int>::iterator it = nextuse.find(result);
+					if( it == nextuse.end()){
+						nextuse.insert(make_pair(result,-1));
+						if(Temp *t = dynamic_cast<Temp *>(result))
 						{
-								p->put(t->op,t);
-								t->offset = p->used;
-								p->used += t->width;
+							prog->put(t->op,t);
+							t->offset = prog->used;
+							prog->used += t->type->width;
 						}
 						x->resnextuse = -1;
-						addtomap(Id *id);
+						addr_des.addtomap(result);
 					}
 					else{
-						x->resnextuse = It->second;
-						It->second = -1;
+						x->resnextuse = it->second;
+						it->second = -1;
+					}
+					if(Arg_id * argid2 = dynamic_cast<Arg_id*>(q->arg2)){
+						Id *id2 = argid2->id;
+						std::unordered_map<Id*,int>::iterator it = nextuse.find(id2);
+						if( it == nextuse.end()){
+							if(Temp *t = dynamic_cast<Temp *>(id2))
+							{
+								prog->put(t->op,t);
+								t->offset = prog->used;
+								prog->used += t->type->width;
+							}
+							nextuse.insert(make_pair(id2,i));
+							x->a2nextuse = -1;
+							addr_des.addtomap(id2);
+						}
+						else{
+							x->a2nextuse = it->second;
+							it->second = i;
+						}
 					}
 					if(Arg_id * argid1 = dynamic_cast<Arg_id*>(q->arg1)){
 						Id *id1 = argid1->id;
 						std::unordered_map<Id*,int>::iterator it = nextuse.find(id1);
-						if( It == nextuse.end()){
-							nextuse.insert(make_pair(id1,i));
+						if( it == nextuse.end()){
 						if(Temp *t = dynamic_cast<Temp *>(id1))
 						{
-							p->put(t->op,t);
-							t->offset = p->used;
-							p->used += t->width;
+								prog->put(t->op,t);
+								t->offset = prog->used;
+								prog->used += t->type->width;
 						}
+							nextuse.insert(make_pair(id1,i));
 							x->a1nextuse = -1;
-							addtomap(Id *id1);
+							addr_des.addtomap(id1);
 						}
 						else{
 							x->a1nextuse = it->second;
-							it->second = i;
-						}
-					}
-					if(Arg_id * argid2 = dynamic_cast<Arg_id*>(q->argid2)){
-						Id *id2 = argid2->id;
-						std::unordered_map<Id*,int>::iterator it = nextuse.find(id2);
-						if( It == nextuse.end()){
-							nextuse.insert(make_pair(id2,i));
-						if(Temp *t = dynamic_cast<Temp *>(id2))
-						{
-							p->put(t->op,t);
-							t->offset = p->used;
-							p->used += t->width;
-						}
-							x->a2nextuse = -1;
-							addtomap(Id *id2);
-						}
-						else{
-							x->a2nextuse = it->second;
 							it->second = i;
 						}
 					}
@@ -200,16 +203,17 @@ Bblockgenerator::backwardscan(){
 				{
 					Rel * r = ((Arg_rel*)q->arg1)->relation;
 					if(Id * id1 = dynamic_cast<Id*>(r->e1)){
-						std::unordered_map<Id*,int>::iterator it = nextuse.find(id);
-						if( It == nextuse.end()){
+						std::unordered_map<Id*,int>::iterator it = nextuse.find(id1);
+						if( it == nextuse.end()){
 							nextuse.insert(make_pair(id1,i));
 						if(Temp *t = dynamic_cast<Temp *>(id1))
 						{
-							p->put(t->op,t);
-							t->offset = p->used;
-							p->used += t->width;
+							prog->put(t->op,t);
+							t->offset = prog->used;
+							prog->used += t->type->width;
 						}
-							addtomap(Id *id1);
+							x->a1nextuse = -1;
+							addr_des.addtomap(id1);
 						}
 						else{
 							x->a1nextuse = it->second;
@@ -217,17 +221,17 @@ Bblockgenerator::backwardscan(){
 						}
 					}
 					if(Id * id2 = dynamic_cast<Id*>(r->e2)){
-						std::unordered_map<Id*,int>::iterator it = nextuse.find(id);
-						if( It == nextuse.end()){
+						std::unordered_map<Id*,int>::iterator it = nextuse.find(id2);
+						if( it == nextuse.end()){
 							nextuse.insert(make_pair(id2,i));
 						if(Temp *t = dynamic_cast<Temp *>(id2))
 						{
-							p->put(t->op,t);
-							t->offset = p->used;
-							p->used += t->width;
+							prog->put(t->op,t);
+							t->offset = prog->used;
+							prog->used += t->type->width;
 						}
 							x->a2nextuse = -1;
-							addtomap(Id *id2);
+							addr_des.addtomap(id2);
 						}
 						else{
 							x->a2nextuse = it->second;
@@ -238,19 +242,19 @@ Bblockgenerator::backwardscan(){
 				}
 			case I_WRITE:
 				{
-					if(Arg_id * argid = dynamic_cast<Arg_id*>(q->arg2)){
-						Id *id = argid->id;
-						std::unordered_map<Id*,int>::iterator it = nextuse.find(id);
-						if( It == nextuse.end()){
-							nextuse.insert(make_pair(id,i));
-						if(Temp *t = dynamic_cast<Temp *>(id))
-						{
-							p->put(t->op,t);
-							t->offset = p->used;
-							p->used += t->width;
-						}
+					if(Arg_id * argid2 = dynamic_cast<Arg_id*>(q->arg2)){
+						Id *id2 = argid2->id;
+						std::unordered_map<Id*,int>::iterator it = nextuse.find(id2);
+						if( it == nextuse.end()){
+							if(Temp *t = dynamic_cast<Temp *>(id2))
+							{
+								prog->put(t->op,t);
+								t->offset = prog->used;
+								prog->used += t->type->width;
+							}
+							nextuse.insert(make_pair(id2,i));
 							x->a2nextuse = -1;
-							addtomap(Id *id);
+							addr_des.addtomap(id2);
 						}
 						else{
 							x->a2nextuse = it->second;
@@ -259,44 +263,20 @@ Bblockgenerator::backwardscan(){
 					}
 					break;
 				}
-			case I_PARAM:
-				{
-/*					if(Argid * argid = dynamic_cast<Arg_id*>(q->arg1)){
-						Id *id = argid->id;
-						std::unordered_map<Id*,int>::iterator it = nextuse.find(id);
-						if( It == nextuse.end()){
-							nextuse.insert(make_pair(id,i));
-						if(Temp *t = dynamic_cast<Temp *>(id))
-						{
-							p->put(t->op,t);
-							t->offset = p->used;
-							p->used += t->width;
-						}
-							x->a1nextuse = -1;
-							addtomap(Id *id);
-						}
-						else{
-							x->a1nextuse = it->second;
-							it->second = i;
-						}
-					}*/
-					break;
-				}
 			case I_READ:
-			case I_CALLFUNC:
 				{
-					Id * id = dynamic_cast<Id*>((Arg_id*)(q->result)->id);
-					std::unordered_map<Id*,int>::iterator it = nextuse.find(id);
-					if( It == nextuse.end()){
-						if(Temp *t = dynamic_cast<Temp *>(id))
+					Id * result = dynamic_cast<Id*>(((Arg_id*)(q->result))->id);
+					std::unordered_map<Id*,int>::iterator it = nextuse.find(result);
+					if( it == nextuse.end()){
+						nextuse.insert(make_pair(result,-1));
+						if(Temp *t = dynamic_cast<Temp *>(result))
 						{
-							p->put(t->op,t);
-							t->offset = p->used;
-							p->used += t->width;
+							prog->put(t->op,t);
+							t->offset = prog->used;
+							prog->used += t->type->width;
 						}
 						x->resnextuse = -1;
-						nextuse.insert(make_pair(id,-1));
-						addtomap(Id *id);
+						addr_des.addtomap(result);
 					}
 					else{
 						x->resnextuse = it->second;
@@ -304,10 +284,69 @@ Bblockgenerator::backwardscan(){
 					}
 					break;
 				}
+			case I_CALLFUNC:
 			case I_CALLPROC:
 			case I_GOTO:
 			case I_END:
+			case I_INVOKE:
+			case I_PARAM:
+				;
 		}
 		q->info = x;
 	}
 }
+					/*Id * result = dynamic_cast<Id*>((Arg_id*)(q->result)->id);
+					std::unordered_map<Id*,int>::iterator it = nextuse.find(result);
+					if( it == nextuse.end()){
+						nextuse.insert(make_pair(result,-1));
+						if(Temp *t = dynamic_cast<Temp *>(id))
+						{
+							prog->put(t->op,t);
+							t->offset = prog->used;
+							prog->used += t->type->width;
+						}
+						x->resnextuse = -1;
+						addr_des.addtomap(result);
+					}
+					else{
+						x->resnextuse = it->second;
+						it->second = -1;
+					}*/
+					/*if(Arg_id * argid1 = dynamic_cast<Arg_id*>(q->arg1)){
+						Id *id1 = argid1->id;
+						std::unordered_map<Id*,int>::iterator it = nextuse.find(id1);
+						if( it == nextuse.end()){
+						if(Temp *t = dynamic_cast<Temp *>(id1))
+						{
+								prog->put(t->op,t);
+								t->offset = prog->used;
+								prog->used += t->type->width;
+						}
+							nextuse.insert(make_pair(id1,i));
+							x->a1nextuse = -1;
+							addr_des.addtomap(id1);
+						}
+						else{
+							x->a1nextuse = it->second;
+							it->second = i;
+						}
+					}*/
+					/*if(Arg_id * argid2 = dynamic_cast<Arg_id*>(q->arg2)){
+						Id *id2 = argid2->id;
+						std::unordered_map<Id*,int>::iterator it = nextuse.find(id2);
+						if( it == nextuse.end()){
+							if(Temp *t = dynamic_cast<Temp *>(id2))
+							{
+								prog->put(t->op,t);
+								t->offset = prog->used;
+								prog->used += t->type->width;
+							}
+							nextuse.insert(make_pair(id2,i));
+							x->a2nextuse = -1;
+							addr_des.addtomap(id2);
+						}
+						else{
+							x->a2nextuse = it->second;
+							it->second = i;
+						}
+					}*/

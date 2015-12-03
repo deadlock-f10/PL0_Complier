@@ -2,6 +2,8 @@
 #include <vector>
 #include "Regdef.h"
 #include <unordered_map>
+#include "PAF.h"
+#include "Optimizer.h"
 
 #ifndef CODEGEN_H
 #define CODEGEN_H
@@ -9,6 +11,7 @@ class Program;
 class Reg_Des;
 class Addr_Des;
 class AttachedInfo{      // -3 mean correponding variable don't exit or do not need a next-use information(func,proc,const,array) , -2 represent no next use. -1 represent live on exit.
+	public:
 	int a1nextuse;
 	int a2nextuse;
 	int resnextuse;
@@ -16,7 +19,7 @@ class AttachedInfo{      // -3 mean correponding variable don't exit or do not n
 class Codegenerator{
 	public:
 	Program *p;
-	Codegen(Program *prog){p = prog;}
+	Codegenerator(Program *prog){p = prog;}
 	void gen(Program *p);
 	void gen_block(Block *b);
 	void gen_seqpaf(Seq_PAF *seq);
@@ -25,27 +28,10 @@ class Codegenerator{
 	void print_seqpaf(Seq_PAF *seq);
 	//void basicblockgen();
 };
-class Bblockgenerator{
-	std::vector<std::string> instrlist;
-	Reg_Des reg_des;
-	Addr_Des addr_des;       // no array variable.
-	BasicBlock *block;
-	Program *prog;
-	void getReg(Quadruple *q);           // automatically assign register for each variable in x(modify register and address decripter,emit load code if necessary).      next-use information contained inside quadruple.
-	void loadvariable(Id *id , Register r); //load id to register r
-	void gen();
-	void print();
-	void backwardscan();              // first pass backward from the last instruction of this basicblock. collect next-use info and add variable to addr_des.
-	Bblockgenerator(BasicBlock *b,Program *p){block = b; prog = p;}
-	void emit(std::string s);
-	void chooseInstr(Quadruple *q);       // consider  constant-constant rel.
-	void findstore(Arg_id *argid);
-	void findload(Arg_id *argid,Reg_Descripter* backup);
-	void loadarrayaddr(Arg_id* argid);
-	void loadaddress(Arg_id* argid);
-	void loadvariable(Arg_id* argid, Register r);
-	void storevariable(Arg_id* argid, Register r);
-}
+class Reg_Des;
+class Addr_Des;
+class Addr_Descripter;
+class Reg_Descripter;
 class Reg_Descripter{
 	public:
 	Register r;	
@@ -65,11 +51,11 @@ class Addr_Descripter{
 	bool valueonstack = true;
 	Reg_Descripter* reg;
 //	int temponstack;      // offset with regard to FP
-	Addr_Descripter(Id *i){if(Temp * t = dynamic_cast<Temp*>(i)) valueonstack = false;id = i;}
+	Addr_Descripter(Id *i){id = i;}
 	void assignReg(Reg_Descripter *r) { reg = r;}
-	Reg_Descripter* getReg(){return reg;};
-	void deleteReg(){reg.deleteId();reg = nullptr};
-	void invalidatestack(){valueonstack == false;}
+	Reg_Descripter* getReg(){return reg;}
+	void deleteReg(){reg->deleteId();reg = nullptr;}
+	void invalidatestack(){valueonstack = false;}
 	//void clear();
 };
 class Reg_Des{
@@ -80,8 +66,31 @@ class Reg_Des{
 	void availReg(Reg_Descripter *r);
 };
 class Addr_Des{
+	public:
 	std::unordered_map<Id*,Addr_Descripter*> map;
 	void addtomap(Id *i);            // temp 
 	Addr_Descripter * find(Id *i);
+};
+class Bblockgenerator{
+	public:
+	std::vector<std::string> instrlist;
+	Reg_Des reg_des;
+	Addr_Des addr_des;       // no array variable.
+	BasicBlock *block;
+	Program *prog;
+	void getReg(Quadruple *q);           // automatically assign register for each variable in x(modify register and address decripter,emit load code if necessary).      next-use information contained inside quadruple.
+	void loadvariable(Id *id , Register r); //load id to register r
+	void gen();
+	void print();
+	void backwardscan();              // first pass backward from the last instruction of this basicblock. collect next-use info and add variable to addr_des.
+	Bblockgenerator(BasicBlock *b,Program *p){block = b; prog = p;}
+	void emit(std::string s);
+	void chooseInstr(Quadruple *q);       // consider  constant-constant rel.
+	void findstore(Arg_id *argid);
+	void findload(Arg_id *argid,Reg_Descripter* backup);
+	void loadarrayaddr(Arg_id* argid);
+	void loadaddress(Arg_id* argid);
+	void loadvariable(Arg_id* argid, Register r);
+	void storevariable(Arg_id* argid, Register r);
 };
 #endif

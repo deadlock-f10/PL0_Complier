@@ -2,7 +2,7 @@ label	Instr		arg1				arg2			 result		meaning
 	1	read										     id			read a integer(char) into id
 		li $v0 5   read int     /        li $v0 12     read char
 		syscall
-		add $v0 id.reg
+		add id.reg $zero $v0
 
 	2	write		string				[id,integer]				write a string or id or both
 		.data 
@@ -36,6 +36,7 @@ label	Instr		arg1				arg2			 result		meaning
 
 	4	iffalse		rel									 L			if relation doesnt' holds then goto label L
 
+	5	invoke	    program				integer				
 	5	param		(id,integer)									parameter id(for future use)
 		la $k1 integer.value
 		sw $k1 ($sp)
@@ -57,13 +58,13 @@ label	Instr		arg1				arg2			 result		meaning
 
 	9	copyind		idx					(idi,integer)	 idy	    y = x[i]
 		//lw $k1 x.offset(%fp)             |      不一定，x可能不在本层．
-		add $k1 $k1 i.reg | integer.value
+		sub $k1 $k1 i.reg | integer.value 
 		lw y.reg ($k1)
 		
 
 	10	indcopy		(idy,integer)		(idi,integer)	 idx		x[i] = y
 		//lw $k1 x.offset(%fp)             |      不一定，x可能不在本层．                getReg应该负责把x的基址加载到k1中．这样我们就不用判断了.
-		add $k1 $k1 i.reg | integer.value
+		sub $k1 $k1 i.reg | integer.value
 		sw y.reg ($k1)        |        li $t8 yint.value    sw $t8 ($k1)
 
 	11	op			(idy,integer)		(idz,integer)	 idx		x = y op z (op can be +,-,*,/)
