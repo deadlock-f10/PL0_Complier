@@ -52,11 +52,11 @@ class Program :public Node{
 		int getfsize(){return framesize;}*/
 	protected :
 		int framesize;
-		std::vector<std::string> *labellist;
+		std::vector<std::string> *labellist = nullptr;
 };
 class Proc : public Program{
 	public :
-		std::vector<Id*> paralist;
+		std::vector<Id*> paralist = nullptr;
 		int para_used = 0;                // count it !!!!
 		int para_offset;
 		int display_offset;
@@ -71,7 +71,7 @@ class Func : public Program{
 		int para_used = 0;
 		int para_offset;
 		int display_offset;
-		std::vector<Id*> paralist;
+		std::vector<Id*> paralist = nullptr;
 		//label l;                     // L label:
 		Type* type;
 //		std::string symtype = "function";
@@ -90,8 +90,8 @@ class Seq_PAF : public Program{
 
 class Block {
 	public :
-	Seq_PAF * seq_paf;
-	Seq * seq_stmt;
+	Seq_PAF * seq_paf = nullptr;
+	Seq * seq_stmt = nullptr;
 	void print();
 	void print_block();
 	void gen(Program *p);

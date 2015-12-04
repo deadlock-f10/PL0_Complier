@@ -18,6 +18,6 @@ all: Makefile $(OBJS)
 test: $(OBJS)
 	$(CC) $(CFLAGS) $(LEXER_TEST) $(OBJS) $(TEST_O)  -o ../pl0-compiler
 clean:
-	rm -f $(OBJS) *~ *.o 
+	rm -f $(OBJS) *~ *.o  ../pl0-compiler
 depend: $(LEXER_C)
 	makedepend $(LEXER_H) $^

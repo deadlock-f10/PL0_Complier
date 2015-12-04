@@ -37,7 +37,7 @@ class Reg_Descripter;
 class Reg_Descripter{
 	public:
 	Register r;
-	Addr_Descripter* addr;
+	Addr_Descripter* addr = nullptr;
 	Reg_Descripter(Register reg) {r = reg;}
 	void assignId(Addr_Descripter *x) { addr = x;}
 	void deleteId(){addr = nullptr;}
@@ -51,7 +51,7 @@ class Addr_Descripter{
 	Id * id;
 	//std::vector<Reg_Descripter*> list;
 	bool valueonstack = true;
-	Reg_Descripter* reg;
+	Reg_Descripter* reg = nullptr;
 //	int temponstack;      // offset with regard to FP
 	Addr_Descripter(Id *i){id = i;}
 	void assignReg(Reg_Descripter *r) { reg = r;}
@@ -78,7 +78,7 @@ class Bblockgenerator{
 	std::vector<std::string> instrlist;
 	Reg_Des reg_des;
 	Addr_Des addr_des;       // no array variable.
-	BasicBlock *block;
+	BasicBlock *block = nullptr;
 	Program *prog;
 	void getReg(Quadruple *q);           // automatically assign register for each variable in x(modify register and address decripter,emit load code if necessary).      next-use information contained inside quadruple.
 	void loadvariable(Id *id , Register r); //load id to register r
