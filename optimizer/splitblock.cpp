@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 
-
+extern ofstream targetcode;
 void Optimizer::splitseq_paf(Seq_PAF * s){
 	if(s->paf != Program::Null)
 		splitblock(s->paf);
@@ -14,6 +14,10 @@ void Optimizer::splitseq_paf(Seq_PAF * s){
 }
 
 int BasicBlock::num = 0;
+void BasicBlock::print(){
+	for(std::vector<std::string>::iterator it = list.begin(); it != list.end();it++)
+		targetcode<<*it<<endl;
+}
 
 void Optimizer::changelabel(Program *p,std::map<std::string,std::string> *relabel){
 	for(unsigned int i = 1 ; i < p->blocklist.size(); i++){

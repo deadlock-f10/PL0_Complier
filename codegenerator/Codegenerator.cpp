@@ -38,8 +38,9 @@ void Codegenerator::print(Program *p){
 		targetcode<<"sw $ra 4($fp)"<<endl;
 	targetcode<<"sub $sp $sp "<<p->used<<endl;
 	for(unsigned int i = 1 ; i < p->blocklist.size(); i++){
-		Bblockgenerator * bb = new Bblockgenerator(p->blocklist[i],p);
-		bb->print();
+		//Bblockgenerator * bb = new Bblockgenerator(p->blocklist[i],p);
+		//bb->print();
+		p->blocklist[i]->print();
 	}
 }
 void Codegenerator::print_block(Block *b){

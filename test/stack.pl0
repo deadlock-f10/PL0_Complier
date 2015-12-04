@@ -4,7 +4,7 @@ var
 	MaxLen : integer;
 	readnum : integer;
 	i : integer;
-	temp : char;
+	temp : integer; 
 function IsEmpty : integer;
 begin
 	if base = 0 then
@@ -58,7 +58,7 @@ end;
 begin
 	read (MaxLen);
 	MakeEmpty;
-	for i := 1 to 0 do              {*infinite loop*}
+	for i := 1 to 100 do              {*infinite loop*}
 	begin
 		read (temp);
 		if temp = 1 then begin
@@ -68,7 +68,7 @@ begin
 		else if temp = 2 then
 			Pop
 		else if temp = 0 then       {*break*}
-			i := 0
+			i := 101 
 	end;
 	PopN(base);
 end.

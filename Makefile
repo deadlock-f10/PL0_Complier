@@ -2,8 +2,8 @@ all:
 	make -C ./symboltable
 	make -C ./inter
 	make -C ./lexer test
-	make -C ./parser test
-	make -C ./optimizer test
+	make -C ./parser 
+	make -C ./optimizer 
 	make -C codegenerator test
 clean:
 	make -C lexer clean

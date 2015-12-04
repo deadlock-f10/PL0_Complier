@@ -1,6 +1,7 @@
 #include "Quadruple.h"
 #include <map>
 #include <vector>
+#include <string>
 #ifndef OPTIMIZERR_H
 #define	OPTIMIZERR_H
 class Program;
@@ -11,8 +12,10 @@ class BasicBlock{
 	public:
 		QuadList instrlist;
 	//int size;
+		std::vector<std::string> list;
 		static int num;
 		std::string label;
+		void print();
 		BasicBlock(QuadList *l,int begin,int end){
 			if(begin > end){
 				label = "";

@@ -5,7 +5,6 @@
 #include "../include/Codegen.h"
 #include <fstream>
 
-std::ofstream targetcode("/home/f10/pl0-compiler/my_compiler/target.asm");
 int main(){
 	Lexer* lex = new Lexer("test/stack.pl0");
 	Parser p(lex);

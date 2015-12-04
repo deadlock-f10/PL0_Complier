@@ -11,8 +11,7 @@ Reg_Descripter* Reg_Descripter::k0 = new Reg_Descripter(R_K0);
 
 void Bblockgenerator::emit(std::string s){
 	//targetcode<<s.length()<<endl;
-	std::string x(s);
-    instrlist.push_back(x);
+    block->list.push_back(s);
 }
 
 void Bblockgenerator::print(){
@@ -99,12 +98,12 @@ void Bblockgenerator::getReg(Quadruple *q){
 		case I_DIV:
 		case I_MINUS:
 			{
+				Arg_id * result = dynamic_cast<Arg_id*>(q->result);                //  findstore for result first so that we can deal with i = i + 1
+					findstore(result);
 				if(Arg_id * id1 = dynamic_cast<Arg_id*>(q->arg1))
 					 findload(id1,Reg_Descripter::t8);
 				if(Arg_id * id2 = dynamic_cast<Arg_id*>(q->arg2))
 					 findload(id2,Reg_Descripter::t9);
-				Arg_id * result = dynamic_cast<Arg_id*>(q->result);
-					findstore(result);
 				break;
 			}
 	}
@@ -148,11 +147,12 @@ void Bblockgenerator::findstore(Arg_id * argid){    //find register to store
 void Bblockgenerator::loadarrayaddr(Arg_id * argid){//store addr in k1
 	Id * id = argid->id;
 		if(id->level == prog->level)
-			emit("lw "+regto_string[R_K1]+patch::to_string(-(id->offset))+"($fp)");
+			emit("lw "+regto_string[R_K1]+" "+ patch::to_string(-(id->offset))+"($fp)");
 		else{
-			int m = 4 * (prog->level + 3 - id->level);
+			int m = -(4 * (prog->level + 3 - id->level));
 			emit("lw "+regto_string[R_K1]+" "+patch::to_string(-m)+"("+regto_string[R_FP]+")");
-			emit("lw "+regto_string[R_K1]+patch::to_string(-(id->offset))+"("+regto_string[R_K1]+")");
+			//emit("lw "+regto_string[R_K1]+" "+patch::to_string(-(id->offset))+"("+regto_string[R_K1]+")");
+			emit("sub $k1 $k1 "+patch::to_string(-(id->offset)));
 		}
 }
 void Bblockgenerator::loadvariable(Arg_id * argid,Register r){       // use k1
@@ -160,17 +160,17 @@ void Bblockgenerator::loadvariable(Arg_id * argid,Register r){       // use k1
 	Id * id = argid->id;
 	Register reg = R_FP;
 	if(id->level != prog->level){
-			int m = 4 * (prog->level + 3 - id->level);
+			int m = -(4 * (prog->level + 3 - id->level));
 			emit("lw "+regto_string[R_K1]+" "+patch::to_string(-m)+"("+regto_string[R_FP]+")");
 			//emit("lw "+regto_string[r]+" "+patch::to_string(id->offset)+"("+regto_string[R_K1]+")");
 			reg = R_K1;
 	}
-	if(id->offset > 0)
-		emit("lw "+regto_string[r]+patch::to_string(-(id->offset))+"("+regto_string[reg]+")");
+	if(id->offset >= 0)
+		emit("lw "+regto_string[r]+" "+patch::to_string(-(id->offset))+"("+regto_string[reg]+")");
 	else{
 		if(Proc *proc = dynamic_cast<Proc*>(prog)){
 			if(id->isRef == false)
-				emit("lw "+regto_string[r]+patch::to_string(-(proc->para_offset+id->offset))+"("+regto_string[reg]+")");
+				emit("lw "+regto_string[r]+" "+ patch::to_string(-(proc->para_offset+id->offset))+"("+regto_string[reg]+")");
 			else{
 				emit("lw $k1 "+patch::to_string(-(proc->para_offset+id->offset))+"("+regto_string[reg]+")");
 				emit("lw "+regto_string[r]+" ($k1)");
@@ -178,7 +178,7 @@ void Bblockgenerator::loadvariable(Arg_id * argid,Register r){       // use k1
 		}
 		else if(Func *func = dynamic_cast<Func*>(prog)){
 			if(id->isRef == false)
-				emit("lw "+regto_string[r]+patch::to_string(-(func->para_offset+id->offset))+"("+regto_string[reg]+")");
+				emit("lw "+regto_string[r]+ " "+patch::to_string(-(func->para_offset+id->offset))+"("+regto_string[reg]+")");
 			else{
 				emit("lw $k1 "+patch::to_string(-(func->para_offset+id->offset))+"("+regto_string[reg]+")");
 				emit("lw "+regto_string[r]+" ($k1)");
@@ -191,12 +191,12 @@ void Bblockgenerator::loadaddress(Arg_id * argid){//store addr in k1
 	Id * id = argid->id;
 	Register reg = R_FP;
 	if(id->level != prog->level){
-			int m = 4 * (prog->level + 3 - id->level);
+			int m = -(4 * (prog->level + 3 - id->level));
 			emit("lw "+regto_string[R_K1]+" "+patch::to_string(-m)+"("+regto_string[R_FP]+")");
 			//emit("lw "+regto_string[r]+" "+patch::to_string(id->offset)+"("+regto_string[R_K1]+")");
 			reg = R_K1;
 	}
-	if(id->offset > 0)
+	if(id->offset >= 0)
 		emit("add "+regto_string[reg]+" "+regto_string[reg]+" "+patch::to_string(-(id->offset)));
 	else{
 		if(Proc *proc = dynamic_cast<Proc*>(prog)){
@@ -223,11 +223,11 @@ void Bblockgenerator::storevariable(Arg_id * argid,Register r){//use  k1
 			reg = R_K1;
 	}
 	if(id->offset > 0)
-		emit("sw "+regto_string[r]+patch::to_string(-(id->offset))+"("+regto_string[reg]+")");
+		emit("sw "+regto_string[r]+" " +patch::to_string(-(id->offset))+"("+regto_string[reg]+")");
 	else{
 		if(Proc *proc = dynamic_cast<Proc*>(prog)){
 			if(id->isRef == false)
-				emit("sw "+regto_string[r]+patch::to_string(-(proc->para_offset+id->offset))+"("+regto_string[reg]+")");
+				emit("sw "+regto_string[r]+ " " +patch::to_string(-(proc->para_offset+id->offset))+"("+regto_string[reg]+")");
 			else{
 				emit("lw $k1 "+patch::to_string(-(proc->para_offset+id->offset))+"("+regto_string[reg]+")");
 				emit("sw "+regto_string[r]+" ($k1)");
@@ -235,7 +235,7 @@ void Bblockgenerator::storevariable(Arg_id * argid,Register r){//use  k1
 		}
 		else if(Func *func = dynamic_cast<Func*>(prog)){
 			if(id->isRef == false)
-				emit("sw "+regto_string[r]+patch::to_string(-(func->para_offset+id->offset))+"("+regto_string[reg]+")");
+				emit("sw "+regto_string[r]+ " "+patch::to_string(-(func->para_offset+id->offset))+"("+regto_string[reg]+")");
 			else{
 				emit("lw $k1 "+patch::to_string(-(func->para_offset+id->offset))+"("+regto_string[reg]+")");
 				emit("sw "+regto_string[r]+" ($k1)");

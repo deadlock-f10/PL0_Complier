@@ -44,8 +44,8 @@ void Bblockgenerator::chooseInstr(Quadruple *q){
 				if(Arg_id * arg1 = dynamic_cast<Arg_id*>(q->arg1)){ // if it is var ,  pass address.
 					//Id * id1 = arg1->id;
 					//Addr_Descripter * addr1 = addr_des.find(id1);
-					if(Arg_func *func = dynamic_cast<Arg_func*>(q->arg1)){
-						Id * func_para = func->func->paralist[params-1];
+					if(Func *func = dynamic_cast<Func*>(calledProg)){
+						Id * func_para = func->paralist[params-1];
 						if(func_para->isRef == false ){
 							//addr1->assignReg(Reg_Descripter::t8);
 							loadvariable(arg1,R_T8);
@@ -56,8 +56,8 @@ void Bblockgenerator::chooseInstr(Quadruple *q){
 							emit("sw $k1 ($gp)");
 						}
 					}
-					else if(Arg_proc *proc = dynamic_cast<Arg_proc*>(q->arg1)){
-						Id * proc_para = proc->proc->paralist[params-1];
+					else if(Proc *proc = dynamic_cast<Proc*>(calledProg)){
+						Id * proc_para = proc->paralist[params-1];
 						if(proc_para->isRef == false ){
 							//addr1->assignReg(Reg_Descripter::t8);
 							loadvariable(arg1,R_T8);
@@ -125,10 +125,12 @@ void Bblockgenerator::chooseInstr(Quadruple *q){
 				emit("jal "+calledProg->beginlabel);
 		//		emit("sw $ra 4($fp)");
 				if(q->op == I_CALLFUNC){
-					emit("lw $k1 $(sp)");
+					emit("lw $k1 ($sp)");
 					Arg_id * result = dynamic_cast<Arg_id*>(q->result);
 					storevariable(result,R_K1);
 				}
+				calledProg = nullptr;
+				params = 0;
 				break;
 			}
 		case I_COPYIND:
@@ -336,7 +338,7 @@ void Bblockgenerator::chooseInstr(Quadruple *q){
 				//Arg_id *result = dynamic_cast<Arg_id*>(q->result);
 				Addr_Descripter *addr = addr_des.find(id);
 				Reg_Descripter * reg = addr->getReg();
-				emit("add "+regto_string[reg->r]+"$v0 $zero");
+				emit("add "+regto_string[reg->r]+" $v0 $zero");
 				storevariable(result,reg->r);
 				if(x->resnextuse == -1 || reg ==Reg_Descripter::k0){
 					addr->deleteReg();
@@ -361,10 +363,10 @@ void Bblockgenerator::chooseInstr(Quadruple *q){
 						Addr_Descripter * addr2 = addr_des.find(id2);
 						Reg_Descripter * reg2 = addr2->getReg();
 						if(id2->type == Type::Int)
-							emit("li $k0 "+patch::to_string(1));
+							emit("li $v0 "+patch::to_string(1));
 						else if(id2->type == Type::Char)
-							emit("li $k0 "+patch::to_string(11));
-						emit("add $a0 $zero"+regto_string[reg2->r]);
+							emit("li $v0 "+patch::to_string(11));
+						emit("add $a0 $zero "+regto_string[reg2->r]);
 						emit("syscall");
 						if(x->a2nextuse == -1 || reg2 == Reg_Descripter::t9){
 							addr2->deleteReg();

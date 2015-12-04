@@ -2,6 +2,7 @@
 #include "../include/Type.h"
 #include <iostream>
 
+std::ofstream targetcode("/home/f10/pl0-compiler/my_compiler/target.asm");
 Word *  Word::assign = new Word(":=",T_ASSIGN);
 Word	*Word::Plus = new Word("+",T_PLUS);
 Word	*Word::Minus = new Word("-",T_MINUS);
