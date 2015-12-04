@@ -49,7 +49,7 @@ end;
 procedure PopN(popNum : integer);
 begin
 	write (Top);
-	if popNum >= 1 then
+	if popNum > 1 then
 		begin
 		Pop;
 		PopN(popNum - 1);
@@ -70,5 +70,5 @@ begin
 		else if temp = 0 then       {*break*}
 			i := 101 
 	end;
-	PopN(base+1);
+	PopN(base);
 end.

@@ -86,9 +86,9 @@ void Bblockgenerator::chooseInstr(Quadruple *q){
 			{
 				int displayoffset1=0;
 				if(Func* m = dynamic_cast<Func*>(prog))
-					displayoffset1 = -(m->para_offset);
+					displayoffset1 = -(m->display_offset);
 				if(Proc* n = dynamic_cast<Proc*>(prog))
-					displayoffset1 = -(n->para_offset);
+					displayoffset1 = -(n->display_offset);
 				if(prog->level != 1){
 					if(calledProg->level == prog->level + 1){
 						for(int i = 1 ; i < prog->level ; i++){
