@@ -353,7 +353,7 @@ void Bblockgenerator::chooseInstr(Quadruple *q){
 					emit(".data");
 					emit(string->name+" : .asciiz \""+string->str+"\"");
 					emit(".text");
-					emit("lw $v0 4");
+					emit("li $v0 4");
 					emit("la $a0 "+string->name);
 					emit("syscall");
 				}

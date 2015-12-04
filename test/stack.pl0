@@ -70,5 +70,5 @@ begin
 		else if temp = 0 then       {*break*}
 			i := 101 
 	end;
-	PopN(base);
+	PopN(base+1);
 end.
