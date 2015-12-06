@@ -4,6 +4,7 @@
 #include <unordered_set>
 #include <queue>
 #include <iostream>
+#include "../include/Exception.h"
 
 //typedef std::unordered_set<Tag> Tag_Set;
 
@@ -12,8 +13,8 @@ void Parser::match(Tag t){
 	if(look->tag == t)
 		move();
 	else
-		//cout<<"unmatched "<<t<<endl;                  // throw exception
-		throw TokenMatchException(look,t,lex->line);
+		//cout<<"unmatched "<<t<<endl;                  // throw new exception
+		throw new TokenMatchException(look,t,lex->line);
 }
 
 class Parser::labelcounter{
@@ -41,7 +42,7 @@ Program* Parser::program(){
 	top = p;
 	p->block = block();
 	if(look->tag != T_DOT)
-		throw TokenMatchException(look,T_DOT,lex->line);                 // throw exception
+		throw new TokenMatchException(look,T_DOT,lex->line);                 // throw exception
 	//label begin = p->newlabel();
 	//label after = p->newlabel();        //suppose type checking , name lookup have already done in parse phase
 	//p->emitlabel(begin);
@@ -63,21 +64,22 @@ Block* Parser::block(){
 Stmt* Parser::compoundstmt(){
 	try{
 		match(T_BEGIN);
-E:		Seq * c = new Seq(statement(),seq_statement()) ;
-F:      match(T_END);
+		Seq * c = new Seq(statement(),seq_statement()) ;
+        match(T_END);
 		return c;
 	}
-	catch(const Exception *e){
-		std::cout<<e.print()<<endl;
+	catch(Exception *e){
+		std::cout<<e->print()<<endl;
 		if(++error_count >= max_errors)
 			throw new ToomucherrorException();
-		while(look->tag != T_ELSE && look->tag != T_WHILE && look->tag != T_SEMICOLON && look->tag != T_END) 
+		while(look->tag != T_ELSE && look->tag != T_WHILE && look->tag != T_SEMICOLON && look->tag != T_END && look->tag != T_DOT) 
 			move();
-		if(look->tag == T_END)
+/*		if(look->tag == T_END)
 			goto F;
 		else
-			goto E;
+			goto E;*/
 	}
+	return Stmt::Null;
 }
 
 Stmt* Parser::statement(){
@@ -112,7 +114,7 @@ Stmt* Parser::statement(){
 			;
 	}
 	if(look->tag != T_ELSE && look->tag != T_WHILE && look->tag != T_SEMICOLON && look->tag != T_END)
-		throw InappropriateException(look, lex->line);          // throw exception
+		throw new InappropriateException(look, lex->line);          // throw exception
 	// look in follow .
 	return Stmt::Null;
 }
@@ -122,7 +124,7 @@ Stmt* Parser::inputstatement(){
 	match(T_OPENPARENTHESIS);
 	std::vector<Id*> * list = new std::vector<Id*>();
 	if(look->tag != T_IDENT)
-		throw TokenMatchException(look,T_IDENT,lex->line);         // throw exception
+		throw new TokenMatchException(look,T_IDENT,lex->line);         // throw exception
 	Word * tok = (Word*)look;
 	move();
 	Node * nod = top->get(tok);
@@ -133,7 +135,7 @@ Stmt* Parser::inputstatement(){
 	while(look->tag != T_CLOSEPARENTHESIS){
 		match(T_COMMA);
 		if(look->tag != T_IDENT)
-			throw TokenMatchException(look,T_IDENT,lex->line);         // throw exception
+			throw new TokenMatchException(look,T_IDENT,lex->line);         // throw exception
 		tok = (Word *)look;
 		move();
 		Node * nod = top->get(tok);
@@ -154,7 +156,7 @@ Stmt* Parser::outputstatement(){
 	match(T_OPENPARENTHESIS);
 	if(look->tag == T_STRING){
 		if(look->tag != T_STRING)
-			throw TokenMatchException(look,T_STRING,lex->line);              // throw exception
+			throw new TokenMatchException(look,T_STRING,lex->line);              // throw exception
 		s = (STring *) look;
 		move();
 		if(look->tag == T_CLOSEPARENTHESIS){
@@ -167,11 +169,11 @@ Stmt* Parser::outputstatement(){
 			return new Output(e,s);
 		}
 		else{
-			throw InappropriateException(look,lex->line);           // throw exception
+			throw new InappropriateException(look,lex->line);           // throw exception
 		}
 	}
 	if(look->tag != T_PLUS && look->tag != T_MINUS && look->tag != T_IDENT && look->tag != T_NUMBER && look->tag != T_NUMBER && T_OPENPARENTHESIS)
-		throw InappropriateException(look,lex->line);           // throw exception
+		throw new InappropriateException(look,lex->line);           // throw exception
 	e = expr();
 	match(T_CLOSEPARENTHESIS);
 	return new Output(e,nullptr);
@@ -179,7 +181,7 @@ Stmt* Parser::outputstatement(){
 
 Stmt* Parser::assignstatement(){    // incomplete
 	if(look->tag != T_IDENT)
-		throw TokenMatchException(look,T_IDENT,lex->line);         // throw exception
+		throw new TokenMatchException(look,T_IDENT,lex->line);         // throw exception
 	Word * dest = (Word*)look;
 	move();
 	if(Id *id  = dynamic_cast<Id *>(top->get(dest))){
@@ -196,7 +198,7 @@ Stmt* Parser::assignstatement(){    // incomplete
 			return new AssignElem(ac,expr());
 		}
 		else
-			throw InappropriateException(look,lex->line);           // throw exception
+			throw new InappropriateException(look,lex->line);           // throw exception
 	}
 	else{
 
@@ -221,7 +223,7 @@ Stmt* Parser::ifstatement(){
 Stmt* Parser::forstatement(){        // incomlete . unchecked identifier information
 	match(T_FOR);
 	if(look->tag != T_IDENT)
-		throw TokenMatchException(look,T_IDENT,lex->line);         // throw exception
+		throw new TokenMatchException(look,T_IDENT,lex->line);         // throw exception
 	Word *tok = (Word*)look;
 	move();
 	Node * nod = top->get(tok);
@@ -234,7 +236,7 @@ Stmt* Parser::forstatement(){        // incomlete . unchecked identifier informa
 		else if(look->tag == T_DOWNTO)
 			is_to = false;
 		else{
-			throw InappropriateException(look,lex->line);           // throw exception
+			throw new InappropriateException(look,lex->line);           // throw exception
 		}
 		move();
 		Expr* e2 = expr();
@@ -256,7 +258,7 @@ Stmt* Parser::dowhilestatement(){
 
 Stmt* Parser::callprocstatement(){
 	if(look->tag != T_IDENT)
-		throw TokenMatchException(look,T_IDENT,lex->line);         // throw exception
+		throw new TokenMatchException(look,T_IDENT,lex->line);         // throw exception
 	Word * w = (Word*)look;
 	move();
 	Node * nod = top->get(w);

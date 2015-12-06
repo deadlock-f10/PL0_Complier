@@ -1,4 +1,5 @@
 #include "../include/Parser.h"
+#include "../include/Exception.h"
 #include <unordered_set>
 #include <vector>
 #include <fstream>
@@ -6,7 +7,7 @@ Program* Parser::seq_paf(){
 	//First = {T_PROCEDURE,T_FUNCTION,\epsilon};
 	//static Tag_Set Follow = {T_BEGIN};
 	try{
-E:		switch (look->tag){
+		switch (look->tag){
 		 	case T_PROCEDURE:{
                  Proc * p = proc_decl();
 		 		return new Seq_PAF(p,seq_paf());
@@ -19,25 +20,25 @@ E:		switch (look->tag){
 		 		;
 		}
 		if(look->tag != T_BEGIN)
-			throw TokenMatchException(look,T_BEGIN,lex->line);          // throw exception
-		return Program::Null;// look in follow .
+			throw new TokenMatchException(look,T_BEGIN,lex->line);          // throw exception
 	}
-	catch(const Exception &e){
-		std::cout<<e.print()<<endl;
+	catch( Exception *e){
+		std::cout<<e->print()<<endl;
 		if(++error_count >= max_errors)
 			throw new ToomucherrorException();
-		while(look->tag != T_SEMICOLON && look->tag != T_PROCEDURE && look->tag != T_FUNCTION && look->tag != T_BEGIN) 
+		while(look->tag != T_PROCEDURE && look->tag != T_FUNCTION && look->tag != T_BEGIN) 
 			move();
-		if(look->tag == T_SEMICOLON)
-			goto E;
+/*		if(look->tag == T_SEMICOLON)
+			goto E;*/
 	}
+	return Program::Null;// look in follow .
 }
 
 Proc* Parser::proc_decl(){
 	match(T_PROCEDURE);
 	Program * save = top;
 	if(look->tag != T_IDENT)
-		throw TokenMatchException(look,T_IDENT,lex->line);          // throw exception
+		throw new TokenMatchException(look,T_IDENT,lex->line);          // throw new exception
 	Word * word = (Word *)look;
 	move();
 	Proc * p = new Proc(top,word,top->level + 1);
@@ -58,7 +59,7 @@ Func* Parser::func_decl(){
 	match(T_FUNCTION);
 	Program * save = top;
 	if(look->tag != T_IDENT)
-		throw TokenMatchException(look,T_IDENT,lex->line);          // throw exception
+		throw new TokenMatchException(look,T_IDENT,lex->line);          // throw exception
 	Word * word = (Word *)look;
 	move();
 	Func * f = new Func(top,word,top->level + 1);
@@ -67,7 +68,7 @@ Func* Parser::func_decl(){
 	optional_para();
 	match(T_COLON);
 	if(look->tag != T_INT && look->tag != T_CHARACTER)
-		throw InappropriateException(look,lex->line);             // throw exception . Cause function type must be basic type
+		throw new InappropriateException(look,lex->line);             // throw exception . Cause function type must be basic type
 	f->type = type();
 	top->put(word,new Id(word,f->type,f->used,top->level));
 	top->used += f->type->width;
@@ -90,8 +91,9 @@ void Parser::optional_para(){
 		default:
 			;
 	}
-	if(look->tag != T_COLON && look->tag != T_CONST && look->tag != T_VAR && look->tag != T_PROCEDURE && look->tag != T_FUNCTION && look->tag !=T_BEGIN)
-		throw InappropriateException(look,lex->line);          // throw exception
+//	if(look->tag != T_COLON && look->tag != T_CONST && look->tag != T_VAR && look->tag != T_PROCEDURE && look->tag != T_FUNCTION && look->tag !=T_BEGIN)
+	if(look->tag != T_COLON && look->tag !=T_SEMICOLON)
+		throw new InappropriateException(look,lex->line);          // throw exception
 	// look in follow .
 }
 
@@ -109,21 +111,21 @@ void Parser::form_para_seg(){
 		case T_IDENT:{
 			std::vector<Word *> identifier_list;
 			if(look->tag != T_IDENT)
-				throw TokenMatchException(look,T_IDENT,lex->line);         // throw exception
+				throw new TokenMatchException(look,T_IDENT,lex->line);         // throw exception
 			Word * tok = (Word *)look;
 			move();
 			identifier_list.push_back(tok);
 			while(look->tag != T_COLON){
 				match(T_COMMA);
 				if(look->tag != T_IDENT)
-					throw TokenMatchException(look,T_IDENT,lex->line);         // throw exception
+					throw new TokenMatchException(look,T_IDENT,lex->line);         // throw exception
 				tok = (Word *)look;
 				move();
 				identifier_list.push_back(tok);
 			}
 			move();
 			if(look->tag != T_INT && look->tag != T_CHAR)
-				throw InappropriateException(look,lex->line);                 // throw exception , cause para must be of basic type;
+				throw new InappropriateException(look,lex->line);                 // throw exception , cause para must be of basic type;
 			Type * t = type();
 			Id * id;
 			if(Proc * p = dynamic_cast<Proc*>(top)){
@@ -167,6 +169,6 @@ void Parser::seq_formpara_seg(){
 			;
 	}
 	if(look->tag != T_CLOSEPARENTHESIS)
-		throw TokenMatchException(look,T_CLOSEPARENTHESIS,lex->line);          // throw exception
+		throw new TokenMatchException(look,T_CLOSEPARENTHESIS,lex->line);          // throw exception
 	// look in follow .
 }

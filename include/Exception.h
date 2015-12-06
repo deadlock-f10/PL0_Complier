@@ -6,10 +6,10 @@
 
 class Exception{
 	public:
-	virtual std::string print(){;}
+	virtual std::string print(){return "";}
 };
 
-class TypeMatchExcetion : public Exception{
+class TypeMatchException : public Exception{
 	public:
 		int line;
 	Node * exitedtype;
@@ -22,7 +22,7 @@ class TokenMatchException : public Exception{
 	public:
 		int line;
 	Token * exitedtoken;
-	Tag * expectedtoken;
+	Tag expectedtoken;
 	TokenMatchException(Token *a , Tag b, int l){exitedtoken = a ; expectedtoken = b;line = l;}
 	std::string print();
 };

@@ -15,26 +15,26 @@ void Parser::decl_constants(){
 			;
 	}
 	if(look->tag != T_VAR && look->tag != T_PROCEDURE && look->tag != T_FUNCTION && look->tag != T_BEGIN)
-		throw InappropriateException(look,lex->line);          // throw exception
+		throw new InappropriateException(look,lex->line);          // throw exception
 }
 
 void Parser::constants(){
 	try{
 		match(T_CONST);
-E:		constDeclaration();
+		constDeclaration();
 		seq_constDeclaration();
-F:		match(T_SEMICOLON);
+		match(T_SEMICOLON);
 	}
-	catch (const Exception & e){
-		std::cout<<e.print()<<endl;
+	catch (Exception * e){
+		std::cout<<e->print()<<endl;
 		if(++error_count >= max_errors)
 			throw new ToomucherrorException();
-		while(look->tag != T_COMMA && look->tag != T_SEMICOLON)
+		while(look->tag != T_PROCEDURE && look->tag != T_FUNCTION && look->tag != T_BEGIN && look->tag != T_VAR) 
 			move();
-		if(look->tag == T_COMMA)
+/*		if(look->tag == T_COMMA)
 			goto E;
 		else
-			goto F;
+			goto F;*/
 	}
 }
 
@@ -97,17 +97,7 @@ void Parser::seq_constDeclaration(){
 			throw TokenMatchException(look,T_SEMICOLON,lex->line);          // throw exception
 	// look is in follow .
 	//}
-	/*catch(const Exception & e){
-		std::cout<<e.print()<<endl;
-		if(++error_count >= max_errors)
-			throw new ToomucherrorException();
-		while(look->tag != T_SEMICOLON && T_SEMICOLON)
-			move();
-		goto E;
-	}*/
 }
-
-
 
 void Parser::decl_variables(){
 	//First = {"var",\epsilon};
@@ -127,18 +117,18 @@ void Parser::decl_variables(){
 void Parser::variables(){
 	try{
 	match(T_VAR);
-E:	variableDeclaration();
+	variableDeclaration();
 	match(T_SEMICOLON);
 	seq_variableDeclaration();
 	}
-	catch(const Exception &e){
-		std::cout<<e.print()<<endl;
+	catch(Exception *e){
+		std::cout<<e->print()<<endl;
 		if(++error_count >= max_errors)
 			throw new ToomucherrorException();
-		while(look->tag != T_SEMICOLON && look->tag != T_PROCEDURE && look->tag != T_FUNCTION && look->tag != T_BEGIN) 
+		while(look->tag != T_PROCEDURE && look->tag != T_FUNCTION && look->tag != T_BEGIN) 
 			move();
-		if(look->tag == T_SEMICOLON)
-			goto E;
+		/*if(look->tag == T_SEMICOLON)
+			goto E;*/
 	}
 }
 

@@ -120,7 +120,7 @@ Rel * Parser::condition(){
 		move();
 		return new Rel(tok,x1,expr());
 	}
-	throw  InappropriateException(look,lex->line);           // throw exception
+	throw  new InappropriateException(look,lex->line);           // throw exception
 	return nullptr ; // will not excuted
 }
 
