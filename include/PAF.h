@@ -56,7 +56,7 @@ class Program :public Node{
 };
 class Proc : public Program{
 	public :
-		std::vector<Id*> paralist = nullptr;
+		std::vector<Id*> paralist ;
 		int para_used = 0;                // count it !!!!
 		int para_offset;
 		int display_offset;
@@ -71,7 +71,7 @@ class Func : public Program{
 		int para_used = 0;
 		int para_offset;
 		int display_offset;
-		std::vector<Id*> paralist = nullptr;
+		std::vector<Id*> paralist ;
 		//label l;                     // L label:
 		Type* type;
 //		std::string symtype = "function";
