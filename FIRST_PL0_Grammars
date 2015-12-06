@@ -72,7 +72,7 @@ FunctionDeclaration  -> "function" Ident OptionalFormPara ":" Basic_Type ";"  Bl
 FIRST{"function"}		FOLLOW{"procedure","function","begin"}
 
 OptionalFormPara -> ( "("	FormalParameters   ")" ) | \epsilon
-FIRST{"(",\epsilon}		FOLLOW{":" , "const" , "var" , "procedure" , "function" , "begin"}
+FIRST{"(",\epsilon}		FOLLOW{":" , ";"}
 
 FormalParameters -> FormalParameters_Seg  Seq_FormalParameters_Seg
 FIRST{"var",Ident}		FOLLOW{")"}

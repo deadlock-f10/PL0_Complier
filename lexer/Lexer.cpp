@@ -181,6 +181,9 @@ L:  peek = ' ';
 	}
 	else 
 //		throw  WrongSymbolException();
-		std::cout << "WrongSymbol :"<< peek << endl;
+	{
+		std::cout <<"In line "<<line<< " Unmatched Token : "<< peek << endl;
+		goto L;
+	}
 	return nullptr;
 }

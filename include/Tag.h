@@ -72,4 +72,5 @@ namespace patch
         return stm.str() ;
     }
 }
+extern std::string tagto_string[T_DOT - T_NULL + 1];
 #endif

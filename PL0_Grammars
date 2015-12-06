@@ -40,6 +40,7 @@ Statement -> [AssignmentStatement| IfStatement  | DoWhileStatement  | CallProcSt
 
 AssignmentStatement -> (Ident | FuncIdent | Ident "[" Expression "]") ":=" Expression  
 FuncIdent -> Ident
+checking if ident is a variable , and check if const , check type.
 
 Expression -> ["+" | "-"]  Term ( ( "+" | "-" ) Term )*
 
@@ -54,6 +55,7 @@ CallProcStatement ->  Ident  ["(" ActualParameters")"]
 CallFuncStatement ->  Ident  ["(" ActualParameters ")"] 
 
 ActualParameters -> Expression ("," Expression)*
+checking type !  if var ,check if Id
 
 Condition ->  CompareCondition
 
@@ -64,9 +66,11 @@ IfStatement -> "if" Condition "then" Statement ["else" Statement]
 DoWhileStatement -> "do" Statement "while" Condition
 
 ForStatement -> "for" Ident ":=" Expression ("downto" | "to") Expression "do" Statement
+checking if ident is a variable , and check if const , check type 
 
 CompoundStatement -> "begin" Statement ( ";" Statement )* "end"
 
 InputStatement -> "read" "(" Ident("," Ident)* ")"
+checking  if ident is a variable , and check if const
 
-OutputStatement -> "write" "(String "," Expression | String | Expression) ")"
+OutputStatement -> "write" "("String "," Expression | String | Expression) ")"

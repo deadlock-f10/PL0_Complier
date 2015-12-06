@@ -5,13 +5,19 @@
 #include "../include/Codegen.h"
 #include <fstream>
 
-int main(){
-	Lexer* lex = new Lexer("test/stack.pl0");
+int main(int argn , char * arg[]){
+	Lexer* lex; 
+	if(argn == 2)
+		lexer = new Lexer(std::string(arg[1]));
+	else
+		lexer = new Lexer("program/stack.pl0");
 	Parser p(lex);
 	Program *x = p.program();
 	x->gen();
+	x->print();
 	Optimizer *o = new Optimizer(x);
 	o->optimize();
+	x->print_block();
 	Codegenerator *c = new Codegenerator(x);
 	c->gen(x);
 	c->print(x);

@@ -13,7 +13,7 @@ typedef std::unordered_map<std::string , Word*> hashtable;
 
 class Lexer {
 	public :
-		static int line;         // not even a declaration!
+		static int line;         // just a declaration!
 		static int column;
 		char peek = ' ';
 		std::fstream *fs;

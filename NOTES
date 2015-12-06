@@ -1,31 +1,16 @@
-1.　为什么有很多个Env对象都有一个hashtable ,　却只用一个Lexer呢？
+Lexer 在做语法分析时，如果遇到了undefineed token时，直接输出错误信息并跳过此token
 
-因为Env 里symboltable用来把 Token 映射到 存放这个变量的地址. 为了使Block里面的变量与外面的变量独立,每一个Block都应该独立对应一个新的Env.事实上每个独立的函数或者过程里也应该对应一个Env
+出现的exception一共两大类,
 
-而Lexer主要是返回给语法分析一个Token.
-注意，在接下来的语法分析中唯一重要的是Token的类型以及lexeme，至于与Token相关联的地址则不是语法分析要关心的事情(应该是生成中间代码阶段需要关心的)．
+一类是token match error　属于语法的错误
+另一类是type match error 属于语义的错误
 
-2.	我们把形如'a' 以及"string"的语法成分看成是一体的，也就是说，在词法分析阶段不把 ' , " 单独看做是一个token.这样做的原因是我们的文法规定字符串里的字符类型有非常多种，如果我们把字符串的内容单独作为一个token的话，词法分析器在判断这个token的类型(String,Word)时会需要联系上下文，这样就使设计复杂了．
-
-3. FIRST 与 FOLLOW　集的作用主要是用于选择对应的Production. 如果一个非终结符能够推出\epsilon，那么当我们读到的第一个元素属于FOLLOW集时，说明此时的Production应为\epsilon.　反之如果读到的Token属于FIRST集，则从中选择对应的Production.
-
+只要出现exception ，就把parser的cangencode 设为 false,　并在最后抛出异常
+parser里有一个errorcount域，记录检测到的错误个数，超过规定个数(max_errors)直接退出.
 
 
----------------------------------------------------------------------------
+综上，catch exception 的地方一共只有四个，constants()(常量定义时出现错误则跳到下一个定义) , variables(变量定义时出现错误则跳到下一个变量定义), seq_paf(), compoundstmt()
 
-4.如果两个数的乘积发现大于了int类型怎么办
-使用mulo(multiplication with overflow)，如果出现溢出直接抛出异常
+当常量定义出现错误时，synchronizing token是T_COMMA以及T_SEMICOLON	
 
-5.真的需要为var的参数在栈上分配空间吗，还是说直接操作地址
-直接操作地址即可.
-
-6.把函数的返回值当做了一个变量，递归时应该怎么处理?
-//应该look ahead一个，判断此处到底是调用还是对函数赋值．          -- 这样处理不太方便．
-
-现在的想法应该是在Program的get 中进行调整，如果发现搜索的word就是函数名，则跳过这一层的搜索．
-
-7.在生成中间代码时，如何出现多个同名函数，如何处理跳转关系?
-每个函数或者过程都有一个属于他们自己的label，用来作为此函数的入口．在Parser中维护一个表，每次函数或者过程要生成属于他们自己的label时，首先在这个表中注册，如果发现以及有同名label注册过了，就在这个label后加上序号2,3,4...
-
-
-注意提示设置mars delaying branching的问题.
+未检查标示符重名的问题．
