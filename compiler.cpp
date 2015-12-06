@@ -1,18 +1,20 @@
-#include "../include/Lexer.h"
-#include "../include/Parser.h"
-#include "../include/PAF.h"
-#include "../include/Optimizer.h"
-#include "../include/Codegen.h"
+#include "include/Lexer.h"
+#include "include/Parser.h"
+#include "include/PAF.h"
+#include "include/Optimizer.h"
+#include "include/Codegen.h"
 #include <fstream>
 
 int main(int argn , char * arg[]){
 	Lexer* lex; 
 	if(argn == 2)
-		lexer = new Lexer(std::string(arg[1]));
+		lex = new Lexer(std::string(arg[1]));
 	else
-		lexer = new Lexer("program/stack.pl0");
+		lex = new Lexer("program/stack.pl0");
 	Parser p(lex);
 	Program *x = p.program();
+	if( x->error_count != 0)
+		return 0;
 	x->gen();
 	x->print();
 	Optimizer *o = new Optimizer(x);

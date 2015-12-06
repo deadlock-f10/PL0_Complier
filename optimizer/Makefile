@@ -14,9 +14,9 @@ $(BUILDDIR)%.o: %.cpp
 	g++ $(CFLAGS) -c $< -o $@
 
 test: $(OBJS)
-	$(CC) $(CFLAGS) $(LEXER_TEST) $(OBJS) $(TEST_O)  -o ../optimizer_test
+	$(CC) $(CFLAGS) $(LEXER_TEST) $(OBJS) $(TEST_O)  -o ../test_optimizer
 clean:
-	rm -f $(OBJS) *~ *.o ../optimizer_test
+	rm -f $(OBJS) *~ *.o ../test_optimizer
 depend: $(LEXER_C)
 	makedepend $(LEXER_H) $^
 

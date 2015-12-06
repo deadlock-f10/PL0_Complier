@@ -1,5 +1,6 @@
 #include "../include/Expr.h"
 #include "../include/Parser.h"
+#include "../include/Exception.h"
 
 Expr* Parser::factor(){
 	switch(look->tag){
@@ -32,13 +33,13 @@ Expr* Parser::factor(){
 						move();
 						return callfunc(func);
 					}
+					else{
+						;              // throw exception
+					}
 				}
-				else if(tok->lexeme == top->name->lexeme){
+				else{
 					move();
 					return callfunc(dynamic_cast<Func*>(top->prev->get(tok)));
-				}
-				else {
-					;              // throw exception
 				}
 		}//incomplete . to much things to consider
 		default:
@@ -59,8 +60,7 @@ Callfunc* Parser::callfunc(Func *func){
 		if(func->paralist.size() == 1){
 			match(T_CLOSEPARENTHESIS);
 			return new Callfunc(func,list);
-		}
-		else{
+		} else{
 			for(unsigned int i = 1; i < func->paralist.size() ; i++){
 				match(T_COMMA);
 				e = expr();
@@ -120,7 +120,7 @@ Rel * Parser::condition(){
 		move();
 		return new Rel(tok,x1,expr());
 	}
-	;           // throw exception
+	throw  InappropriateException(look,lex->line);           // throw exception
 	return nullptr ; // will not excuted
 }
 

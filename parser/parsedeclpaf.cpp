@@ -5,30 +5,39 @@
 Program* Parser::seq_paf(){
 	//First = {T_PROCEDURE,T_FUNCTION,\epsilon};
 	//static Tag_Set Follow = {T_BEGIN};
-	switch (look->tag){
-		case T_PROCEDURE:{
-            Proc * p = proc_decl();
- //           top->put(p->name,p);
-			return new Seq_PAF(p,seq_paf());
-			}
-		case T_FUNCTION:{
-            Func * f = func_decl();
-//            top->put(f->name,f);
-			return new Seq_PAF(f,seq_paf());
-			}
-		default:
-			;
+	try{
+E:		switch (look->tag){
+		 	case T_PROCEDURE:{
+                 Proc * p = proc_decl();
+		 		return new Seq_PAF(p,seq_paf());
+		 		}
+		 	case T_FUNCTION:{
+                 Func * f = func_decl();
+		 		return new Seq_PAF(f,seq_paf());
+		 		}
+		 	default:
+		 		;
+		}
+		if(look->tag != T_BEGIN)
+			throw TokenMatchException(look,T_BEGIN,lex->line);          // throw exception
+		return Program::Null;// look in follow .
 	}
-	if(look->tag != T_BEGIN)
-		;          // throw exception
-	return Program::Null;// look in follow .
+	catch(const Exception &e){
+		std::cout<<e.print()<<endl;
+		if(++error_count >= max_errors)
+			throw new ToomucherrorException();
+		while(look->tag != T_SEMICOLON && look->tag != T_PROCEDURE && look->tag != T_FUNCTION && look->tag != T_BEGIN) 
+			move();
+		if(look->tag == T_SEMICOLON)
+			goto E;
+	}
 }
 
 Proc* Parser::proc_decl(){
 	match(T_PROCEDURE);
 	Program * save = top;
 	if(look->tag != T_IDENT)
-		;          // throw exception
+		throw TokenMatchException(look,T_IDENT,lex->line);          // throw exception
 	Word * word = (Word *)look;
 	move();
 	Proc * p = new Proc(top,word,top->level + 1);
@@ -49,7 +58,7 @@ Func* Parser::func_decl(){
 	match(T_FUNCTION);
 	Program * save = top;
 	if(look->tag != T_IDENT)
-		;          // throw exception
+		throw TokenMatchException(look,T_IDENT,lex->line);          // throw exception
 	Word * word = (Word *)look;
 	move();
 	Func * f = new Func(top,word,top->level + 1);
@@ -58,7 +67,7 @@ Func* Parser::func_decl(){
 	optional_para();
 	match(T_COLON);
 	if(look->tag != T_INT && look->tag != T_CHARACTER)
-		;             // throw exception . Cause function type must be basic type
+		throw InappropriateException(look,lex->line);             // throw exception . Cause function type must be basic type
 	f->type = type();
 	top->put(word,new Id(word,f->type,f->used,top->level));
 	top->used += f->type->width;
@@ -82,7 +91,7 @@ void Parser::optional_para(){
 			;
 	}
 	if(look->tag != T_COLON && look->tag != T_CONST && look->tag != T_VAR && look->tag != T_PROCEDURE && look->tag != T_FUNCTION && look->tag !=T_BEGIN)
-		;          // throw exception
+		throw InappropriateException(look,lex->line);          // throw exception
 	// look in follow .
 }
 
@@ -100,21 +109,21 @@ void Parser::form_para_seg(){
 		case T_IDENT:{
 			std::vector<Word *> identifier_list;
 			if(look->tag != T_IDENT)
-				;         // throw exception
+				throw TokenMatchException(look,T_IDENT,lex->line);         // throw exception
 			Word * tok = (Word *)look;
 			move();
 			identifier_list.push_back(tok);
 			while(look->tag != T_COLON){
 				match(T_COMMA);
 				if(look->tag != T_IDENT)
-					;         // throw exception
+					throw TokenMatchException(look,T_IDENT,lex->line);         // throw exception
 				tok = (Word *)look;
 				move();
 				identifier_list.push_back(tok);
 			}
 			move();
 			if(look->tag != T_INT && look->tag != T_CHAR)
-				;                 // throw exception , cause para must be of basic type;
+				throw InappropriateException(look,lex->line);                 // throw exception , cause para must be of basic type;
 			Type * t = type();
 			Id * id;
 			if(Proc * p = dynamic_cast<Proc*>(top)){
@@ -136,6 +145,9 @@ void Parser::form_para_seg(){
 					p->put(tok,id);
 				}
 			}
+			else{
+				;                         // throw exception
+			}
 		}
 		default:
 			;
@@ -155,6 +167,6 @@ void Parser::seq_formpara_seg(){
 			;
 	}
 	if(look->tag != T_CLOSEPARENTHESIS)
-		;          // throw exception
+		throw TokenMatchException(look,T_CLOSEPARENTHESIS,lex->line);          // throw exception
 	// look in follow .
 }

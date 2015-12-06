@@ -1,7 +1,7 @@
 all: 
 	make -C ./symboltable
 	make -C ./inter
-	make -C ./lexer test
+	make -C ./lexer 
 	make -C ./parser 
 	make -C ./optimizer 
 	make -C codegenerator test

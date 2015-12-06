@@ -6,6 +6,7 @@
 #include <iostream>
 #include <string>
 #include <unordered_map>
+#define max_errors  (15)
 #ifndef PARSER_H
 #define PARSER_H
 class Parser{
@@ -13,6 +14,8 @@ class Parser{
 		class labelcounter;
 		static std::unordered_map<Word*,Parser::labelcounter*>  lcounter;
 		static std::string getlabel(Word *w);
+		bool cangenerate = true;
+		int error_count = 0;
 		Lexer *lex;
 		Token *look;
 		Program * top = nullptr;
@@ -39,7 +42,6 @@ class Parser{
 
 		void seq_identDecl();
 
-
 		void decl_procandfunc();
 		Proc* proc_decl();
 		Func* func_decl();
@@ -49,17 +51,6 @@ class Parser{
 		void seq_formpara_seg();
 		void formpara_seg();
 		
-
-/*		Seq* compoundstmt();
-		Stmt* statement();
-		Seq* seq_statement();
-		Input* inputstatement();
-		Output* outputstatement();
-		Stmt* assignstatement();        //incomplete .no type checking
-		Stmt* ifstatement();
-		For* forstatement();
-		DoWhile* dowhilestatement();
-		Callproc* callprocstatement();*/
 		Stmt* compoundstmt();
 		Stmt* statement();
 		Stmt* seq_statement();
