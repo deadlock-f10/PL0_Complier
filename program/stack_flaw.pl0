@@ -1,6 +1,8 @@
+const 
+	space = ' ';
 var
 	stack: array[1000] of integer;
-	base integer;
+	base: integer;
 	MaxLen:  integer;
 	readnum : integer;
 	i : integer;
@@ -56,19 +58,12 @@ begin
 	end;
 end;
 begin
-	read (MaxLen);
-	MakeEmpty;
-	for i := 1 to 100 do              {*infinite loop*}
+	read(i);
+	read(base);
+	temp := 1;
+	for temp := 1 to base do
 	begin
-		read (temp);
-		if temp = 1 then begin
-			read (temp) ;
-			Push (temp) 
-		end
-		else if temp = 2 then
-			Pop
-		else if temp = 0 then       {*break*}
-			i := 101 
-	end;
-	PopN(base);
+		i := i+1;
+		write(space,i);
+	end
 end.

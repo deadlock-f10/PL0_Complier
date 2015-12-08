@@ -63,7 +63,7 @@ Token* Parser::constant(){
 }
 void Parser::constDeclaration(){        //  imcomplete due to lack of protaction for const. deal with it
 	if(look->tag != T_IDENT)
-		throw TokenMatchException(look,T_IDENT,lex->line);                // throw exception
+		throw new TokenMatchException(look,T_IDENT,lex->line);                // throw exception
 	Word * tok = (Word*)look;
 	move();
 	match(T_EQ);
@@ -94,7 +94,7 @@ void Parser::seq_constDeclaration(){
 				;
 		}
 		if(look->tag != T_SEMICOLON);
-			throw TokenMatchException(look,T_SEMICOLON,lex->line);          // throw exception
+			throw new TokenMatchException(look,T_SEMICOLON,lex->line);          // throw exception
 	// look is in follow .
 	//}
 }

@@ -164,6 +164,7 @@ Stmt* Parser::outputstatement(){
 			return new Output(nullptr,s);
 		}
 		else if(look->tag == T_COMMA){
+			move();
 			e = expr();
 			match(T_CLOSEPARENTHESIS);
 			return new Output(e,s);
@@ -303,7 +304,7 @@ Stmt* Parser::seq_statement(){
 			;
 	}
 	if(look->tag != T_END)
-		TokenMatchException(look,T_END,lex->line);          // throw exception
+		throw new TokenMatchException(look,T_END,lex->line);          // throw exception
 	// look in follow .
 	return Stmt::Null;
 }

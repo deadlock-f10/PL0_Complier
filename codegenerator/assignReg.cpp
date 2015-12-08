@@ -77,10 +77,10 @@ void Bblockgenerator::getReg(Quadruple *q){
 			{
 				if(Arg_id * id2 = dynamic_cast<Arg_id*>(q->arg2)) //use k1 as intermediate
 					 findload(id2,Reg_Descripter::t9);
-				Arg_id * id1 = dynamic_cast<Arg_id*>(q->result);
-				findstore(id1);
 				Arg_id* arg1 = dynamic_cast<Arg_id*>(q->arg1);
 				loadarrayaddr(arg1);                                 //store addr in k1
+				Arg_id * id1 = dynamic_cast<Arg_id*>(q->result);
+				findstore(id1);
 				break;
 			}
 		case I_INDCOPY:
@@ -98,12 +98,14 @@ void Bblockgenerator::getReg(Quadruple *q){
 		case I_DIV:
 		case I_MINUS:
 			{
-				Arg_id * result = dynamic_cast<Arg_id*>(q->result);                //  findstore for result first so that we can deal with i = i + 1
-					findstore(result);
+		/*		Arg_id * result = dynamic_cast<Arg_id*>(q->result);                //  findstore for result first so that we can deal with i = i + 1
+					findstore(result);*/
 				if(Arg_id * id1 = dynamic_cast<Arg_id*>(q->arg1))
 					 findload(id1,Reg_Descripter::t8);
 				if(Arg_id * id2 = dynamic_cast<Arg_id*>(q->arg2))
 					 findload(id2,Reg_Descripter::t9);
+				Arg_id * result = dynamic_cast<Arg_id*>(q->result);                //  findstore for result first so that we can deal with i = i + 1
+					findstore(result);
 				break;
 			}
 	}
@@ -132,15 +134,17 @@ void Bblockgenerator::findload(Arg_id *argid,Reg_Descripter *backup){//use  k1
 void Bblockgenerator::findstore(Arg_id * argid){    //find register to store
 	Id * id = argid->id;
 	Addr_Descripter *ad = addr_des.find(id);
-	Reg_Descripter *x = reg_des.getAvail();
-	if(x != nullptr){
-		x->assignId(ad);
-		ad->deleteReg();
-		ad->assignReg(x);
-	}
-	else{
-		ad->deleteReg();
-		ad->assignReg(Reg_Descripter::k0);
+	if(ad->getReg() == nullptr){
+		Reg_Descripter *x = reg_des.getAvail();
+		if(x != nullptr){
+			x->assignId(ad);
+			ad->deleteReg();
+			ad->assignReg(x);
+		}
+		else{
+			ad->deleteReg();
+			ad->assignReg(Reg_Descripter::k0);
+		}
 	}
 	//ad->invalidatestack();
 }
