@@ -88,21 +88,27 @@ L:  peek = ' ';
 		case ':':
 			if(readch('='))
 				return Word::assign;
-			else
+			else{
+				fs->unget();
 				return Word::colon;
+			}
 		case '<':
 			readch();
 			if(peek == '>')
 				return Word::ne;
 			else if(peek == '=')
 				return Word::le;
-			else 
+			else{
+				fs->unget();
 				return Word::lt;
+			}
 		case '>':
 			if(readch('='))
 				return Word::ge;
-			else
+			else{
+				fs->unget();
 				return Word::gt;
+			}
 		case '=':
 			return Word::eq;
 		case '+':

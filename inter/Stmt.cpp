@@ -43,10 +43,11 @@ void For::gen(Program *p){
 	label after = newlabel();
 	emitlabel(test,p);
 	Rel * r;
+	Expr *x2 = e2->reduce(p);
 	if(is_to == true)
-		r = new Rel(Word::le,id,e2);
+		r = new Rel(Word::le,id,x2);
 	else
-		r = new Rel(Word::ge,id,e2);
+		r = new Rel(Word::ge,id,x2);
 	emit(I_IFFALSE,new Arg_rel(r),nullptr,new Result_label(after),p);
 	s->gen(p);
 	if(is_to == true)
