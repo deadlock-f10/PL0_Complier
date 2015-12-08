@@ -165,7 +165,23 @@ Stmt* Parser::outputstatement(){
 		}
 		else if(look->tag == T_COMMA){
 			move();
-			e = expr();
+			if(look->tag == T_IDENT){
+				Word * tok = (Word *)look;
+				Node * nod = top->get(tok);
+				if(Id * id = dynamic_cast<Id*>(nod)){
+					if(id->isConst == true){
+						move();
+						e = id;
+					}
+					else
+						e = expr();
+				}
+				else
+					e = expr();
+			}
+			else{
+				e = expr();
+			}
 			match(T_CLOSEPARENTHESIS);
 			return new Output(e,s);
 		}
@@ -175,7 +191,23 @@ Stmt* Parser::outputstatement(){
 	}
 	if(look->tag != T_PLUS && look->tag != T_MINUS && look->tag != T_IDENT && look->tag != T_NUMBER && look->tag != T_NUMBER && T_OPENPARENTHESIS)
 		throw new InappropriateException(look,lex->line);           // throw exception
-	e = expr();
+	if(look->tag == T_IDENT){
+		Word * tok = (Word *)look;
+		Node * nod = top->get(tok);
+		if(Id * id = dynamic_cast<Id*>(nod)){
+			if(id->isConst == true){
+				move();
+				e = id;
+			}
+			else
+				e = expr();
+		}
+		else
+			e = expr();
+	}
+	else{
+		e = expr();
+	}
 	match(T_CLOSEPARENTHESIS);
 	return new Output(e,nullptr);
 }

@@ -21,10 +21,12 @@ class Id : public Expr {          // need add field which specify whether this i
 	public :
 		int offset ;        // relative address ( of what ?)  --- symboltable of this func/proc
 		int level ;         //don't need level   --no~~~~ we need it
-		bool isConst;
+		bool isConst =false;
+		int constvalue = 0;
 		bool isRef = false;
 		Id(Word* w , Type* t , int o,int l): Expr(w,t) {offset = o; isConst = false; level = l;}
-		Id(Word* w , Type* t , int o , bool b,int l): Expr(w,t) {offset = o; isConst = b; level = l;}
+		//Id(Word* w , Type* t , int o , bool b,int l): Expr(w,t) {offset = o; isConst = b; level = l;}
+		Id(Word* w , Type* t , int o , bool b,int cv,int l): Expr(w,t) {offset = o; isConst = b; constvalue = cv; level = l;}
 		Id(Word* w , Type* t , int o , bool b1 , bool b2,int l): Expr(w,t) {offset = o; isConst = b1; isRef = b2; level = l;}
 		std::string to_string(){return op->to_string();}
 };
@@ -74,7 +76,7 @@ class Constant : public Expr {
 	public :
 		int c ;
 		Constant (Num *t): Expr(t , Type::Int){c = t->value;}
-		Constant (Character *t): Expr(t , Type::Int){c = t->value;}
+		Constant (Character *t): Expr(t , Type::Char){c = t->value;}
 		std::string to_string(){return patch::to_string(c);}
 };
 

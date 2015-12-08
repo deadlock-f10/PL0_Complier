@@ -366,7 +366,12 @@ void Bblockgenerator::chooseInstr(Quadruple *q){
 							emit("li $v0 "+patch::to_string(1));
 						else if(id2->type == Type::Char)
 							emit("li $v0 "+patch::to_string(11));
-						emit("add $a0 $zero "+regto_string[reg2->r]);
+						if(id2->isConst == true){
+							emit("li $a0 "+patch::to_string(id2->constvalue));
+						}
+						else{
+							emit("add $a0 $zero "+regto_string[reg2->r]);
+						}
 						emit("syscall");
 						if(x->a2nextuse == -1 || reg2 == Reg_Descripter::t9){
 							addr2->deleteReg();

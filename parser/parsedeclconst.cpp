@@ -53,11 +53,18 @@ Token* Parser::constant(){
 			t->value *= (-1);
 			return t;
 		 }
-		case T_CHARACTER:
+		case T_CHARACTER:{
+			Character * c = (Character *)look;
 			move();
-			return (Character *)look;
+			return c;
+		}
+		case T_NUMBER:{
+			Num * n = (Num *)look;
+			move();
+			return n;
+		}
 		default:
-			throw InappropriateException(look,lex->line);           // throw exception
+			throw new InappropriateException(look,lex->line);           // throw exception
 	}
 	return nullptr;       //never excuted
 }
@@ -70,14 +77,20 @@ void Parser::constDeclaration(){        //  imcomplete due to lack of protaction
 	Token * CONST = constant();
 	Type * t;
 	Id * id;
-	if(CONST->tag == T_NUMBER)
+	int constvalue=0;
+	if(CONST->tag == T_NUMBER){
 		t = Type::Int;
-	else if(CONST->tag == T_CHARACTER)
+		constvalue = ((Num*)CONST)->value;
+
+	}
+	else if(CONST->tag == T_CHARACTER){
 		t = Type::Char;
+		constvalue = ((Character*)CONST)->value;
+	}
 	else{
 		;           // throw exception
 	}
-	id = new Id(tok,t,top->used,true,top->level);  // Should assign Const.Value to this ID      deal with it
+	id = new Id(tok,t,top->used,true,constvalue,top->level);  // Should assign Const.Value to this ID      deal with it
 	top->used += t->width;
 	top->put(tok,id);
 }
@@ -93,7 +106,7 @@ void Parser::seq_constDeclaration(){
 			default:
 				;
 		}
-		if(look->tag != T_SEMICOLON);
+		if(look->tag != T_SEMICOLON)
 			throw new TokenMatchException(look,T_SEMICOLON,lex->line);          // throw exception
 	// look is in follow .
 	//}
@@ -110,7 +123,7 @@ void Parser::decl_variables(){
 			;
 	}
 	if(look->tag != T_PROCEDURE && look->tag != T_FUNCTION && look->tag != T_BEGIN)
-		throw InappropriateException(look,lex->line);          // throw exception
+		throw new InappropriateException(look,lex->line);          // throw exception
 	// look in follow .
 
 }
@@ -145,7 +158,7 @@ void Parser::seq_variableDeclaration(){
 			;
 	}
 	if(look->tag  != T_PROCEDURE && look->tag != T_FUNCTION && look->tag != T_BEGIN)
-		throw InappropriateException(look,lex->line);          // throw exception
+		throw new InappropriateException(look,lex->line);          // throw exception
 	// look in follow .
 }
 
@@ -153,14 +166,14 @@ void Parser::seq_variableDeclaration(){
 void Parser::variableDeclaration(){
 	std::queue<Token*> identifier_list;
 	if(look->tag != T_IDENT)
-		throw TokenMatchException(look,T_IDENT,lex->line);          // throw exception
+		throw new TokenMatchException(look,T_IDENT,lex->line);          // throw exception
 	Word * tok = (Word *)look;
 	move();
 	identifier_list.push(tok);
 	while(look->tag != T_COLON){
 		match(T_COMMA);
 		if(look->tag != T_IDENT)
-			throw TokenMatchException(look,T_IDENT,lex->line);          // throw exception
+			throw new TokenMatchException(look,T_IDENT,lex->line);          // throw exception
 		tok = (Word *)look;
 		move();
 		identifier_list.push(tok);
@@ -189,7 +202,7 @@ Type* Parser::type(){
 				move();
 				match(T_OPENBRACKET);
 				if(look->tag != T_NUMBER)
-                    throw TokenMatchException(look,T_NUMBER,lex->line);           // throw exception
+                    throw new TokenMatchException(look,T_NUMBER,lex->line);           // throw exception
 				Num * t = (Num*)look;
 				move();
 				int size = t->value;
@@ -204,10 +217,10 @@ Type* Parser::type(){
 					move();
 					return new Array(size,Type::Char);
 				}
-				throw InappropriateException(look,lex->line);              // throw exception
+				throw new InappropriateException(look,lex->line);              // throw exception
 			}
 		default:
-			throw InappropriateException(look,lex->line);             //throw exception
+			throw new InappropriateException(look,lex->line);             //throw exception
 	}
 	return nullptr;             // never excuted.
 }

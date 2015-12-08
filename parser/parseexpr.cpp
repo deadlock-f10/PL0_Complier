@@ -24,6 +24,8 @@ Expr* Parser::factor(){
 						;             // throw exception
 					if(Id * id = dynamic_cast<Id *>(nod)){
 						move();
+						if(id->isConst == true)
+							return new Constant(new Num(id->constvalue));
 						if(look->tag != T_OPENBRACKET)
 							return id;
 						else

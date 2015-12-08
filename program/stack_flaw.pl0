@@ -1,5 +1,6 @@
 const 
-	space = ' ';
+	space = ' ',
+	length = 3;
 var
 	stack: array[1000] of integer;
 	base: integer;
@@ -63,7 +64,10 @@ begin
 	temp := 1;
 	for temp := 1 to base do
 	begin
-		i := i+1;
-		write(space,i);
+		i := i+length;
+		write(space);
+		write(length);
+		write(space);
+		write(i);
 	end
 end.
