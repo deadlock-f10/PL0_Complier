@@ -10,7 +10,8 @@ std::string regto_string[32] = {"$zero","$at","$v0","$v1","$a0","$a1","$a2","$a3
 extern std::ofstream targetcode;
 void Codegenerator::gen(Program *p){
 	gen_block(p->block);
-	for(unsigned int i = p->blocklist.size()-1 ; i >= 1; i--){
+//	for(unsigned int i = p->blocklist.size()-1 ; i >= 1; i--){
+	for(unsigned int i = 1 ; i <= p->blocklist.size()-1; i++){
 		Bblockgenerator * bb = new Bblockgenerator(p->blocklist[i],p);
 		bb->gen();
 	}

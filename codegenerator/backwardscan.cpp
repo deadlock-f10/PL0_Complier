@@ -36,12 +36,6 @@ void Bblockgenerator::backwardscan(){
 						Id *id2 = argid2->id;
 						std::unordered_map<Id*,int>::iterator it = nextuse.find(id2);
 						if( it == nextuse.end()){
-							if(Temp *t = dynamic_cast<Temp *>(id2))
-							{
-								prog->put(t->op,t);
-								t->offset = prog->used;
-								prog->used += t->type->width;
-							}
 							nextuse.insert(make_pair(id2,i));
 							x->a2nextuse = -1;
 							addr_des.addtomap(id2);
@@ -60,12 +54,6 @@ void Bblockgenerator::backwardscan(){
 						std::unordered_map<Id*,int>::iterator it = nextuse.find(id1);
 						if( it == nextuse.end()){
 							nextuse.insert(make_pair(id1,i));
-						if(Temp *t = dynamic_cast<Temp *>(id1))
-						{
-								prog->put(t->op,t);
-								t->offset = prog->used;
-								prog->used += t->type->width;
-						}
 							x->a1nextuse = -1;
 							addr_des.addtomap(id1);
 						}
@@ -78,12 +66,6 @@ void Bblockgenerator::backwardscan(){
 						Id *id2 = argid2->id;
 						std::unordered_map<Id*,int>::iterator it = nextuse.find(id2);
 						if( it == nextuse.end()){
-							if(Temp *t = dynamic_cast<Temp *>(id2))
-							{
-								prog->put(t->op,t);
-								t->offset = prog->used;
-								prog->used += t->type->width;
-							}
 							nextuse.insert(make_pair(id2,i));
 							x->a2nextuse = -1;
 							addr_des.addtomap(id2);
@@ -119,12 +101,6 @@ void Bblockgenerator::backwardscan(){
 						Id *id1 = argid1->id;
 						std::unordered_map<Id*,int>::iterator it = nextuse.find(id1);
 						if( it == nextuse.end()){
-						if(Temp *t = dynamic_cast<Temp *>(id1))
-						{
-								prog->put(t->op,t);
-								t->offset = prog->used;
-								prog->used += t->type->width;
-						}
 							nextuse.insert(make_pair(id1,i));
 							x->a1nextuse = -1;
 							addr_des.addtomap(id1);
@@ -162,12 +138,6 @@ void Bblockgenerator::backwardscan(){
 						Id *id2 = argid2->id;
 						std::unordered_map<Id*,int>::iterator it = nextuse.find(id2);
 						if( it == nextuse.end()){
-							if(Temp *t = dynamic_cast<Temp *>(id2))
-							{
-								prog->put(t->op,t);
-								t->offset = prog->used;
-								prog->used += t->type->width;
-							}
 							nextuse.insert(make_pair(id2,i));
 							x->a2nextuse = -1;
 							addr_des.addtomap(id2);
@@ -181,12 +151,6 @@ void Bblockgenerator::backwardscan(){
 						Id *id1 = argid1->id;
 						std::unordered_map<Id*,int>::iterator it = nextuse.find(id1);
 						if( it == nextuse.end()){
-						if(Temp *t = dynamic_cast<Temp *>(id1))
-						{
-								prog->put(t->op,t);
-								t->offset = prog->used;
-								prog->used += t->type->width;
-						}
 							nextuse.insert(make_pair(id1,i));
 							x->a1nextuse = -1;
 							addr_des.addtomap(id1);
@@ -206,12 +170,6 @@ void Bblockgenerator::backwardscan(){
 						std::unordered_map<Id*,int>::iterator it = nextuse.find(id1);
 						if( it == nextuse.end()){
 							nextuse.insert(make_pair(id1,i));
-						if(Temp *t = dynamic_cast<Temp *>(id1))
-						{
-							prog->put(t->op,t);
-							t->offset = prog->used;
-							prog->used += t->type->width;
-						}
 							x->a1nextuse = -1;
 							addr_des.addtomap(id1);
 						}
@@ -224,12 +182,6 @@ void Bblockgenerator::backwardscan(){
 						std::unordered_map<Id*,int>::iterator it = nextuse.find(id2);
 						if( it == nextuse.end()){
 							nextuse.insert(make_pair(id2,i));
-						if(Temp *t = dynamic_cast<Temp *>(id2))
-						{
-							prog->put(t->op,t);
-							t->offset = prog->used;
-							prog->used += t->type->width;
-						}
 							x->a2nextuse = -1;
 							addr_des.addtomap(id2);
 						}
@@ -246,12 +198,6 @@ void Bblockgenerator::backwardscan(){
 						Id *id2 = argid2->id;
 						std::unordered_map<Id*,int>::iterator it = nextuse.find(id2);
 						if( it == nextuse.end()){
-							if(Temp *t = dynamic_cast<Temp *>(id2))
-							{
-								prog->put(t->op,t);
-								t->offset = prog->used;
-								prog->used += t->type->width;
-							}
 							nextuse.insert(make_pair(id2,i));
 							x->a2nextuse = -1;
 							addr_des.addtomap(id2);
@@ -285,6 +231,19 @@ void Bblockgenerator::backwardscan(){
 					break;
 				}
 			case I_CALLFUNC:
+				{
+					Id * result = dynamic_cast<Id*>(((Arg_id*)(q->result))->id);
+					std::unordered_map<Id*,int>::iterator it = nextuse.find(result);
+					if(it == nextuse.end()){
+						if(Temp *t = dynamic_cast<Temp *>(result))
+						{
+							prog->put(t->op,t);
+							t->offset = prog->used;
+							prog->used += t->type->width;
+						}
+					}
+					break;
+				}
 			case I_CALLPROC:
 			case I_GOTO:
 			case I_END:

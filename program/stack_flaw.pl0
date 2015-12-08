@@ -67,6 +67,6 @@ begin
 end;
 begin
 	read(temp);
-	i := 1;
+	i := 2;
 	write(i + i + i + i + r(temp));
 end.
