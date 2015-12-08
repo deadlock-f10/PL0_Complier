@@ -132,7 +132,7 @@ void Parser::form_para_seg(){
 				for(unsigned int i = 0; i < identifier_list.size(); i++){
 					tok = identifier_list[i];
 					p->para_used -= t->width;
-					id = new Id((Word*)tok,t,p->para_used,false,isref,p->level);
+					id = new Id((Word*)tok,t,p->para_used,isref,p->level);
 					p->paralist.push_back(id);
 					p->put(tok,id);
 				}
@@ -141,7 +141,7 @@ void Parser::form_para_seg(){
 				for(unsigned int i = 0; i < identifier_list.size(); i++){
 					tok = identifier_list[i];
 					p->para_used -= t->width;
-					id = new Id((Word*)tok,t,p->para_used,false,isref,p->level);
+					id = new Id((Word*)tok,t,p->para_used,isref,p->level);
 					p->paralist.push_back(id);
 					//p->used += t->width;
 					p->put(tok,id);

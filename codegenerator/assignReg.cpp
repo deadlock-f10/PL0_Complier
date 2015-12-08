@@ -201,9 +201,11 @@ void Bblockgenerator::loadaddress(Arg_id * argid){//store addr in k1
 			reg = R_K1;
 	}
 	if(id->offset >= 0)
-		emit("add "+regto_string[reg]+" "+regto_string[reg]+" "+patch::to_string(-(id->offset)));
+		emit("add $k1 "+regto_string[reg]+" "+patch::to_string(-(id->offset)));
 	else{
-		if(Proc *proc = dynamic_cast<Proc*>(prog)){ if(id->isRef == false) emit("lw $k1 "+patch::to_string(-(proc->para_offset+id->offset))+"("+regto_string[reg]+")");
+		if(Proc *proc = dynamic_cast<Proc*>(prog)){ 
+			if(id->isRef == false)
+				emit("lw $k1 "+patch::to_string(-(proc->para_offset+id->offset))+"("+regto_string[reg]+")");
 			else
 				emit("add $k1 "+regto_string[reg]+" "+patch::to_string(-(proc->para_offset+id->offset)));
 		}

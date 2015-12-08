@@ -26,8 +26,8 @@ class Id : public Expr {          // need add field which specify whether this i
 		bool isRef = false;
 		Id(Word* w , Type* t , int o,int l): Expr(w,t) {offset = o; isConst = false; level = l;}
 		//Id(Word* w , Type* t , int o , bool b,int l): Expr(w,t) {offset = o; isConst = b; level = l;}
-		Id(Word* w , Type* t , int o , bool b,int cv,int l): Expr(w,t) {offset = o; isConst = b; constvalue = cv; level = l;}
-		Id(Word* w , Type* t , int o , bool b1 , bool b2,int l): Expr(w,t) {offset = o; isConst = b1; isRef = b2; level = l;}
+		Id(Word* w , Type* t , int o , bool b,int cv,int l): Expr(w,t) {offset = o; isConst = b; isRef = false; constvalue = cv; level = l;}
+		Id(Word* w , Type* t , int o , bool b2,int l): Expr(w,t) {offset = o; isConst = false; isRef = b2; level = l;}
 		std::string to_string(){return op->to_string();}
 };
 

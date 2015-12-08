@@ -58,16 +58,15 @@ begin
 		PopN(popNum - 1);
 	end;
 end;
+function r(x : integer) : integer;
 begin
-	read(i);
-	read(base);
-	temp := 1;
-	for temp := 1 to base do
-	begin
-		i := i+length;
-		write(space);
-		write(length);
-		write(space);
-		write(i);
-	end
+	if x <> 1 then
+		r := r(x-1)+1
+	else
+		r := 1
+end;
+begin
+	read(temp);
+	i := 1;
+	write(i + i + i + i + r(temp));
 end.
