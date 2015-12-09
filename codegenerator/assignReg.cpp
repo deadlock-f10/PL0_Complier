@@ -151,12 +151,13 @@ void Bblockgenerator::findstore(Arg_id * argid){    //find register to store
 void Bblockgenerator::loadarrayaddr(Arg_id * argid){//store addr in k1
 	Id * id = argid->id;
 		if(id->level == prog->level)
-			emit("lw "+regto_string[R_K1]+" "+ patch::to_string(-(id->offset))+"($fp)");
+			//emit("lw "+regto_string[R_K1]+" "+ patch::to_string(-(id->offset))+"($fp)");
+			emit("add $k1 $fp "+ patch::to_string(-(id->offset)));
 		else{
 			int m = -(4 * (prog->level + 3 - id->level));
 			emit("lw "+regto_string[R_K1]+" "+patch::to_string(-m)+"("+regto_string[R_FP]+")");
 			//emit("lw "+regto_string[R_K1]+" "+patch::to_string(-(id->offset))+"("+regto_string[R_K1]+")");
-			emit("sub $k1 $k1 "+patch::to_string(-(id->offset)));
+			emit("add $k1 $k1 "+patch::to_string(-(id->offset)));
 		}
 }
 void Bblockgenerator::loadvariable(Arg_id * argid,Register r){       // use k1

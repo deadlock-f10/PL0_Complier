@@ -16,15 +16,15 @@ void Bblockgenerator::backwardscan(){
 			case I_COPYIND:
 				{
 					Id * result = dynamic_cast<Id*>(((Arg_id*)(q->result))->id);
-					std::unordered_map<Id*,int>::iterator it = nextuse.find(result);
-					if( it == nextuse.end()){
-						nextuse.insert(make_pair(result,-1));
 						if(Temp *t = dynamic_cast<Temp *>(result))
 						{
 							prog->put(t->op,t);
 							t->offset = prog->used;
 							prog->used += t->type->width;
 						}
+					std::unordered_map<Id*,int>::iterator it = nextuse.find(result);
+					if( it == nextuse.end()){
+						nextuse.insert(make_pair(result,-1));
 						x->resnextuse = -1;
 						addr_des.addtomap(result);
 					}
@@ -81,15 +81,15 @@ void Bblockgenerator::backwardscan(){
 			case I_COPY:
 				{
 					Id * result = dynamic_cast<Id*>(((Arg_id*)(q->result))->id);
-					std::unordered_map<Id*,int>::iterator it = nextuse.find(result);
-					if( it == nextuse.end()){
-						nextuse.insert(make_pair(result,-1));
 						if(Temp *t = dynamic_cast<Temp *>(result))
 						{
 							prog->put(t->op,t);
 							t->offset = prog->used;
 							prog->used += t->type->width;
 						}
+					std::unordered_map<Id*,int>::iterator it = nextuse.find(result);
+					if( it == nextuse.end()){
+						nextuse.insert(make_pair(result,-1));
 						x->resnextuse = -1;
 						addr_des.addtomap(result);
 					}
@@ -118,15 +118,15 @@ void Bblockgenerator::backwardscan(){
 			case I_MINUS:
 				{
 					Id * result = dynamic_cast<Id*>(((Arg_id*)(q->result))->id);
-					std::unordered_map<Id*,int>::iterator it = nextuse.find(result);
-					if( it == nextuse.end()){
-						nextuse.insert(make_pair(result,-1));
 						if(Temp *t = dynamic_cast<Temp *>(result))
 						{
 							prog->put(t->op,t);
 							t->offset = prog->used;
 							prog->used += t->type->width;
 						}
+					std::unordered_map<Id*,int>::iterator it = nextuse.find(result);
+					if( it == nextuse.end()){
+						nextuse.insert(make_pair(result,-1));
 						x->resnextuse = -1;
 						addr_des.addtomap(result);
 					}
@@ -212,15 +212,15 @@ void Bblockgenerator::backwardscan(){
 			case I_READ:
 				{
 					Id * result = dynamic_cast<Id*>(((Arg_id*)(q->result))->id);
-					std::unordered_map<Id*,int>::iterator it = nextuse.find(result);
-					if( it == nextuse.end()){
-						nextuse.insert(make_pair(result,-1));
 						if(Temp *t = dynamic_cast<Temp *>(result))
 						{
 							prog->put(t->op,t);
 							t->offset = prog->used;
 							prog->used += t->type->width;
 						}
+					std::unordered_map<Id*,int>::iterator it = nextuse.find(result);
+					if( it == nextuse.end()){
+						nextuse.insert(make_pair(result,-1));
 						x->resnextuse = -1;
 						addr_des.addtomap(result);
 					}
@@ -233,15 +233,12 @@ void Bblockgenerator::backwardscan(){
 			case I_CALLFUNC:
 				{
 					Id * result = dynamic_cast<Id*>(((Arg_id*)(q->result))->id);
-					std::unordered_map<Id*,int>::iterator it = nextuse.find(result);
-					if(it == nextuse.end()){
 						if(Temp *t = dynamic_cast<Temp *>(result))
 						{
 							prog->put(t->op,t);
 							t->offset = prog->used;
 							prog->used += t->type->width;
 						}
-					}
 					break;
 				}
 			case I_CALLPROC:

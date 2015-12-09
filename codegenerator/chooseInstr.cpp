@@ -253,11 +253,13 @@ void Bblockgenerator::chooseInstr(Quadruple *q){
 						title11 = "bgt ";
 						title2 = "bge ";
 						title22 = "ble ";
+						break;
 					case T_GT:
 						title1 = "bgt ";
 						title11 = "blt ";
 						title2 = "ble ";
 						title22 = "bge ";
+						break;
 					default:
 						title1 = "bne ";
 						title11 = "bne ";

@@ -4,7 +4,7 @@
 #include "../include/Lexer.h"
 int main()
 {
-	Lexer l("program/stack.pl0");
+	Lexer l("program/test.pl0");
 	int i = 0;
 	Token*  t;
 	do{

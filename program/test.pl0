@@ -1,0 +1,55 @@
+const 
+a1=10,a2='a',a3=-5,a4=+031; 
+var 
+i,j,num,ans:integer;
+b2,b3:char;
+b4:array[10] of integer;
+b5:array[10] of char;
+b6:integer;
+a:array[10] of integer; 
+procedure sort(var num:integer); 
+var temp,k,loop1,loop2:integer; 
+begin 
+	for loop1:=1 to num-1 do 
+	begin 
+		k:= loop1;
+		for loop2:=loop1+1 to num do
+		if a[k]>a[loop2] then
+		k:=loop2; 
+		if k <> loop1 then 
+		begin 
+			temp:=a[k]; 
+			a[k]:=a[loop1]; 
+			a[loop1]:=temp; 
+		end; 
+	end; 
+end; 
+function gcd(m,n:integer):integer; 
+begin 
+	if n=0 then
+		gcd:=m 
+	else 
+		gcd:=gcd(n,m-(m/n)*n);
+end; 
+begin 
+	i:=1; 
+	read(num); 
+	if num<9 then 
+	begin 
+		do
+		begin
+			read(j); 
+			a[i]:=j; 
+			i:=i+1; 
+		end 
+		while i<=num; 
+		sort(num); 
+		ans:=(gcd(a[1],a[num])*2+1)/2;
+	end 
+	else
+	begin
+		ans:=-1; 
+		write("too large"); 
+	end; 
+	write(ans); 
+end.

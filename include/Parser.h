@@ -21,7 +21,7 @@ class Parser{
 		Program * top = nullptr;
 //		int used = 0;
 		Parser(Lexer* l) {lex = l; move();}
-		void move(){look = lex->scan();}
+		void move(){look = lex->scan();}//std::cout<<tagto_string[look->tag]<<endl;}
 		void error(std::string s){;}     //unimplemented
 		void match(Tag t);
 		Program* program();

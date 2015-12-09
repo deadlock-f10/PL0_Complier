@@ -1,9 +1,10 @@
 const 
-	space = ' ';
+	space = ' ',
+	length = 3;
 var
 	stack: array[1000] of integer;
 	base: integer;
-	MaxLen : integer;
+	MaxLen:  integer;
 	readnum : integer;
 	i : integer;
 	temp : integer; 
@@ -51,27 +52,22 @@ end;
 procedure PopN(popNum : integer);
 begin
 	write (Top);
-	write (space);
 	if popNum > 1 then
 		begin
 		Pop;
 		PopN(popNum - 1);
 	end;
 end;
+function r(x : integer) : integer;
 begin
-	read (MaxLen);
-	MakeEmpty;
-	for i := 1 to 100 do              {*infinite loop*}
-	begin
-		read (temp);
-		if temp = 1 then begin
-			read (temp) ;
-			Push (temp) 
-		end
-		else if temp = 2 then
-			Pop
-		else if temp = 0 then       {*break*}
-			i := 101 
-	end;
-	PopN(base);
+	if x <> 1 then
+		r := r(x-1)+1
+	else
+		r := 1
+end;
+begin
+	read(temp);
+	i := 7;
+	write(space);
+	write(i*4+ r(temp)+space);
 end.

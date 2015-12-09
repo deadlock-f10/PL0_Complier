@@ -42,15 +42,19 @@ Token* Parser::constant(){
 	switch(look->tag){
 		case T_PLUS:{
 				move();
-				match(T_NUMBER);
+				if(look->tag != T_NUMBER)
+					throw new TokenMatchException(look,T_NUMBER,lex->line);
 				Num *t = (Num *)look;
+				move();
 				return t;
 			}
 		case T_MINUS:{
 			move();
-			match(T_NUMBER);
+			if(look->tag != T_NUMBER)
+				throw new TokenMatchException(look,T_NUMBER,lex->line);
 			Num *t = (Num *)look;
 			t->value *= (-1);
+			move();
 			return t;
 		 }
 		case T_CHARACTER:{
