@@ -2,9 +2,9 @@
 #include <fstream>
 #include <string>
 #include "../include/Lexer.h"
-int main()
+int main(int argn , char *arg[])
 {
-	Lexer l("program/test.pl0");
+	Lexer l(arg[1]);
 	int i = 0;
 	Token*  t;
 	do{

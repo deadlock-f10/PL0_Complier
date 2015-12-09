@@ -2,7 +2,7 @@
 #include "../include/Type.h"
 #include <iostream>
 
-std::ofstream targetcode("/home/f10/pl0-compiler/my_compiler/target.asm");
+std::ofstream targetcode("target.asm");
 Word *  Word::assign = new Word(":=",T_ASSIGN);
 Word	*Word::Plus = new Word("+",T_PLUS);
 Word	*Word::Minus = new Word("-",T_MINUS);
@@ -140,8 +140,7 @@ L:  peek = ' ';
 				return new Character(c);
 			else
 //				throw  SingleQuoteException();
-		std::cout << "SingleQuote"<<endl
-				;
+				std::cout << "SingleQuote"<<endl;
 		/*default:
 			;*/
 	}
@@ -188,7 +187,7 @@ L:  peek = ' ';
 	else 
 //		throw  WrongSymbolException();
 	{
-		std::cout <<"In line "<<line<< " Unmatched Token : "<< peek << endl;
+		std::cout <<"In line "<<line<< " Undefined Token : "<< peek << endl;
 		goto L;
 	}
 	return nullptr;

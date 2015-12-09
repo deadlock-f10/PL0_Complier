@@ -382,6 +382,7 @@ void Bblockgenerator::chooseInstr(Quadruple *q){
 					}
 					else{
 						Arg_int * in = dynamic_cast<Arg_int*>(q->arg2);
+						emit("li $v0 1");
 						emit("li $a0 "+patch::to_string(in->value));
 						emit("syscall");
 					}

@@ -61,12 +61,11 @@ end;
 function r(x : integer) : integer;
 begin
 	if x <> 1 then
-		r := r(x-1)+1
+		r := x *r(x-1)
 	else
 		r := 1
 end;
 begin
 	read(temp);
-	i := 2;
-	write(i + i + i + i + r(temp));
+	write(r(temp));
 end.

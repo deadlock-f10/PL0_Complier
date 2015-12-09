@@ -7,7 +7,7 @@ var
 	MaxLen:  integer;
 	readnum : integer;
 	i : integer;
-	temp : integer; 
+	temp : char; 
 function IsEmpty : integer;
 begin
 	if base = 0 then
@@ -67,7 +67,5 @@ begin
 end;
 begin
 	read(temp);
-	i := 7;
-	write(space);
-	write(i*4+ r(temp)+space);
+	write(temp);
 end.
