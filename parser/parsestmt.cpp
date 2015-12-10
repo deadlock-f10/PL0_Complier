@@ -148,7 +148,7 @@ Stmt* Parser::inputstatement(){
 	return new Input(list);
 }
 
-Stmt* Parser::outputstatement(){
+Stmt* Parser::outputstatement(){                // a little bit tricky here...
 	//static Tag_Set tag= {T_PLUS,T_MINUS,T_IDENT,T_NUMBER,T_OPENPARENTHESIS};
 	STring * s;
 	Expr * e;
@@ -170,8 +170,15 @@ Stmt* Parser::outputstatement(){
 				Node * nod = top->get(tok);
 				if(Id * id = dynamic_cast<Id*>(nod)){
 					if(id->isConst == true){
+						Token* save = look;
 						move();
-						e = id;
+						if(look->tag != T_CLOSEPARENTHESIS){
+							push_back(look);
+							look = save;
+							goto L1;
+						}
+						else
+							e = id;
 					}
 					else
 						e = expr();
@@ -180,7 +187,7 @@ Stmt* Parser::outputstatement(){
 					e = expr();
 			}
 			else{
-				e = expr();
+L1:				e = expr();
 			}
 			match(T_CLOSEPARENTHESIS);
 			return new Output(e,s);
@@ -189,15 +196,22 @@ Stmt* Parser::outputstatement(){
 			throw new InappropriateException(look,lex->line);           // throw exception
 		}
 	}
-	if(look->tag != T_PLUS && look->tag != T_MINUS && look->tag != T_IDENT && look->tag != T_NUMBER && look->tag != T_NUMBER && T_OPENPARENTHESIS)
+	if(look->tag != T_PLUS && look->tag != T_MINUS && look->tag != T_IDENT && look->tag != T_NUMBER && look->tag != T_NUMBER && look->tag != T_OPENPARENTHESIS)
 		throw new InappropriateException(look,lex->line);           // throw exception
 	if(look->tag == T_IDENT){
 		Word * tok = (Word *)look;
 		Node * nod = top->get(tok);
 		if(Id * id = dynamic_cast<Id*>(nod)){
 			if(id->isConst == true){
+				Token* save = look;
 				move();
-				e = id;
+				if(look->tag != T_CLOSEPARENTHESIS){
+					push_back(look);
+					look = save;
+					goto L2;
+				}
+				else
+					e = id;
 			}
 			else
 				e = expr();
@@ -206,7 +220,7 @@ Stmt* Parser::outputstatement(){
 			e = expr();
 	}
 	else{
-		e = expr();
+L2:		e = expr();
 	}
 	match(T_CLOSEPARENTHESIS);
 	return new Output(e,nullptr);

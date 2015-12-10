@@ -10,6 +10,8 @@
 #ifndef PARSER_H
 #define PARSER_H
 class Parser{
+	private:
+		Token *buffer = nullptr;                    // design when check if we are write a const variable.
 	public:
 		class labelcounter;
 		static std::unordered_map<Word*,Parser::labelcounter*>  lcounter;
@@ -21,7 +23,15 @@ class Parser{
 		Program * top = nullptr;
 //		int used = 0;
 		Parser(Lexer* l) {lex = l; move();}
-		void move(){look = lex->scan();}//std::cout<<tagto_string[look->tag]<<endl;}
+		void move(){
+			if(buffer == nullptr)
+				look = lex->scan();
+			else{
+				look = buffer;
+				buffer = nullptr;
+			}
+		}//std::cout<<tagto_string[look->tag]<<endl;}
+		void push_back(Token *x){buffer = x;}
 		void error(std::string s){;}     //unimplemented
 		void match(Tag t);
 		Program* program();
