@@ -158,19 +158,20 @@ void Callproc::gen(Program *p){
 		else
 			emit(I_PARAM,new Arg_id((Id *)list[i]),nullptr,nullptr,p);
 	emit(I_CALLPROC,new Arg_proc(prc),new Arg_int(actuallist->size()),nullptr,p);
-	/*
 	for(unsigned int i = 0; i < actuallist->size() ; i++){
-		Id *e1 = prc->paralist[i];
+		Id *x = prc->paralist[i];
 		Expr * expr = actuallist->at(i);
-		if(e1->isRef == true && (Access *acs = dynamic_cast<Access*>(expr))){
-			Access *saved = acs->saved;
-			Id * array = saved->array;
-			Expr *e2 = saved->index;
-			if(Constant *c = dynamic_cast<Constant*>(e2))
-				emit(I_INDCOPY,new Arg_id((Id *)e1),new Arg_int(c->c),new Arg_id(array),p);
-			else
-				emit(I_INDCOPY,new Arg_id((Id *)e1),new Arg_id((Id *)e2),new Arg_id(array),p);
+		Expr *e1 = list[i];
+		if(Access *acs = dynamic_cast<Access*>(expr)){
+			if(x->isRef == true){
+				Access *saved = acs->saved;
+				Id * array = saved->array;
+				Expr *e2 = saved->index;
+				if(Constant *c = dynamic_cast<Constant*>(e2))
+					emit(I_INDCOPY,new Arg_id((Id *)e1),new Arg_int(c->c),new Arg_id(array),p);
+				else
+					emit(I_INDCOPY,new Arg_id((Id *)e1),new Arg_id((Id *)e2),new Arg_id(array),p);
+			}
 		}
 	}
-	*/
 }
