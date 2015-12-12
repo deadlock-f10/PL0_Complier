@@ -25,6 +25,6 @@ parser里有一个errorcount域，记录检测到的错误个数，超过规定�
 NOTE FOR program/043Test_for.txt
 这就是所说的把数组元素放到var形参里．我的解决办法是在生成中间代码时在函数调用语句时判断这样的情况，如果符合再从临时变量写回数组元素
 
-NOTE FOR program/050Test_array.txt
+NOTE FOR program/050Test_array.txt                   -- no problem 
 
 NOTE FOR program/072Test_procedure.txt
