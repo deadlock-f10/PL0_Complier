@@ -23,6 +23,7 @@ class Func;
 class Proc;
 class Id;
 class Rel;
+class Access;
 class Arg_id : public Arg1 ,public Arg2,public Result{             // maybe temp ?
 	public :
 		Id * id;
@@ -47,6 +48,12 @@ class Arg_rel : public Arg1{
 	public :
 		Rel * relation;
 		Arg_rel(Rel * r) {relation = r;}
+		std::string to_string();
+};
+class Arg_ace : public Arg1{
+	public :
+		Access * ace;
+		Arg_ace(Access* a){ace = a;}
 		std::string to_string();
 };
 class Arg_func : public Arg1{

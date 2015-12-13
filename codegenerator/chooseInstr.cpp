@@ -44,33 +44,46 @@ void Bblockgenerator::chooseInstr(Quadruple *q){
 				if(Arg_id * arg1 = dynamic_cast<Arg_id*>(q->arg1)){ // if it is var ,  pass address.
 					//Id * id1 = arg1->id;
 					//Addr_Descripter * addr1 = addr_des.find(id1);
-					if(Func *func = dynamic_cast<Func*>(calledProg)){
-						Id * func_para = func->paralist[params-1];
-						if(func_para->isRef == false ){
-							//addr1->assignReg(Reg_Descripter::t8);
-							loadvariable(arg1,R_T8);
-							emit("sw $t8 ($gp)");
-						}
-						else{
-							loadaddress(arg1);
-							emit("sw $k1 ($gp)");
-						}
+					Id * para;
+					if(Func *func = dynamic_cast<Func*>(calledProg))
+						para = func->paralist[params-1];
+					else if(Proc *proc = dynamic_cast<Proc*>(calledProg))
+						para = proc->paralist[params-1];
+					if(para->isRef == false ){
+						//addr1->assignReg(Reg_Descripter::t8);
+						loadvariable(arg1,R_T8);
+						emit("sw $t8 ($gp)");
 					}
-					else if(Proc *proc = dynamic_cast<Proc*>(calledProg)){
-						Id * proc_para = proc->paralist[params-1];
-						if(proc_para->isRef == false ){
-							//addr1->assignReg(Reg_Descripter::t8);
-							loadvariable(arg1,R_T8);
-							emit("sw $t8 ($gp)");
-						}
-						else{
-							loadaddress(arg1);
-							emit("sw $k1 ($gp)");
-						}
+					else{
+						loadaddress(arg1);
+						emit("sw $k1 ($gp)");
 					}
 					/*Addr_Descripter * addr1 = addr_des.find(id1);
 					Reg_Descripter * reg1 = addr1->getReg();*
 					emit("sw "+regto_string[reg1->r] + "($gp)");*/
+					emit("sub $gp $gp 4");
+				}
+				else if(Arg_ace * ace = dynamic_cast<Arg_ace*>(q->arg1)){
+					Id *array = ace->ace->array;
+					Id *index = (Id*)(ace->ace->index);
+					Id * para;
+					if(Func *func = dynamic_cast<Func*>(calledProg))
+						para = func->paralist[params-1];
+					else if(Proc *proc = dynamic_cast<Proc*>(calledProg))
+						para = proc->paralist[params-1];
+					if(para->isRef == false ){
+						loadvariable(new Arg_id(index),R_T9);
+						loadarrayaddr(new Arg_id(array));
+						emit("sub $k1 $k1 $t9");
+						emit("lw $k1 ($k1)");
+						emit("sw $k1 ($gp)");
+					}
+					else{
+						loadvariable(new Arg_id(index),R_T9);
+						loadarrayaddr(new Arg_id(array));
+						emit("sub $k1 $k1 $t9");
+						emit("sw $k1 ($gp)");
+					}
 					emit("sub $gp $gp 4");
 				}
 				else{

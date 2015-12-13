@@ -100,6 +100,6 @@ class Access : public Op{
 		Expr * gen(Program *p) {return new Access(array,type,index->reduce(p));}
 		Expr* reduce(Program *p);
 		//void jumping(label iftrue, label iffalse) {emitjumps(reduce()->to_string(),iftrue,iffalse);}
-		//std::string to_string(){return array->to_string()+"[" + index->to_string() + "]";}
+		std::string to_string(){return array->to_string()+"[" + index->to_string() + "]";}
 };
 #endif

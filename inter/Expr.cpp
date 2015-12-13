@@ -8,44 +8,25 @@ void helper::emit(OP op,Arg1* arg1 , Arg2* arg2,Result * result,Program *p){p->a
 
 int Node::labels = 0;
 int Temp::count = 0;
-/*void Expr::jumping(label iftrue , label iffalse){
-	emitjumps(toString(), iftrue , iffalse);
-}*/
-/*void Expr::emitjumps(Rel* rel , label iftrue , label iffalse,Program *p){
-	if(iftrue != 0 && iffalse != 0){
-		//emit("if "+test+ "goto L"+ patch::to_string(iftrue));
-		emit(I_IF,new Arg_rel(rel),nullptr,new Result_label("L"+patch::to_string(iftrue)),p);
-		//emit("goto L" + iffalse);
-		emit(I_GOTO,nullptr,nullptr,new Result_label("L"+patch::to_string(iffalse)),p);
-	}
-	else if(iffalse != 0){
-		//emit("iffalse "+test + "goto L" + patch::to_string(iffalse));
-		emit(I_IFFALSE,new Arg_rel(rel),nullptr,new Result_label("L"+patch::to_string(iffalse)),p);
-	}
-	else if(iftrue != 0){
-		//emit("if " + test + "goto L" +patch::to_string(iftrue));
-		emit(I_IF,new Arg_rel(rel),nullptr,new Result_label("L"+patch::to_string(iftrue)),p);
-	}
-}*/
-
 Expr* Op::reduce(Program*p){
-	/*Expr *x = gen();	
-	Temp *t = new Temp(type);
-	emit(I_COPY,new Arg_id(x->),nullptr,new Arg_id(t),p)
-	//emit(t->toString() + "=" + x->toString());
-	//emit(I_COPY,)
-	return t;*/
 	return this;
 }
 
 Expr* Callfunc::reduce(Program *p){
 	std::vector<Expr*> list;
-	for(unsigned int i = 0; i < actuallist->size() ; i++)
-		list.push_back((actuallist->at(i)->reduce(p)));
+	for(unsigned int i = 0; i < actuallist->size() ; i++){
+		Expr* e = actuallist->at(i);
+		if(Access * ace = dynamic_cast<Access*>(e))
+			list.push_back(ace->gen(p));
+		else
+			list.push_back((Expr*)(e->reduce(p)));
+	}
 	emit(I_INVOKE,new Arg_func(f),new Arg_int(actuallist->size()),nullptr,p);
 	for(int i = actuallist->size()-1 ; i >= 0 ; i--)
 		if(Constant *c1 = dynamic_cast<Constant*>(list[i]))
 			emit(I_PARAM,new Arg_int(c1->c),nullptr,nullptr,p);
+		else if(Access * ace = dynamic_cast<Access*>(list[i]))
+			emit(I_PARAM,new Arg_ace(ace),nullptr,nullptr,p);
 		else
 			emit(I_PARAM,new Arg_id((Id *)list[i]),nullptr,nullptr,p);
 	Temp *t = new Temp(type,p->level);

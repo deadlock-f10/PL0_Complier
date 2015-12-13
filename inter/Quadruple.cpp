@@ -117,3 +117,6 @@ std::string Arg_proc::to_string(){
 std::string Result_label::to_string(){
 	return label;
 }
+std::string Arg_ace::to_string(){
+	return ace->to_string();
+}
