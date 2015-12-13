@@ -22,8 +22,9 @@ parser里有一个errorcount域，记录检测到的错误个数，超过规定�
 
 
 
-NOTE FOR program/043Test_for.txt
-这就是所说的把数组元素放到var形参里．我的解决办法是在生成中间代码时在函数调用语句时判断这样的情况，如果符合再从临时变量写回数组元素
+NOTE FOR program/043Test_for.txt                     -- no problem
+这就是所说的把数组元素放到var形参里．我的解决办法是在生成中间代码时在函数调用语句时判断这样的情况，如果符合再从临时变量写回数组元素.想得不错，但是出现了一个问题，如果这个数组的index本身是一个变量，而在调用函数前后又这个变量i的值被改变了的话，那么写回去的就不是正确的地址了．
+所以我把所有的index都变成临时变量!就是他是变量也先用临时变量来替代.不过，我似乎搞错了，因为本来index就一定是临时变量，因为会乘以type::length
 
 NOTE FOR program/050Test_array.txt                   -- no problem 
 

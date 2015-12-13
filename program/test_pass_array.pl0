@@ -1,0 +1,17 @@
+var i, j, temp : integer; s : array[5] of integer;
+procedure swap(var p: integer);
+	var temp : integer;
+	begin
+		p := 1;
+		i := 2;
+	end;
+begin
+	write("Sorted as:");
+	i:=1;
+	swap(s[i]);
+	write("i=",i);
+	write(" ");
+	write("s[1]=",s[1]);
+	write(" ");
+	write("s[2]=",s[2]);
+end.
