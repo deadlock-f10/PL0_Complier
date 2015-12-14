@@ -106,9 +106,8 @@ Stmt* Parser::statement(){
 			else if(dynamic_cast<Proc*>(nod)){
 				return callprocstatement();
 			}
-			else{
-				;          // throw exception
-			}
+			else
+				throw new InappropriateException(look,lex->line);          // throw exception
 		}
 		default:
 			;
@@ -129,9 +128,13 @@ Stmt* Parser::inputstatement(){
 	move();
 	Node * nod = top->get(tok);
 	if(Id * id = dynamic_cast<Id*>(nod))                 // check if const
+	{
+		if(id->isConst == true)
+			throw new MiscellaneousException(id->to_string()+"is const",lex->line);
 		list->push_back(id);
+	}
 	else
-		;          // throw exception
+		throw new NoSuchIdentException(tok,lex->line);          // throw exception
 	while(look->tag != T_CLOSEPARENTHESIS){
 		match(T_COMMA);
 		if(look->tag != T_IDENT)
@@ -140,9 +143,13 @@ Stmt* Parser::inputstatement(){
 		move();
 		Node * nod = top->get(tok);
 		if(Id * id = dynamic_cast<Id*>(nod))               // check if const
+		{
+			if(id->isConst == true)
+				throw new MiscellaneousException(id->to_string()+"is const",lex->line);
 			list->push_back(id);
+		}
 		else
-			;          // throw exception
+			throw new NoSuchIdentException(tok,lex->line);          // throw exception
 	}
 	move();
 	return new Input(list);
@@ -189,6 +196,7 @@ Stmt* Parser::outputstatement(){                // a little bit tricky here...
 			else{
 L1:				e = expr();
 			}
+	//		e = expr();
 			match(T_CLOSEPARENTHESIS);
 			return new Output(e,s);
 		}
@@ -222,6 +230,7 @@ L1:				e = expr();
 	else{
 L2:		e = expr();
 	}
+	//e = expr();
 	match(T_CLOSEPARENTHESIS);
 	return new Output(e,nullptr);
 }
@@ -234,7 +243,12 @@ Stmt* Parser::assignstatement(){    // incomplete
 	if(Id *id  = dynamic_cast<Id *>(top->get(dest))){
 		if(look->tag == T_ASSIGN){       // check is function or variable,check if const
 			move();
-			return new Assign(id,expr());
+			Expr* e = expr();
+			if(id->type == Type::Char && e->type != Type::Char)
+				throw new TypeMatchException(e->type,id->type,lex->line);
+			if(id->isConst == true)
+				throw new MiscellaneousException("can not assign to const variable",lex->line);
+			return new Assign(id,e);
 		}
 		else if(look->tag == T_OPENBRACKET){
 			/*move();
@@ -242,14 +256,16 @@ Stmt* Parser::assignstatement(){    // incomplete
 			match(T_CLOSEBRACKET);*/
 			Access * ac = offset(id);
 			match(T_ASSIGN);
-			return new AssignElem(ac,expr());
+			Expr* e = expr();
+			if(((Array*)(id->type))->of == Type::Char && e->type != Type::Char)
+				throw new TypeMatchException(e->type,Type::Char,lex->line);
+			return new AssignElem(ac,e);
 		}
 		else
 			throw new InappropriateException(look,lex->line);           // throw exception
 	}
-	else{
-
-	}
+	else
+		throw new InappropriateException(look,lex->line);           // throw exception
 	return Stmt::Null;      // should never excuted
 }
 
@@ -290,9 +306,8 @@ Stmt* Parser::forstatement(){        // incomlete . unchecked identifier informa
 		match(T_DO);
 		return new For(id,e1,is_to,e2,statement());
 	}
-	else {
-		;        //throw exception
-	}
+	else 
+		throw new NoSuchIdentException(tok,lex->line);          // throw exception
 	return Stmt::Null;// should never excuted
 }
 
@@ -311,12 +326,16 @@ Stmt* Parser::callprocstatement(){
 	Node * nod = top->get(w);
 	Expr * e;
 	if(Proc * proc = dynamic_cast<Proc*>(nod)){
+		Id * id;
 		if(proc->paralist.size() == 0)
 			return new Callproc(proc,new std::vector<Expr*>());
 		else{
 			std::vector<Expr*> *list = new std::vector<Expr*>();
 			match(T_OPENPARENTHESIS);
 			e = expr();
+			id = proc->paralist[0];
+			if(id->type != e->type)
+				throw new TypeMatchException(e->type,id->type,lex->line);
 			list->push_back(e);
 			if(proc->paralist.size() == 1){
 				match(T_CLOSEPARENTHESIS);
@@ -326,6 +345,9 @@ Stmt* Parser::callprocstatement(){
 				for(unsigned int i = 1; i < proc->paralist.size() ; i++){          // checking  type !
 					match(T_COMMA);
 					e = expr();
+					id = proc->paralist[i];
+					if(id->type != e->type)
+						throw new TypeMatchException(e->type,id->type,lex->line);
 					list->push_back(e);
 				}
 				match(T_CLOSEPARENTHESIS);
@@ -334,7 +356,7 @@ Stmt* Parser::callprocstatement(){
 		}
 	}
 	else {
-		; // throw exception
+		; // throw exception  no need . have checked before
 	}
 	return Stmt::Null;// should never excuted
 }

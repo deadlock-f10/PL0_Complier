@@ -1,0 +1,5 @@
+const 
+	v = 100;
+begin
+	v := 1;
+end.

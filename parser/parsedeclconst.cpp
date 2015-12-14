@@ -91,9 +91,8 @@ void Parser::constDeclaration(){        //  imcomplete due to lack of protaction
 		t = Type::Char;
 		constvalue = ((Character*)CONST)->value;
 	}
-	else{
-		;           // throw exception
-	}
+	else
+		throw new InappropriateException(CONST,lex->line);           // throw exception
 	id = new Id(tok,t,top->used,true,constvalue,top->level);  // Should assign Const.Value to this ID      deal with it
 	top->used += t->width;
 	top->put(tok,id);

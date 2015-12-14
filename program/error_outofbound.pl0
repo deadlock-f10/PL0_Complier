@@ -1,0 +1,8 @@
+var
+	a : array[10] of integer;
+begin
+	a[0] := 1;
+	a[1] := 1;
+	a[9] := 1;
+	a[10] := 1;
+end.

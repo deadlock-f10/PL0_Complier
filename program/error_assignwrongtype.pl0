@@ -1,0 +1,10 @@
+const 
+	x = 'x';
+var 
+	c : char;
+begin
+	c := x;
+	write(c);
+	c := 100;
+	write(c);
+end.

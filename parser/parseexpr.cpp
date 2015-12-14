@@ -21,11 +21,15 @@ Expr* Parser::factor(){
 				if(tok->lexeme != top->name->lexeme){
 					Node * nod = top->get(tok);
 					if(nod == nullptr)
-						;             // throw exception
+						throw new NoSuchIdentException(tok,lex->line);             // throw exception
 					if(Id * id = dynamic_cast<Id *>(nod)){
 						move();
-						if(id->isConst == true)
-							return new Constant(new Num(id->constvalue));
+						if(id->isConst == true){
+							if(id->type == Type::Int)
+								return new Constant(new Num(id->constvalue));
+							else
+								return new Constant(new Character(id->constvalue));
+						}
 						if(look->tag != T_OPENBRACKET)
 							return id;
 						else
@@ -35,9 +39,8 @@ Expr* Parser::factor(){
 						move();
 						return callfunc(func);
 					}
-					else{
-						;              // throw exception
-					}
+					else
+						throw new MiscellaneousException("error",lex->line);              // throw exception
 				}
 				else{
 					move();
@@ -52,12 +55,16 @@ Expr* Parser::factor(){
 
 Callfunc* Parser::callfunc(Func *func){
 	Expr * e;
+	Id * id;
 	if(func->paralist.size() == 0)
 		return new Callfunc(func,new std::vector<Expr*>());
 	else{
 		std::vector<Expr*> *list = new std::vector<Expr*>();
 		match(T_OPENPARENTHESIS);
 		e = expr();
+		id = func->paralist[0];
+		if(id->type != e->type)
+			throw new TypeMatchException(e->type,id->type,lex->line);
 		list->push_back(e);
 		if(func->paralist.size() == 1){
 			match(T_CLOSEPARENTHESIS);
@@ -66,6 +73,9 @@ Callfunc* Parser::callfunc(Func *func){
 			for(unsigned int i = 1; i < func->paralist.size() ; i++){
 				match(T_COMMA);
 				e = expr();
+				id = func->paralist[i];
+				if(id->type != e->type)
+					throw new TypeMatchException(e->type,id->type,lex->line);
 				list->push_back(e);
 			}
 			match(T_CLOSEPARENTHESIS);
@@ -130,6 +140,11 @@ Access * Parser::offset(Id *id){
 	match(T_OPENBRACKET);
 	Expr * e  = expr();
 	Type * t = id->type;
+	if(!(dynamic_cast<Array*>(t)))
+		throw new MiscellaneousException(id->to_string()+"is not an array type",lex->line);
+	if(Constant * c = dynamic_cast<Constant*>(e))
+		if(c->c >= ((Array*)t)->size)
+			throw new OutOfBoundException((Word*)(id->op),lex->line);
 	t = ((Array*)t)->of;
 	Expr* w = new Constant(new Num(t->width));
 	Expr * e1 = new Arith(Word::Mult,e,w);

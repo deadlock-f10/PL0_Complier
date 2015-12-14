@@ -8,6 +8,7 @@ var
 	readnum : integer;
 	i : integer;
 	temp : char; 
+	temp2 : integer;
 function IsEmpty : integer;
 begin
 	if base = 0 then
@@ -66,6 +67,9 @@ begin
 		r := 1
 end;
 begin
-	read(temp);
+	read(temp,temp2);
+	temp := temp + 1;
+	temp2 := temp2 + 1;
 	write(temp);
+	write(temp2);
 end.
