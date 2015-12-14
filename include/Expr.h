@@ -92,12 +92,17 @@ class Rel : public Expr {
 		bool check( Type* p1 ,Type *p2) ;
 };
 
+class Access;
 class Access : public Op{
 	public :
 		Id * array ;
 		Expr * index ;
+		Access * saved = nullptr;     // used to write back after passing access to var formalpara
 		Access (Id *id ,Type * t, Expr * e) : Op(new Word("[]" ,T_INDEX),t) {array = id ; index = e; }
-		Expr * gen(Program *p) {return new Access(array,type,index->reduce(p));}
+		Expr * gen(Program *p) {
+			saved= new Access(array,type,index->reduce(p));
+			return saved;
+		}
 		Expr* reduce(Program *p);
 		//void jumping(label iftrue, label iffalse) {emitjumps(reduce()->to_string(),iftrue,iffalse);}
 		std::string to_string(){return array->to_string()+"[" + index->to_string() + "]";}

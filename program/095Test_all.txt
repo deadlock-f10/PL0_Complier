@@ -24,5 +24,7 @@ begin
 	i:= func(10);
 	write(" i= ",i);
 	proc;
-	write(" i= ",i)
+	write(" i= ",i);
+	write(MAX+MAX);
+	write(MAX);
 end.
