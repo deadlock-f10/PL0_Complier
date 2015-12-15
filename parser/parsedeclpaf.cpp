@@ -150,9 +150,10 @@ void Parser::form_para_seg(){
 			else{
 				;                         // throw exception
 			}
+			break;
 		}
 		default:
-			;
+			throw new InappropriateException(look,lex->line);
 	}
 }
 
