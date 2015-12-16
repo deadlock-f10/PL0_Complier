@@ -2,7 +2,7 @@ CC = g++
 CFLAGS = -Wall --std=c++11
 BUILDDIR = ../obj/optimizer/
 
-LEXER_C = splitblock.cpp 
+LEXER_C = splitblock.cpp dag.cpp
 LEXER_TEST = ../test/test_opt.cpp
 HEADER_PATH = ../include
 LEXER_H = $(HEADER_PATH)/Lexer.h  $(HEADER_PATH)/Tag.h $(HEADER_PATH)/Token.h $(HEADER_PATH)/Type.h

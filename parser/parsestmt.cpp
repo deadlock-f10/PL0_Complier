@@ -248,6 +248,8 @@ Stmt* Parser::assignstatement(){    // incomplete
 				throw new TypeMatchException(e->type,id->type,lex->line);
 			if(id->isConst == true)
 				throw new MiscellaneousException("can not assign to const variable",lex->line);
+			if(dynamic_cast<Array*>(id->type))
+				throw new MiscellaneousException("can not assign to array variable itself",lex->line);
 			return new Assign(id,e);
 		}
 		else if(look->tag == T_OPENBRACKET){

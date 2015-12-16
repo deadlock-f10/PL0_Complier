@@ -18,8 +18,9 @@ Node* Program::get(Token *w) {
 }
 //FILE * intercode=fopen("/home/f10/Doc/a/inter.txt","w");
 //typedef std::unordered_set<Tag> Tag_Set;
-std::ofstream intercode("/home/f10/pl0-compiler/my_compiler/inter.txt");
-std::ofstream optcode("/home/f10/pl0-compiler/my_compiler/opt.txt");
+std::ofstream intercode("inter.txt");
+std::ofstream optcode("opt.txt");
+std::ofstream dagcode("dag.txt");
 Program::Program(){
 	level = 1;
 	name = new Word("main",T_IDENT);
@@ -84,11 +85,15 @@ void Seq_PAF::print(){
 void Program::print_block(){
 	block->print_block();
 	optcode<<beginlabel<<":"<<endl;
+	dagcode<<beginlabel<<":"<<endl;
 	for(unsigned i = 1; i < blocklist.size(); i++){
 		BasicBlock* b = blocklist[i];
 		optcode<<b->label+":"<<endl;
+		dagcode<<b->label+":"<<endl;
 		for(unsigned j = 0 ; j < b->instrlist.size(); j++)
 			optcode<<b->instrlist[j]->to_string()<<endl;
+		for(unsigned j = 0 ; j < b->daglized.size(); j++)
+			dagcode<<b->daglized[j]->to_string()<<endl;
 	}
 }
 void Block::print_block(){

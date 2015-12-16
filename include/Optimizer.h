@@ -11,6 +11,7 @@ typedef std::vector<Quadruple*> QuadList;
 class BasicBlock{
 	public:
 		QuadList instrlist;
+		QuadList daglized;
 	//int size;
 		std::vector<std::string> list;
 		static int num;
@@ -21,11 +22,13 @@ class BasicBlock{
 				label = "";
 			}
 			else{
-		for(int i = begin ; i <= end ; i++)
-		instrlist.push_back(l->at(i));
-		label = "B" + patch::to_string(++num);
+				for(int i = begin ; i <= end ; i++)
+				instrlist.push_back(l->at(i));
+				label = "B" + patch::to_string(++num);
+			}
 		}
-}
+		void dag();
+		int dagtoquad(int begin); //return end index
 };
 
 class Optimizer{
@@ -33,8 +36,11 @@ class Optimizer{
 	Program *p;
 	Optimizer(Program *prog) { p = prog;}
 	void splitblock(Program *p);
-	void optimize(){splitblock(p);}
+	void optimize(){
+		splitblock(p);
+	}
 	void splitseq_paf(Seq_PAF * s);
 	void changelabel(Program *p,std::map<std::string,std::string> *relabel);
+	void dag(Program *p);
 };
 #endif

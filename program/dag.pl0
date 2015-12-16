@@ -1,0 +1,9 @@
+var 
+	a,b,c,d,e:integer;
+	ar:array[7] of integer;
+begin
+	e := (a-b)+(a-b)*(a-b)/(a-b);
+	write(e);
+	ar[6] := (e-1) - (a-b)*(e-1);
+	write(ar[6]);
+end.

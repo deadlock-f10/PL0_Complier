@@ -6,6 +6,10 @@
 #include <vector>
 
 extern ofstream targetcode;
+void Optimizer::dag(Program *p){
+	for(unsigned int i = 1; i < p->blocklist.size(); i++)
+		p->blocklist[i]->dag();
+}
 void Optimizer::splitseq_paf(Seq_PAF * s){
 	if(s->paf != Program::Null)
 		splitblock(s->paf);
@@ -67,6 +71,7 @@ void Optimizer::splitblock(Program *p){
     x->labellist = nullptr;
 	p->blocklist.push_back(b);
 	changelabel(p,relabel);
+	dag(p);
 	if(Seq_PAF *x = dynamic_cast<Seq_PAF*>(p->block->seq_paf))
 		splitseq_paf(x);
 }

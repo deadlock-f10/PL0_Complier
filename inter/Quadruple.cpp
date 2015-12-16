@@ -120,3 +120,20 @@ std::string Result_label::to_string(){
 std::string Arg_ace::to_string(){
 	return ace->to_string();
 }
+/*bool Arg2::operator==(Arg2*r)
+{
+	if(Arg_id* idl = dynamic_cast<Arg_id*>(this)){
+		if(Arg_id* idr = dynamic_cast<Arg_id*>(r))
+			return idl->id == idr->id;
+		else
+			return false;
+	}
+	else if(Arg_int* intl = dynamic_cast<Arg_int*>(this)){
+		if(Arg_int* intr = dynamic_cast<Arg_int*>(r))
+			return intl->value == intr->value;
+		else
+			return false;
+	}
+	else
+		return false;
+}*/

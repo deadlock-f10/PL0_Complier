@@ -14,6 +14,7 @@ class Arg1{
 class Arg2{
 	public:
 	virtual std::string to_string(){return "";}
+	//bool operator==(Arg2*r);
 };
 class Result{
 	public:
