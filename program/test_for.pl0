@@ -1,0 +1,11 @@
+var i:integer;
+begin
+    i:=100;
+    for i:=1 to 5 do
+        write(i);
+    write(i);
+    i:=101;
+    for i:=6 to 5 do
+        write(i);
+    write(i);
+end.

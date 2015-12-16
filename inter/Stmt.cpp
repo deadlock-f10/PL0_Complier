@@ -34,7 +34,7 @@ void DoWhile::gen(Program *p)
 }
 
 void For::gen(Program *p){
-	Expr *x1 = e1->reduce(p);
+	/*Expr *x1 = e1->reduce(p);
 	if(Constant* c = dynamic_cast<Constant*>(x1))
 		emit(I_COPY,new Arg_int(c->c),nullptr,new Arg_id(id),p);
 	else
@@ -55,6 +55,40 @@ void For::gen(Program *p){
 	else
 		emit(I_MINUS,new Arg_id(id),new Arg_int(1),new Arg_id(id),p);
 	emit(I_GOTO,nullptr,nullptr,new Result_label(test),p);
+	emitlabel(after,p);
+	*/
+	label test = newlabel();
+	label after = newlabel();
+	label middle = newlabel();
+	Expr *x1 = e1->reduce(p);
+	Expr *x2 = e2->reduce(p);
+	Rel * r1 , *r2;
+	if(is_to == true){
+		r1 = new Rel(Word::le,x1,x2);
+		r2 = new Rel(Word::le,id,x2);
+	}
+	else{
+		r1 = new Rel(Word::ge,x1,x2);
+		r2 = new Rel(Word::ge,id,x2);
+	}
+	emit(I_IFFALSE,new Arg_rel(r1),nullptr,new Result_label(after),p);
+	if(Constant* c = dynamic_cast<Constant*>(x1))
+		emit(I_COPY,new Arg_int(c->c),nullptr,new Arg_id(id),p);
+	else
+		emit(I_COPY,new Arg_id((Id *)x1),nullptr,new Arg_id(id),p);
+	emitlabel(test,p);
+	emit(I_IFFALSE,new Arg_rel(r2),nullptr,new Result_label(middle),p);
+	s->gen(p);
+	if(is_to == true)
+		emit(I_ADD,new Arg_id(id),new Arg_int(1),new Arg_id(id),p);
+	else
+		emit(I_MINUS,new Arg_id(id),new Arg_int(1),new Arg_id(id),p);
+	emit(I_GOTO,nullptr,nullptr,new Result_label(test),p);
+	emitlabel(middle,p);
+	if(is_to == false)
+		emit(I_ADD,new Arg_id(id),new Arg_int(1),new Arg_id(id),p);
+	else
+		emit(I_MINUS,new Arg_id(id),new Arg_int(1),new Arg_id(id),p);
 	emitlabel(after,p);
 }
 
