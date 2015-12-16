@@ -69,7 +69,7 @@ void BasicBlock::dag(){
 			case I_DIV:
 			case I_MULT:
 			case I_COPY:
-				i = dagtoquad(i);
+				i = dagtoquad(i)-1;
 				break;
 			default:
 				daglized.push_back(instrlist[i]);
@@ -92,7 +92,7 @@ int BasicBlock::dagtoquad(int begin){
 		Quadruple *q = instrlist[n];
 		bool find = false;
 		if(q->op != I_ADD && q->op != I_COPY && q->op != I_MINUS && q->op != I_DIV && q->op != I_MULT)
-			return n-1;
+			return n;
 		if(dynamic_cast<Arg_id*>(q->arg1))
 			arg = (Arg_id*)(q->arg1);
 		else
