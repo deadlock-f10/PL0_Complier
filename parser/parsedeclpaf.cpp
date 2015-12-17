@@ -67,7 +67,7 @@ Func* Parser::func_decl(){
 	top = f;
 	optional_para();
 	match(T_COLON);
-	if(look->tag != T_INT && look->tag != T_CHARACTER)
+	if(look->tag != T_INT && look->tag != T_CHAR)
 		throw new InappropriateException(look,lex->line);             // throw exception . Cause function type must be basic type
 	f->type = type();
 	top->put(word,new Id(word,f->type,f->used,top->level));
