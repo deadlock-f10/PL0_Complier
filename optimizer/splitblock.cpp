@@ -7,8 +7,15 @@
 
 extern ofstream targetcode;
 void Optimizer::dag(Program *p){
-	for(unsigned int i = 1; i < p->blocklist.size(); i++)
-		p->blocklist[i]->dag();
+	for(unsigned int i = 1; i < p->blocklist.size(); i++){
+		BasicBlock * b = p->blocklist[i];
+		b->dag();
+		if(optimize == true){
+			b->instrlist.clear();
+			for(Quadruple::iterator it = daglized.begin(); it != daglized.end(); it++)
+				b->instrlist.push_back(*it);
+		}
+	}
 }
 void Optimizer::splitseq_paf(Seq_PAF * s){
 	if(s->paf != Program::Null)
@@ -16,7 +23,6 @@ void Optimizer::splitseq_paf(Seq_PAF * s){
 	if(s->pafs != Program::Null)
 		splitseq_paf((Seq_PAF*)(s->pafs));
 }
-
 int BasicBlock::num = 0;
 void BasicBlock::print(){
 	for(std::vector<std::string>::iterator it = list.begin(); it != list.end();it++)
@@ -71,7 +77,12 @@ void Optimizer::splitblock(Program *p){
     x->labellist = nullptr;
 	p->blocklist.push_back(b);
 	changelabel(p,relabel);
-	dag(p);
+	if(optimize == true){
+		dag(p);
+		flowgraph(p);
+		livevariable(p);
+		globalregassign(p);
+	}
 	if(Seq_PAF *x = dynamic_cast<Seq_PAF*>(p->block->seq_paf))
 		splitseq_paf(x);
 }

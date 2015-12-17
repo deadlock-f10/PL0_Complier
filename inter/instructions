@@ -37,7 +37,7 @@ label	Instr		arg1				arg2			 result		meaning
 	4	iffalse		rel									 L			if relation doesnt' holds then goto label L
 
 	5	invoke	    program				integer				
-	5	param		(id,integer)									parameter id(for future use)
+	5	param		(id,integer,array)								parameter id(for future use)
 		la $k1 integer.value
 		sw $k1 ($sp)
 		sub $sp $sp 4

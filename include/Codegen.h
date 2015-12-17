@@ -41,7 +41,7 @@ class Reg_Descripter{
 	Reg_Descripter(Register reg) {r = reg;}
 	void assignId(Addr_Descripter *x) { addr = x;}
 	void deleteId(){addr = nullptr;}
-	static Reg_Descripter *t8,*t9,*k0;           //only used when no available register.
+	static Reg_Descripter *t8,*t9,*k0,*a1,*a2;           //only used when no available register.
 	//std::vector<Addr_Descripter*> list;
 	//void clear();
 //	static Reg_Descripter *zero;               // zero doesn't any register, it means variable's value is on stack.
@@ -62,7 +62,7 @@ class Addr_Descripter{
 };
 class Reg_Des{
 	public:
-	std::vector<Reg_Descripter*> Available{ new Reg_Descripter(R_A1),new Reg_Descripter(R_A2),new Reg_Descripter(R_A3),new Reg_Descripter(R_T0),new Reg_Descripter(R_T1),new Reg_Descripter(R_T2),new Reg_Descripter(R_T3),new Reg_Descripter(R_T4),new Reg_Descripter(R_T5),new Reg_Descripter(R_T6),new Reg_Descripter(R_T7),new Reg_Descripter(R_S0),new Reg_Descripter(R_S1),new Reg_Descripter(R_S2),new Reg_Descripter(R_S3),new Reg_Descripter(R_S4),new Reg_Descripter(R_S5),new Reg_Descripter(R_S6),new Reg_Descripter(R_S7)};
+	std::vector<Reg_Descripter*> Available{ new Reg_Descripter(R_A3),new Reg_Descripter(R_T0),new Reg_Descripter(R_T1),new Reg_Descripter(R_T2),new Reg_Descripter(R_T3),new Reg_Descripter(R_T4),new Reg_Descripter(R_T5),new Reg_Descripter(R_T6),new Reg_Descripter(R_T7),new Reg_Descripter(R_S0),new Reg_Descripter(R_S1),new Reg_Descripter(R_S2),new Reg_Descripter(R_S3),new Reg_Descripter(R_S4),new Reg_Descripter(R_S5),new Reg_Descripter(R_S6),new Reg_Descripter(R_S7)};        // R_A1,R_A2 preserved for global register assign
 	std::vector<Reg_Descripter*> Istaken;
 	Reg_Descripter* getAvail();       // if a register is now empty ,return it. else return nullptr
 	void availReg(Reg_Descripter *r);

@@ -8,6 +8,8 @@ extern ofstream targetcode;
 Reg_Descripter* Reg_Descripter::t8 = new Reg_Descripter(R_T8);
 Reg_Descripter* Reg_Descripter::t9 = new Reg_Descripter(R_T9);
 Reg_Descripter* Reg_Descripter::k0 = new Reg_Descripter(R_K0);
+Reg_Descripter* Reg_Descripter::a1 = new Reg_Descripter(R_A1);
+Reg_Descripter* Reg_Descripter::a2 = new Reg_Descripter(R_A2);
 
 void Bblockgenerator::emit(std::string s){
 	//targetcode<<s.length()<<endl;
@@ -303,7 +305,7 @@ Reg_Descripter* Reg_Des::getAvail(){
 }
 void Reg_Des::availReg(Reg_Descripter *r){
 	r->deleteId();
-	if(r != Reg_Descripter::k0 && r != Reg_Descripter::t8 && r != Reg_Descripter::t9){
+	if(r != Reg_Descripter::k0 && r != Reg_Descripter::t8 && r != Reg_Descripter::t9 && r != Reg_Descripter::a1 && r != Reg_Descripter::a2){
 		for(std::vector<Reg_Descripter*>::iterator it = Istaken.begin(); it != Istaken.end();it++){
 			if((*it) == r){
 				Istaken.erase(it);

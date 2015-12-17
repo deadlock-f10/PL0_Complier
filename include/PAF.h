@@ -19,6 +19,8 @@ class Program;
 //typedef label int;
 class Program :public Node{
 	public :
+		Id * toa1 = nullptr;
+		Id * toa2 = nullptr;
 		QuadList Instrlist;
 		std::vector<BasicBlock*> blocklist;
 		std::string beginlabel;
