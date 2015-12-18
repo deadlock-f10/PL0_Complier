@@ -1,10 +1,15 @@
 #include "../include/Optimizer.h"
+#include "../include/PAF.h"
+#include "../include/Quadruple.h"
+#include "../include/Expr.h"
 #include <stdio.h>
 #include <unordered_set>
 
 void Optimizer::livevariable(Program *p){
-	for(unsigned int i = 1; i < p->blocklist.size(); i++)
-		p->blocklist[i]->In = new Idset(p->blocklist[i]->use);
+	for(unsigned int i = 1; i < p->blocklist.size(); i++){
+		p->blocklist[i]->find_usedef();
+		BasicBlock::set_union(p->blocklist[i]->In , p->blocklist[i]->use);
+	}
 	for(unsigned int i = 1; i < p->blocklist.size(); i++){
 		BasicBlock *b = p->blocklist[i];
 		for(unsigned j = 0; j < b->following.size() ; j++)
@@ -13,8 +18,9 @@ void Optimizer::livevariable(Program *p){
 		BasicBlock::set_diff(temp,b->def);
 		BasicBlock::set_union(b->In,temp);
 	}
+	bool issame = true;
 	do{
-		bool issame = true;
+		issame = true;
 		for(unsigned int i = 1; i < p->blocklist.size(); i++)
 			p->blocklist[i]->pre_In = new Idset(p->blocklist[i]->In);
 		for(unsigned int i = 1; i < p->blocklist.size(); i++){
@@ -49,7 +55,7 @@ void Optimizer::flowgraph(Program *p){
 				break;
 			case I_GOTO:
 				s = ((Result_label*)lastinstr->result)->label;
-				sscanf(s.c_str(),"%d",&m);
+				sscanf(s.c_str(),"B%d",&m);
 				blocknum = m - begin + 1;
 				b->following.push_back(p->blocklist[blocknum]);
 				p->blocklist[blocknum]->preceeding.push_back(b);
@@ -57,7 +63,7 @@ void Optimizer::flowgraph(Program *p){
 			case I_IFFALSE:
 			case I_IF:
 				s = ((Result_label*)lastinstr->result)->label;
-				sscanf(s.c_str(),"%d",&m);
+				sscanf(s.c_str(),"B%d",&m);
 				blocknum = m - begin + 1;
 				b->following.push_back(p->blocklist[blocknum]);
 				p->blocklist[blocknum]->preceeding.push_back(b);
@@ -73,7 +79,7 @@ void Optimizer::flowgraph(Program *p){
 
 void BasicBlock::find_usedef(){
 	for(unsigned int i = 0 ; i < instrlist.size() ; i++){
-		Quadruple *q = block->instrlist[i];
+		Quadruple *q = instrlist[i];
 		switch(q->op){
 			case I_COPY:
 				{
@@ -186,7 +192,7 @@ void BasicBlock::find_usedef(){
 							use.insert(id1);
 					}
 					else if(Arg_ace* argace1 = dynamic_cast<Arg_ace*>(q->arg1)){
-						Id *id1 = argace1->index;
+						Id *id1 = (Id*)argace1->ace->index;
 						std::unordered_set<Id*>::iterator it = def.find(id1);
 						if(it == def.end())
 							use.insert(id1);
@@ -196,6 +202,7 @@ void BasicBlock::find_usedef(){
 			case I_GOTO:
 			case I_END:
 			case I_INVOKE:
+			case I_CALLPROC:
 				;
 		}
 	}

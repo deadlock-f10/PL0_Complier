@@ -10,11 +10,9 @@ void Optimizer::dag(Program *p){
 	for(unsigned int i = 1; i < p->blocklist.size(); i++){
 		BasicBlock * b = p->blocklist[i];
 		b->dag();
-		if(optimize == true){
-			b->instrlist.clear();
-			for(Quadruple::iterator it = daglized.begin(); it != daglized.end(); it++)
-				b->instrlist.push_back(*it);
-		}
+		b->instrlist.clear();
+		for(QuadList::iterator it = b->daglized.begin(); it != b->daglized.end(); it++)
+			b->instrlist.push_back(*it);
 	}
 }
 void Optimizer::splitseq_paf(Seq_PAF * s){
@@ -50,8 +48,7 @@ void Optimizer::splitblock(Program *p){
 	std::vector<int> begin;
 	begin.push_back(0);
 	for(unsigned int i = 1; i < p->Instrlist.size();i++){
-		Quadruple *x = p->Instrlist[i];
-		if( x->labellist != nullptr){
+		Quadruple *x = p->Instrlist[i]; if( x->labellist != nullptr){
 			if(begin.back() != (signed)i)
 				begin.push_back(i);
 		}
@@ -77,7 +74,7 @@ void Optimizer::splitblock(Program *p){
     x->labellist = nullptr;
 	p->blocklist.push_back(b);
 	changelabel(p,relabel);
-	if(optimize == true){
+	if(isoptimize == true){
 		dag(p);
 		flowgraph(p);
 		livevariable(p);

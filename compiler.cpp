@@ -9,8 +9,14 @@
 int main(int argn , char * arg[]){
 	try{
 		Lexer* lex; 
+		bool isoptimize = false;
 		if(argn == 2)
 			lex = new Lexer(std::string(arg[1]));
+		else if(argn == 3){
+			lex = new Lexer(std::string(arg[1]));
+			if(arg[2][0] == '1')			
+				isoptimize = true;
+		}
 		else
 			lex = new Lexer("program/stack.pl0");
 		Parser p(lex);
@@ -21,7 +27,7 @@ int main(int argn , char * arg[]){
 		}
 		x->gen();
 		x->print();
-		Optimizer *o = new Optimizer(x);
+		Optimizer *o = new Optimizer(x,isoptimize);
 		o->optimize();
 		x->print_block();
 		Codegenerator *c = new Codegenerator(x);

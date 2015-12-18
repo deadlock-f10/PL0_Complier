@@ -2,6 +2,7 @@
 #include <map>
 #include <vector>
 #include <string>
+#include <unordered_set>
 #ifndef OPTIMIZERR_H
 #define	OPTIMIZERR_H
 class Program;
@@ -48,8 +49,8 @@ class BasicBlock{
 class Optimizer{
 	public :
 	Program *p;
-	bool optimize = false;
-	Optimizer(Program *prog) { p = prog;}
+	bool isoptimize = false;
+	Optimizer(Program *prog,bool o) { p = prog;isoptimize = o;}
 	void splitblock(Program *p);
 	void optimize(){
 		splitblock(p);

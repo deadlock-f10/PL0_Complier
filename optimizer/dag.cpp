@@ -1,4 +1,5 @@
 #include "../include/Optimizer.h"
+#include "../include/Quadruple.h"
 #include <vector>
 #include <unordered_map>
 
