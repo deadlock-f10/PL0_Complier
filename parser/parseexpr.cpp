@@ -96,20 +96,29 @@ Expr* Parser::term(){
 }
 
 Expr* Parser::expr(){
-	if(look->tag == T_MINUS)
+/*	if(look->tag == T_MINUS)
 		return unary();
 	else if(look->tag == T_PLUS)
-		move();
+		move();*/
 	return unsignedexpr();
 }
 
 Expr* Parser::unary(){
 	match(T_MINUS);
-	return new Unary(Word::Minus,unsignedexpr());
+	return new Unary(Word::Minus,term());
 }
 
 Expr* Parser::unsignedexpr(){
-	Expr* x = term();
+	Expr* x;
+	switch(look->tag){
+		case T_MINUS:
+			x = unary();
+			break;
+		case T_PLUS:
+			move();             // fall through
+		default:                
+			x = term();
+	}
 	while(look->tag == T_PLUS || look->tag == T_MINUS){
 		Token * tok = look;
 		move();
