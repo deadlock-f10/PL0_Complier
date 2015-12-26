@@ -75,9 +75,10 @@ void Optimizer::splitblock(Program *p){
 	p->blocklist.push_back(b);
 	changelabel(p,relabel);
 	if(isoptimize == true){
-		dag(p);
 		flowgraph(p);
 		livevariable(p);
+		dag(p);
+		elimideadcode(p);
 		globalregassign(p);
 	}
 	if(Seq_PAF *x = dynamic_cast<Seq_PAF*>(p->block->seq_paf))

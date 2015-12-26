@@ -61,5 +61,6 @@ class Optimizer{
 	void flowgraph(Program *p);
 	void livevariable(Program *p);
 	void globalregassign(Program *p);
+	void elimideadcode(Program *p);
 };
 #endif

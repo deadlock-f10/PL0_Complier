@@ -153,8 +153,13 @@ int BasicBlock::dagtoquad(int begin){
 		if(find == true){
 			daglized.push_back(new Quadruple(nullptr,I_COPY,DAG[c]->attached_variable_list.front(),nullptr,(Arg_id*)arg));
 		}
-		else
+		else{
+			if(dynamic_cast<Arg_id*>(q->arg1))
+				q->arg1 = DAG[a]->attached_variable_list.front();
+			if(dynamic_cast<Arg_id*>(q->arg2))
+				q->arg2 = DAG[b]->attached_variable_list.front();
 			daglized.push_back(q);
+		}
 	}
 	return n;
 }
