@@ -15,6 +15,12 @@ void Optimizer::dag(Program *p){
 			b->instrlist.push_back(*it);
 	}
 }
+void Optimizer::elimideadcode(Program *p){
+	for(unsigned int i = 1; i < p->blocklist.size(); i++){
+		BasicBlock * b = p->blocklist[i];
+		b->elimideadcode();
+	}
+}
 void Optimizer::splitseq_paf(Seq_PAF * s){
 	if(s->paf != Program::Null)
 		splitblock(s->paf);

@@ -39,6 +39,7 @@ class BasicBlock{
 			}
 		}
 		void dag();
+		void elimideadcode();
 		int dagtoquad(int begin); //return end index
 		void find_usedef();
 		bool test_same(){return In.size() == pre_In->size();}// once a Id go into set In , it will never get out.
