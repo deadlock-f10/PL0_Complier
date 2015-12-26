@@ -1,6 +1,10 @@
 var 
 	a,b,c,d,e:integer;
 	ar:array[7] of integer;
+function x: integer;
+begin
+	x := 7;
+end;
 begin
 	b := 4;
 	a := b;
@@ -12,4 +16,7 @@ begin
 	write(e);
 	ar[6] := (e-1) - (a-b)*(e-1);
 	write(ar[6]);
+	b := (100-2);
+	a := (100-2)-x;
+	write(a);
 end.
