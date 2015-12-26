@@ -33,9 +33,9 @@ void Optimizer::globalregassign(Program *p){              // what if there is on
 		x = it->first;
 	}
 	p->toa2 = x;
-	std::cout<<"in "<<p->beginlabel<<endl;
+	std::cout<<"\nin "<<p->beginlabel<<endl;
 	if(p->toa1 != nullptr)
-		std::cout<< "assign "<<p->toa1->to_string()<<" to reg a1"<<endl;
+		std::cout<< "assign variable "<<p->toa1->to_string()<<" to global register a1"<<endl;
 	if(p->toa2 != nullptr)
-		std::cout<< "assign "<<p->toa2->to_string()<<" to reg a2"<<endl;
+		std::cout<< "assign variable "<<p->toa2->to_string()<<" to global register a2"<<endl;
 }
