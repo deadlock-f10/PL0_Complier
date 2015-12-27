@@ -202,9 +202,8 @@ L1:				e = expr();
 			}
 	//		e = expr();
 			match(T_CLOSEPARENTHESIS);
-			if(ifweneedthis == false)
-				;
-				//e->type = Type::Int;
+			if(ifweneedthis == false && !dynamic_cast<Id*>(e) && !dynamic_cast<Access*>(e))
+				e->type = Type::Int;
 			return new Output(e,s);
 		}
 		else{
@@ -242,9 +241,8 @@ L2:		e = expr();
 	}
 	//e = expr();
 	match(T_CLOSEPARENTHESIS);
-	if(ifweneedthis == false)
-		;
-	//	e->type = Type::Int;
+	if(ifweneedthis == false && !dynamic_cast<Id*>(e) && !dynamic_cast<Access*>(e))
+		e->type = Type::Int;
 	return new Output(e,nullptr);
 }
 
