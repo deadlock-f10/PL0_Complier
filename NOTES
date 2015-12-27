@@ -20,10 +20,5 @@ parser里有一个errorcount域，记录检测到的错误个数，超过规定�
 不行．有可能先遇到临时变量被使用．
 
 
-
-
-NOTE FOR program/043Test_for.txt               通过
-
-NOTE FOR program/050Test_array.txt                通过
-
-NOTE FOR program/072Test_procedure.txt                       123 的排列
+在write expr这样的形式中，如果expr的结果是一个字符型，则输出字符型．否则输出整数．
+如果要按老师的理解，只要expr是表达式就输出表达式的话，需要的parser/parsestmt/outputstatement里修改一下,把得到的expr都改为整型．
