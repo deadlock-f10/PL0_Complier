@@ -26,6 +26,12 @@ void Bblockgenerator::print(){
 void Bblockgenerator::gen(){
 	emit(block->label+":");
 	backwardscan();
+	if(block == prog->blocklist[1]){
+		if(prog->toa1 != nullptr)
+			loadvariable(new Arg_id(prog->toa1),Reg_Descripter::a1->r);
+		if(prog->toa2 != nullptr)
+			loadvariable(new Arg_id(prog->toa2),Reg_Descripter::a2->r);
+	}
 	for(std::vector<Quadruple*>::iterator it = block->instrlist.begin(); it != block->instrlist.end();it++){
 		getReg(*it);
 		chooseInstr(*it);
@@ -111,37 +117,41 @@ void Bblockgenerator::getReg(Quadruple *q){
 void Bblockgenerator::findload(Arg_id *argid,Reg_Descripter *backup){//use  k1
 	// find register to load
 	Id * id = argid->id;
-	Addr_Descripter *ad = addr_des.find(id);
-	Reg_Descripter *r = ad->getReg();
-	if(r == nullptr){
-		Reg_Descripter *x = reg_des.getAvail();
-		if(x != nullptr){
-			x->assignId(ad);
-			ad->deleteReg();
-			ad->assignReg(x);
-			loadvariable(argid,x->r);
-		}
-		else{
-			//ad.clear();
-			ad->deleteReg();
-			ad->assignReg(backup);
-			loadvariable(argid,backup->r);
+	if(id != prog->toa1 && id != prog->toa2){
+		Addr_Descripter *ad = addr_des.find(id);
+		Reg_Descripter *r = ad->getReg();
+		if(r == nullptr){
+			Reg_Descripter *x = reg_des.getAvail();
+			if(x != nullptr){
+				x->assignId(ad);
+				ad->deleteReg();
+				ad->assignReg(x);
+				loadvariable(argid,x->r);
+			}
+			else{
+				//ad.clear();
+				ad->deleteReg();
+				ad->assignReg(backup);
+				loadvariable(argid,backup->r);
+			}
 		}
 	}
 }
 void Bblockgenerator::findstore(Arg_id * argid){    //find register to store
 	Id * id = argid->id;
-	Addr_Descripter *ad = addr_des.find(id);
-	if(ad->getReg() == nullptr){
-		Reg_Descripter *x = reg_des.getAvail();
-		if(x != nullptr){
-			x->assignId(ad);
-			ad->deleteReg();
-			ad->assignReg(x);
-		}
-		else{
-			ad->deleteReg();
-			ad->assignReg(Reg_Descripter::k0);
+	if(id != prog->toa1 && id != prog->toa2){
+		Addr_Descripter *ad = addr_des.find(id);
+		if(ad->getReg() == nullptr){
+			Reg_Descripter *x = reg_des.getAvail();
+			if(x != nullptr){
+				x->assignId(ad);
+				ad->deleteReg();
+				ad->assignReg(x);
+			}
+			else{
+				ad->deleteReg();
+				ad->assignReg(Reg_Descripter::k0);
+			}
 		}
 	}
 }
@@ -195,7 +205,29 @@ void Bblockgenerator::loadaddress(Arg_id * argid){//store addr in k1
 			emit("add $k1 "+regto_string[reg]+" "+patch::to_string(-(para_offset+id->offset)));
 	}
 }
-void Bblockgenerator::storevariable(Arg_id * argid,Register r){//use  k1
+void Bblockgenerator::storevariable(Arg_id * argid,Register r){//use  k1          won't store globalvariable
+	Id * id = argid->id;
+	if(id != prog->toa1 && id != prog->toa2){
+		Register reg = R_FP;
+		int para_offset = -4*(3+id->level-1);
+		if(id->level != prog->level){
+				int m = -(4 * (prog->level + 3 - id->level));
+				emit("lw "+regto_string[R_K1]+" "+patch::to_string(-m)+"("+regto_string[R_FP]+")");
+				reg = R_K1;
+		}
+		if(id->offset >= 0)
+			emit("sw "+regto_string[r]+" " +patch::to_string(-(id->offset))+"("+regto_string[reg]+")");
+		else{
+			if(id->isRef == false)
+				emit("sw "+regto_string[r]+ " "+patch::to_string(-(para_offset+id->offset))+"("+regto_string[reg]+")");
+			else{
+				emit("lw $k1 "+patch::to_string(-(para_offset+id->offset))+"("+regto_string[reg]+")");
+				emit("sw "+regto_string[r]+" ($k1)");
+			}
+		}
+	}
+}
+void Bblockgenerator::storeglobal(Arg_id * argid,Register r){// store globalvariable  only
 	Id * id = argid->id;
 	Register reg = R_FP;
 	int para_offset = -4*(3+id->level-1);
@@ -215,6 +247,7 @@ void Bblockgenerator::storevariable(Arg_id * argid,Register r){//use  k1
 		}
 	}
 }
+
 
 void Addr_Des::addtomap(Id *i)            // temp
 {

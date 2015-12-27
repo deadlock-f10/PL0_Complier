@@ -27,7 +27,8 @@ int main(int argn , char * arg[]){
 		}
 		x->gen();
 		x->print();
-		Optimizer *o = new Optimizer(x,isoptimize);
+//		Optimizer *o = new Optimizer(x,isoptimize);
+		Optimizer *o = new Optimizer(x,true);
 		o->optimize();
 		x->print_block();
 		Codegenerator *c = new Codegenerator(x);

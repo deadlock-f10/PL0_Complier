@@ -56,7 +56,13 @@ class Addr_Descripter{
 	Addr_Descripter(Id *i){id = i;}
 	void assignReg(Reg_Descripter *r) { reg = r;}
 	Reg_Descripter* getReg(){return reg;}
-	void deleteReg(){if(reg !=nullptr ) reg->deleteId();reg = nullptr;}
+	void deleteReg(){            // can't delete global reg
+		if(reg != Reg_Descripter::a1 && reg != Reg_Descripter::a2){
+			if(reg !=nullptr )
+				reg->deleteId();
+			reg = nullptr;
+		}
+	} 
 	void invalidatestack(){valueonstack = false;}
 	//void clear();
 };
@@ -95,5 +101,6 @@ class Bblockgenerator{
 	void loadaddress(Arg_id* argid);
 	void loadvariable(Arg_id* argid, Register r);
 	void storevariable(Arg_id* argid, Register r);
+	void storeglobal(Arg_id * argid,Register r);
 };
 #endif

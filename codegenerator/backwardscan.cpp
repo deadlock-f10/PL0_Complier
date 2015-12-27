@@ -6,6 +6,19 @@
 
 void Bblockgenerator::backwardscan(){
 	std::unordered_map<Id *,int> nextuse;
+	if(prog->toa1 != nullptr)          // it's is essential. because below will not check variable in I_param  while global variable might appear in param
+	{
+		addr_des.addtomap(prog->toa1);
+		Addr_Descripter *ad = addr_des.find(prog->toa1);
+		Reg_Descripter::a1->assignId(ad);
+		ad->assignReg(Reg_Descripter::a1);
+	}
+	if(prog->toa2 != nullptr){
+		addr_des.addtomap(prog->toa2);
+		Addr_Descripter *ad = addr_des.find(prog->toa2);
+		Reg_Descripter::a2->assignId(ad);
+		ad->assignReg(Reg_Descripter::a2);
+	}
 	for(int i = block->instrlist.size() - 1; i >= 0 ; i--){
 		Quadruple *q = block->instrlist[i];
 		AttachedInfo *x = new AttachedInfo();

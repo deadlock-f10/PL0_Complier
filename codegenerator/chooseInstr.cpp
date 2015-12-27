@@ -4,7 +4,7 @@
 #include <vector>
 
 void Bblockgenerator::chooseInstr(Quadruple *q){
-	// watch out for t8,t9,k0
+	// watch out for t8,t9,k0 and a1 a2
 	//static bool aweekcall = false;
 	static int params = 0;
 	//static int paramoffset = 0;
@@ -18,6 +18,10 @@ void Bblockgenerator::chooseInstr(Quadruple *q){
 		case I_END:
 			{
 				if(prog->level != 1){
+					if(prog->toa1 != nullptr)
+						storeglobal(new Arg_id(prog->toa1),Reg_Descripter::a1->r);
+					if(prog->toa2 != nullptr)
+						storeglobal(new Arg_id(prog->toa2),Reg_Descripter::a2->r);
 					emit("lw $ra 4($fp)");
 					emit("lw $sp 12($fp)");
 					if(dynamic_cast<Func*>(prog)){
@@ -31,6 +35,10 @@ void Bblockgenerator::chooseInstr(Quadruple *q){
 			}
 		case I_INVOKE:
 			{
+				if(prog->toa1 != nullptr)
+					storeglobal(new Arg_id(prog->toa1),Reg_Descripter::a1->r);
+				if(prog->toa2 != nullptr)
+					storeglobal(new Arg_id(prog->toa2),Reg_Descripter::a2->r);
 				if(Arg_func *f = dynamic_cast<Arg_func*>(q->arg1))
 					calledProg = f->func;
 				else if(Arg_proc *proc = dynamic_cast<Arg_proc*>(q->arg1))
@@ -140,8 +148,13 @@ void Bblockgenerator::chooseInstr(Quadruple *q){
 				if(q->op == I_CALLFUNC){
 					emit("lw $k1 ($sp)");
 					Arg_id * result = dynamic_cast<Arg_id*>(q->result);
-					storevariable(result,R_K1);
+					//storevariable(result,R_K1);
+					storeglobal(result,R_K1);
 				}
+				if(prog->toa1 != nullptr)
+					loadvariable(new Arg_id(prog->toa1),Reg_Descripter::a1->r);
+				if(prog->toa2 != nullptr)
+					loadvariable(new Arg_id(prog->toa2),Reg_Descripter::a2->r);
 				calledProg = nullptr;
 				params = 0;
 				break;
