@@ -204,6 +204,7 @@ L1:				e = expr();
 			match(T_CLOSEPARENTHESIS);
 			if(ifweneedthis == false)
 				;
+				//e->type = Type::Int;
 			return new Output(e,s);
 		}
 		else{
@@ -243,6 +244,7 @@ L2:		e = expr();
 	match(T_CLOSEPARENTHESIS);
 	if(ifweneedthis == false)
 		;
+	//	e->type = Type::Int;
 	return new Output(e,nullptr);
 }
 
