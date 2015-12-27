@@ -157,6 +157,7 @@ Stmt* Parser::inputstatement(){
 
 Stmt* Parser::outputstatement(){                // a little bit tricky here...
 	//static Tag_Set tag= {T_PLUS,T_MINUS,T_IDENT,T_NUMBER,T_OPENPARENTHESIS};
+	bool ifweneedthis = false;
 	STring * s;
 	Expr * e;
 	match(T_WRITE);
@@ -185,7 +186,10 @@ Stmt* Parser::outputstatement(){                // a little bit tricky here...
 							goto L1;
 						}
 						else
+						{
+							ifweneedthis = true;
 							e = id;
+						}
 					}
 					else
 						e = expr();
@@ -198,6 +202,8 @@ L1:				e = expr();
 			}
 	//		e = expr();
 			match(T_CLOSEPARENTHESIS);
+			if(ifweneedthis == false)
+				;
 			return new Output(e,s);
 		}
 		else{
@@ -219,7 +225,10 @@ L1:				e = expr();
 					goto L2;
 				}
 				else
+				{
+					ifweneedthis = true;
 					e = id;
+				}
 			}
 			else
 				e = expr();
@@ -232,6 +241,8 @@ L2:		e = expr();
 	}
 	//e = expr();
 	match(T_CLOSEPARENTHESIS);
+	if(ifweneedthis == false)
+		;
 	return new Output(e,nullptr);
 }
 
