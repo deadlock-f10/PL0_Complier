@@ -48,7 +48,7 @@ Expr* Parser::factor(){
 				}
 		}//incomplete . to much things to consider
 		default:
-			;
+			throw new InappropriateException(look,lex->line);
 	}
 	return nullptr ; // will not excuted
 }
